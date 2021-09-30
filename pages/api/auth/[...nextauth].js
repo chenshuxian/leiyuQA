@@ -1,5 +1,7 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
+import { PrismaClient } from '@prisma/client'
+
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -26,6 +28,14 @@ export default NextAuth({
     Providers.Facebook({
       clientId: process.env.FACEBOOK_ID,
       clientSecret: process.env.FACEBOOK_SECRET,
+      profile(profile) {
+        return {
+          id: profile.id,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture.data.url,
+        }
+      },
     }),
     // Providers.GitHub({
     //   clientId: process.env.GITHUB_ID,
@@ -53,7 +63,7 @@ export default NextAuth({
   // Notes:
   // * You must install an appropriate node_module for your database
   // * The Email provider requires a database (OAuth providers do not)
-  database: process.env.DATABASE_URL,
+  database: process.env.DATABASE_URL_AUTH,
 
   // The secret should be set to a reasonably long random string.
   // It is used to sign cookies and to sign and encrypt JSON Web Tokens, unless
@@ -106,9 +116,18 @@ export default NextAuth({
   // when an action is performed.
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
-    // async signIn(user, account, profile) { return true },
+    // async signIn(user, account, profile) { 
+    //   // 取得 profile id
+    //   // 驗證是否已經註
+
+    //   // 已註冊，進入首頁
+
+    //   // 未註冊，進入註冊頁，填寫名字、電話、地址
+    
+    //   return true 
+    // },
     // async redirect(url, baseUrl) { return baseUrl },
-    // async session(session, user) { return session },
+    // async session(session, user, profile) { return session },
     // async jwt(token, user, account, profile, isNewUser) { return token }
   },
 

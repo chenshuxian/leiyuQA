@@ -1,12 +1,49 @@
 import Link from 'next/link'
 import { signIn, signOut, useSession } from 'next-auth/client'
+import { useState, useEffect } from 'react'
 import styles from './header.module.css'
+import { useRouter } from 'next/router'
 
 // The approach used in this component shows how to build a sign in and sign out
 // component that works on pages which support both client and server side
 // rendering, and avoids any flash incorrect content on initial page load.
+
+// 取出以下網址asid
+// https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10158740544102775&height=50&width=50&ext=1635565413&hash=AeQ-Uqx_Vh1jY2iz-Uk
+const getId = async (str) => {
+  // console.log(str)
+  let id;
+  let start, end;
+  start = str.indexOf("asid=") + 5;
+  end = str.indexOf("&height");
+  id = str.substring(start,end);
+  return parseInt(id);
+}
+
 export default function Header () {
   const [ session, loading ] = useSession()
+  const router = useRouter()
+
+  useEffect(()=>{
+    const fetchData = async (session) => {
+      let id = await getId(session.user.image);
+      let data = {id: id};
+      const res = await fetch('/api/login',{
+        method: 'POST', // or 'PUT'
+        body: JSON.stringify(data), // data can be `string` or {object}!
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      })
+      const json = await res.json()
+      if(!json.success){
+        router.push("policy")
+      }
+    }
+    if(session){
+    fetchData(session)
+    }
+  },[session])
   
   return (
     <header>
