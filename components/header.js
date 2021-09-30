@@ -1,4 +1,8 @@
 import Link from 'next/link'
+import Image from 'next/image'
+import logo from '../public/assets/images/logo.png'
+import fbLogo from '../public/assets/images/fbLogo.png'
+import userIcon from '../public/assets/images/userIcon.png'
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { useState, useEffect } from 'react'
 import styles from './header.module.css'
@@ -37,7 +41,9 @@ export default function Header () {
       })
       const json = await res.json()
       if(!json.success){
-        router.push("policy")
+        router.push("/register")
+      }else{
+        router.push("/")
       }
     }
     if(session){
@@ -46,53 +52,55 @@ export default function Header () {
   },[session])
   
   return (
-    <header>
-      <noscript>
-        <style>{`.nojs-show { opacity: 1; top: 0; }`}</style>
-      </noscript>
-      <div className={styles.signedInStatus}>
-        <p className={`nojs-show ${(!session && loading) ? styles.loading : styles.loaded}`}>
-          {!session && <>
-            <span className={styles.notSignedInText}>You are not signed in</span>
-            <a
-                href={`/api/auth/signin`}
-                className={styles.buttonPrimary}
-                onClick={(e) => {
-                  e.preventDefault()
-                  signIn()
-                }}
-              >
-                Sign in
-              </a>
-          </>}
-          {session && <>
-            {session.user.image && <span style={{backgroundImage: `url(${session.user.image})` }} className={styles.avatar}/>}
-            <span className={styles.signedInText}>
-              <small>Signed in as</small><br/>
-              <strong>{session.user.email || session.user.name}</strong>
-              </span>
-            <a
-                href={`/api/auth/signout`}
-                className={styles.button}
-                onClick={(e) => {
-                  e.preventDefault()
-                  signOut()
-                }}
-              >
-                Sign out
-              </a>
-          </>}
-        </p>
-      </div>
-      <nav>
-        <ul className={styles.navItems}>
-          <li className={styles.navItem}><Link href="/"><a>Home</a></Link></li>
-          <li className={styles.navItem}><Link href="/client"><a>Client</a></Link></li>
-          <li className={styles.navItem}><Link href="/server"><a>Server</a></Link></li>
-          <li className={styles.navItem}><Link href="/protected"><a>Protected</a></Link></li>
-          <li className={styles.navItem}><Link href="/api-example"><a>API</a></Link></li>
+    <header className="fixNav">
+    <a className="target-burger">
+        <ul className="buns">
+            <li className="bun"></li>
+            <li className="bun"></li>
         </ul>
-      </nav>
-    </header>
+    </a>
+    <div className="inner">
+        <a href="" className="logo">
+            <Image src={logo} alt="logo"/>
+        </a>
+        <nav className="main-nav" role="navigation">
+            <ul id="globalMu">
+                <li><Link href="/#game">開始遊戲</Link></li>
+                <li><Link href="/#gift">遊戲獎品</Link></li>
+                <li><Link href="userProfile">會員摸彩</Link></li>
+                <li><Link href="/#evenInfo">活動說明</Link></li>
+                <li><Link href="score">烈嶼鄉公所</Link></li>
+            </ul>
+            <div className="otherLink">
+                <ul>
+                {!session &&
+                <>
+                    <li>
+                        <a href={`/api/auth/signin`}
+                            onClick={(e) => {
+                              e.preventDefault()
+                              signIn()
+                            }}>
+                            <Image src={fbLogo} alt="fbLogo" />
+                        </a>
+                    </li>
+                </>}
+                {session && <>
+                    <li>
+                        <a href={`/api/auth/signout`}
+                            className={styles.button}
+                            onClick={(e) => {
+                              e.preventDefault()
+                              signOut()
+                            }}>
+                        {session.user.image && <span style={{backgroundImage: `url(${session.user.image})` }} className={styles.avatar}/>}
+                        </a>
+                    </li>
+                </>}
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
   )
 }

@@ -1,11 +1,21 @@
 import { Provider } from 'next-auth/client'
-import './styles.css'
-// import '../assets/css/style.css'
+import React from "react";
+import Head from "next/head";
+// import './styles.css'
+import '../public/assets/css/style.css'
 
 // Use the <Provider> to improve performance and allow components that call
 // `useSession()` anywhere in your application to access the `session` object.
 export default function App ({ Component, pageProps }) {
   return (
+    <React.Fragment>
+      <Head>
+       <meta charset="UTF-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable =no, viewport-fit=cover" />
+        <title>烈嶼鄉知識問答</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable =no, viewport-fit=cover" />
+      </Head>
     <Provider
       // Provider options are not required but can be useful in situations where
       // you have a short session maxAge time. Shown here with default values.
@@ -27,5 +37,6 @@ export default function App ({ Component, pageProps }) {
       session={pageProps.session} >
       <Component {...pageProps} />
     </Provider>
+    </React.Fragment>
   )
 }
