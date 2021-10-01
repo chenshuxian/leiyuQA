@@ -1,0 +1,31 @@
+{
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.formatOnSave": true,
+    "prettier.jsxSingleQuote": true,
+    "prettier.singleQuote": true,
+    "files.autoSaveDelay": 5000,
+    "eslint.format.enable": true,
+    "eslint.codeAction.showDocumentation": {
+        
+        "enable": true
+    },
+    "prettier.useTabs": true,
+    "prettier.jsxBracketSameLine": true,
+    "editor.wordWrap": "on",
+    "editor.codeActionsOnSave": { "source.fixAll.eslint": true }, 
+    "eslint.alwaysShowStatus": true, 
+    "files.autoSave": "onFocusChange",
+    "[javascript]": {
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    },
+    "[json]": {
+    
+
+        "editor.quickSuggestions": {
+            "strings": true
+        },
+        "editor.suggest.insertMode": "replace"
+    }
+}

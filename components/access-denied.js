@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { signIn } from 'next-auth/client'
 
 export default function AccessDenied () {
