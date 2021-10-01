@@ -1,8 +1,18 @@
 import Layout from '../components/layout'
 import Image from 'next/image'
 import mainBanner from '../public/assets/images/mainBanner.png';
+import router from 'next/router';
+import React, {useEffect} from "react";
+import { signIn, signOut, useSession } from 'next-auth/client'
 
-export default function Page () {
+export default function QA () {
+    const [ session, loading ] = useSession()
+    useEffect(()=>{
+        console.log(session)
+        if(session === undefined || session === null){
+           signIn()
+        }
+      },[session])
   return (
     <Layout>
         <div id="outerWp">

@@ -1,9 +1,21 @@
+import react, {useEffect} from 'react'
 import Layout from '../../components/layout'
 import Image from 'next/image'
 import mainBanner from '../../public/assets/images/mainBanner.png';
 import { signIn, signOut, useSession } from 'next-auth/client'
+import router from 'next/router';
 
-export default function Page () {
+export default function Signin () {
+    const [ session, loading ] = useSession()
+    useEffect(()=>{
+        if(session){
+            if(session.reg){
+                router.push("/register")
+            }
+                router.push("/")
+        }
+      },[session])
+
   return (
     <Layout>
      <div id="outerWp">

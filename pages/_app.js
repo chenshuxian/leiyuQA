@@ -1,7 +1,7 @@
-import { Provider } from 'next-auth/client'
+/* eslint-disable @next/next/no-sync-scripts */
+import { Provider, useSession, signIn, SessionProvider } from 'next-auth/client'
 import React from "react";
 import Head from "next/head";
-// import './styles.css'
 import '../public/assets/css/style.css'
 
 // Use the <Provider> to improve performance and allow components that call
@@ -14,7 +14,7 @@ export default function App ({ Component, pageProps }) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable =no, viewport-fit=cover" />
         <title>烈嶼鄉知識問答</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable =no, viewport-fit=cover" />
+        <script src="/public/assets/js/min/all.js"></script>
       </Head>
     <Provider
       // Provider options are not required but can be useful in situations where
@@ -35,8 +35,32 @@ export default function App ({ Component, pageProps }) {
         keepAlive: 0
       }}
       session={pageProps.session} >
-      <Component {...pageProps} />
+      {Component.auth ? (
+        <Auth>
+          <Component {...pageProps} />
+        </Auth>
+      ) : (
+        <Component {...pageProps} />
+      )}
     </Provider>
     </React.Fragment>
   )
+}
+
+function Auth({ children }) {
+  const { data: session, loading } = useSession()
+  const isUser = !!session?.user
+  console.log(`Auth ${JSON.stringify(session)}`)
+  React.useEffect(() => {
+    if (loading) return // Do nothing while loading
+    if (!isUser) signIn() // If not authenticated, force log in
+  }, [isUser, loading])
+  //console.log('authisUser' + isUser)
+  if (isUser) {
+    return children
+  }
+
+  // Session is being fetched, or no user.
+  // If no user, useEffect() will redirect.
+  return <div>Loading...</div>
 }

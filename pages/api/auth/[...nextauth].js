@@ -1,7 +1,34 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
 import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
+const login = async (id) => {
+  const regist = await prisma.user.findUnique({
+    where:{
+    id: id
+  }, select: {
+      phone: true,
+      name: true,
+      addr: true,
+      is_play: true
+    }, 
+  });
+
+  return regist   
+}
+
+// 取出以下網址asid
+// https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10158740544102775&height=50&width=50&ext=1635565413&hash=AeQ-Uqx_Vh1jY2iz-Uk
+const getId = async (str) => {
+  // console.log(str)
+  let id;
+  let start, end;
+  start = str.indexOf("asid=") + 5;
+  end = str.indexOf("&height");
+  id = str.substring(start,end);
+  return parseInt(id);
+}
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -116,18 +143,66 @@ export default NextAuth({
   // when an action is performed.
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
-    // async signIn(user, account, profile) { 
-    //   // 取得 profile id
-    //   // 驗證是否已經註
+    async signIn(user, account, profile) { 
+      
+      // 取得 profile id
+      let id = parseInt(profile.id);
+      console.log(id);
+      // 驗證是否已經註
+      const regist = await login(id);
+      // const regist = await prisma.user.findUnique({
+      //   where:{
+      //   id: id
+      // }, select: {
+      //     phone: true,
+      //     name: true,
+      //     addr: true,
+      //     is_play: true
+      //   },    
+      // });
 
-    //   // 已註冊，進入首頁
+      if(regist !== null) {
+      // 已註冊，進入首頁
+        return true
+      } else {
+        // console.log(`add User`)
+        try{
+          const user = await prisma.user.create({
+            data:{
+              id: id,
+              name: profile.name,
+              phone: '1'
+            }
+          })
+        }catch(e){
+          console.log(e)
+        }
+        
 
-    //   // 未註冊，進入註冊頁，填寫名字、電話、地址
+        if(user){
+          return true
+        }
+        
+     
+      // 未註冊，進入註冊頁，填寫名字、電話、地址
+      }
+      // return true;
     
-    //   return true 
-    // },
+    },
     // async redirect(url, baseUrl) { return baseUrl },
-    // async session(session, user, profile) { return session },
+    async session(session, user) { 
+      console.log(JSON.stringify(session));
+      const id = await getId(session.user.image);
+      session.id = id;
+      session.reg = false;
+      const regist = await login(id);
+      // console.log(`session ${JSON.stringify(regist)}`)
+      if(regist.phone == "1") {
+        // 需要進行註冊資料填寫
+        session.reg = true
+      }
+      return session 
+    },
     // async jwt(token, user, account, profile, isNewUser) { return token }
   },
 
