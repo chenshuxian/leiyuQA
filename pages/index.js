@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/link-passhref */
 import Layout from '../components/layout'
 import Image from 'next/image'
@@ -29,23 +31,22 @@ export default function Page () {
                             <h3>共地質、文化、綜合三大題庫，每題庫共10題問題，答對成績答80分，就可取得一張摸彩卷</h3>
                             <ul>
                                 <li>
-                                <Image src={gameIcn1} alt="gameIcn1" />
-                                    <Link href="qa">
+                                    <a href="qa">
+                                        <img src="/assets/images/gameIcn1.png" />
                                         <div className="qaTitle"><h4>人文</h4></div>
-                                    </Link>
+                                    </a>
                                 </li>
                                 <li>
-                                <Image src={gameIcn2} alt="gameIcn2" />
-                                    <Link href="qa">
-                                    
+                                    <a href="qa.html">
+                                        <img src="/assets/images/gameIcn2.png" />
                                         <div className="qaTitle"><h4>文化</h4></div>
-                                    </Link>
+                                    </a>
                                 </li>
                                 <li>
-                                <Image src={gameIcn3} alt="gameIcn3" />
-                                    <Link href="qa">
+                                    <a href="qa.html">
+                                        <img src="/assets/images/gameIcn3.png" />
                                         <div className="qaTitle"><h4>綜合</h4></div>
-                                    </Link>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -62,32 +63,32 @@ export default function Page () {
                             <ul>
                                 <li>
                                     <span>頭獎</span>
-                                    <Image src={gift1} alt="gameIcn1" />
+                                    <img src="/assets/images/gift1.png" />
                                     <h4>iPad</h4>
                                 </li>
                                 <li>
                                     <span>二獎</span>
-                                    <Image src={gift1} alt="gameIcn1" />
+                                    <img src="/assets/images/gift2.png" />
                                     <h4>Switch</h4>
                                 </li>
                                 <li>
                                     <span>三獎</span>
-                                    <Image src={gift1} alt="gameIcn1" />
+                                    <img src="/assets/images/gift3.png" />
                                     <h4>馬克杯</h4>
                                 </li>
                                 <li>
                                     <span>四獎</span>
-                                    <Image src={gift1} alt="gameIcn1" />
+                                    <img src="/assets/images/gift4.png" />
                                     <h4>明信片</h4>
                                 </li>
                                 <li>
                                     <span>五獎</span>
-                                    <Image src={gift1} alt="gameIcn1" />
+                                    <img src="/assets/images/gift5.png" />
                                     <h4>高梁酒</h4>
                                 </li>
                                 <li>
                                     <span>六獎</span>
-                                    <Image src={gift1} alt="gameIcn1" />
+                                    <img src="/assets/images/gift6.png" />
                                     <h4>鋼筆</h4>
                                 </li>
                             </ul>

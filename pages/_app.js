@@ -14,7 +14,7 @@ export default function App ({ Component, pageProps }) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable =no, viewport-fit=cover" />
         <title>烈嶼鄉知識問答</title>
-        <script src="/public/assets/js/min/all.js"></script>
+        <script src="/assets/js/min/all.js"></script>
       </Head>
     <Provider
       // Provider options are not required but can be useful in situations where
