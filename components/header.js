@@ -52,7 +52,7 @@ export default function Header () {
             <ul id="globalMu">
                 <li><Link href="/#game">開始遊戲</Link></li>
                 <li><Link href="/#gift">遊戲獎品</Link></li>
-                <li><Link href="userProfile">會員摸彩</Link></li>
+                <li><Link href="/userProfile">會員摸彩</Link></li>
                 <li><Link href="/#evenInfo">活動說明</Link></li>
                 <li><a href="" onClick={(e) => {
                     e.preventDefault()
@@ -78,7 +78,7 @@ export default function Header () {
                             className={styles.button}
                             onClick={(e) => {
                               e.preventDefault()
-                              router.push("/userProfile")
+                              router.push("userProfile")
                             }}>
                         {session.user.image && <span style={{backgroundImage: `url(${session.user.image})` }} className={styles.avatar}/>}
                         </a>

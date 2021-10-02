@@ -31,22 +31,22 @@ export default function Page () {
                             <h3>共地質、文化、綜合三大題庫，每題庫共10題問題，答對成績答80分，就可取得一張摸彩卷</h3>
                             <ul>
                                 <li>
-                                    <a href="qa">
-                                        <img src="/assets/images/gameIcn1.png" />
+                                    <img src="/assets/images/gameIcn1.png" />
+                                    <Link href="qa">
                                         <div className="qaTitle"><h4>人文</h4></div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="qa.html">
-                                        <img src="/assets/images/gameIcn2.png" />
+                                <img src="/assets/images/gameIcn2.png" />
+                                    <Link href="qa">  
                                         <div className="qaTitle"><h4>文化</h4></div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="qa.html">
-                                        <img src="/assets/images/gameIcn3.png" />
+                                <img src="/assets/images/gameIcn3.png" />
+                                    <Link href="qa">
                                         <div className="qaTitle"><h4>綜合</h4></div>
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>

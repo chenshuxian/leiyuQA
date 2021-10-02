@@ -15,7 +15,8 @@
     "start": "next start",
     "dbsync": "npx prisma db pull",
     "dbgen": "npx prisma generate",
-    "lint": "next lint"
+    "lint": "next lint",
+    "killnode": "ps aux | grep node | awk '{print $2}' | xargs kill -9"
   },
   "author": "Iain Collins <me@iaincollins.com>",
   "contributors": [
@@ -28,7 +29,6 @@
     "mysql": "^2.18.1",
     "next": "^11.0.0",
     "next-auth": "latest",
-    "prettier-eslint": "^13.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "sqlite3": "^5.0.2"
@@ -37,6 +37,7 @@
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "prettier": "^2.4.1",
+    "prettier-eslint": "^13.0.0",
     "prisma": "^3.1.1"
   }
 }
