@@ -3,9 +3,6 @@
 /* eslint-disable @next/next/link-passhref */
 import Layout from '../components/layout'
 import Image from 'next/image'
-import gameIcn1 from '../public/assets/images/gameIcn1.png';
-import gameIcn2 from '../public/assets/images/gameIcn2.png';
-import gameIcn3 from '../public/assets/images/gameIcn3.png';
 import bannerImg from '../public/assets/images/bannerImg.png';
 import gift1 from '../public/assets/images/gift1.png';
 import Link from "next/link"
@@ -32,19 +29,19 @@ export default function Page () {
                             <ul>
                                 <li>
                                     <img src="/assets/images/gameIcn1.png" />
-                                    <Link href="qa">
+                                    <Link href="qa/1">
                                         <div className="qaTitle"><h4>人文</h4></div>
                                     </Link>
                                 </li>
                                 <li>
                                 <img src="/assets/images/gameIcn2.png" />
-                                    <Link href="qa">  
+                                    <Link href="qa/2">  
                                         <div className="qaTitle"><h4>文化</h4></div>
                                     </Link>
                                 </li>
                                 <li>
                                 <img src="/assets/images/gameIcn3.png" />
-                                    <Link href="qa">
+                                    <Link href="qa/3">
                                         <div className="qaTitle"><h4>綜合</h4></div>
                                     </Link>
                                 </li>
