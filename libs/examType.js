@@ -16,21 +16,19 @@ const getExamType = async function(filter, pagination) {
 
   examType = await prisma.exam_type.findMany(prismaArgs);
 
-  if (!examType) {
+  if (!examType || examType.length === 0) {
     throw { code: 404, msg: `Not Found` };
   }
 
   return examType;
 }
 
-const createExamType = async function(examTypeName) {
+const createExamType = async function(data) {
   let examType;
 
   try {
     examType = await prisma.exam_type.create({
-      data: {
-        exam_type_name: examTypeName
-      }
+      data
     });
   } catch (e) {
     throw { code: 500, msg: `Internal Server Error` };
@@ -39,7 +37,7 @@ const createExamType = async function(examTypeName) {
   return examType;
 }
 
-const updateExamType = async function(examTypeId, examTypeName) {
+const updateExamType = async function(examTypeId, data) {
   let examType;
 
   try {
@@ -47,9 +45,7 @@ const updateExamType = async function(examTypeId, examTypeName) {
       where: {
         exam_type_id: examTypeId
       },
-      data: {
-        exam_type_name: examTypeName
-      }
+      data
     })
   } catch (e) {
     if (e.code === "P2025") {
