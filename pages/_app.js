@@ -2,6 +2,7 @@
 import { Provider, useSession, signIn, SessionProvider } from 'next-auth/client'
 import React from "react";
 import Head from "next/head";
+import 'bootstrap/dist/css/bootstrap.css'
 import '../public/assets/css/style.css'
 
 // Use the <Provider> to improve performance and allow components that call
