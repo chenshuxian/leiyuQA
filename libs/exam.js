@@ -29,24 +29,24 @@ const getExam = async function(filter, pagination) {
 
   exam = await prisma.exam.findMany(prismaArgs);
 
-  if (!exam) {
+  if (!exam || exam.length === 0) {
     throw { code: 404, msg: `Not Found` };
   }
 
   return exam;
 }
 
-const getExamUnDeletedCount = async function() {
+const getExamUnDeletedCount = async function(filter) {
   let count;
+  let prismaArgs = {};
 
-  count = await prisma.exam.aggregate({
-    _count: {
-      exam_id: true
-    },
-    where: {
-      is_delete: false
-    }
-  });
+  if (filter) {
+    prismaArgs['where'] = Object.assign({ is_delete: false }, filter);
+  }
+
+  prismaArgs['_count'] = { exam_id: true };
+
+  count = await prisma.exam.aggregate(prismaArgs);
 
   if (count) {
     return count._count.exam_id;
@@ -55,9 +55,8 @@ const getExamUnDeletedCount = async function() {
   return 0;
 }
 
-const createExam = async function(examData) {
+const createExam = async function(data) {
   let exam;
-  let data = JSON.parse(examData);
 
   try {
     exam = await prisma.exam.create({
@@ -70,9 +69,8 @@ const createExam = async function(examData) {
   return exam;
 }
 
-const updateExam = async function(examId, examData) {
+const updateExam = async function(examId, data) {
   let exam;
-  let data = JSON.parse(examData);
 
   try {
     exam = await prisma.exam.update({
@@ -130,7 +128,7 @@ const getExamRandom = async function(filter, count = 10) {
     prismaArgs['where'] = filter;
   }
 
-  examTotal = await getExamUnDeletedCount();
+  examTotal = await getExamUnDeletedCount(filter);
   maxOffset = examTotal - count + 1;
   maxOffset = maxOffset > 0 ? maxOffset : 0;
   offset = parseInt(Math.random()*maxOffset);
