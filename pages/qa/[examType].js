@@ -8,7 +8,6 @@ import {useRouter} from 'next/router';
 import React, {useEffect, useState} from "react";
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { Button } from 'react-bootstrap';
-
 const examlist = [
     {
         exam_id: 1,
@@ -74,24 +73,30 @@ const examlist = [
 
 let ans = {};
 
-export default function QA () {
+export default function QA ({ qaData }) {
 
     const router = useRouter()
-    const {examType} = router.query
+    // const {examType} = router.query
     const [ session, loading ] = useSession()
-    const [ exam, setExam ] = useState(examlist)
+    const [ exam, setExam ] = useState(qaData)
     const [ examNum , setExamNum ] = useState(0)  // 題號
     const [ examAns , setExamAns ] = useState([0,0,0,0,0,0,0,0,0,0]) // 回答答案
 
     // console.log(session)
-    if(session === undefined || session === null){
-        signIn()
-    }
+    // if(session === undefined || session === null){
+    //     router.push('/auth/sigin')
+    // }
 
     useEffect(()=>{
-        console.log(`examType: ${examType}`)
-        examlist.map((v) => ans[v.exam_id] = 0 )
-    },[examlist])
+        if(session === undefined || session === null){
+                router.push('/auth/signin')
+            }
+      },[session])
+
+    useEffect(()=>{
+       // console.log(`examType: ${examType}`)
+       qaData.map((v) => ans[v.exam_id] = 0 )
+    },[qaData])
 
     // 換題改變題目button顏色
     const changeQ = (i) => {
@@ -184,4 +189,29 @@ export default function QA () {
     </div>
     </Layout>
   )
+}
+
+export async function getStaticPaths() {
+    // Return a list of possible value for id
+    const examType = ['1','2','3'];
+
+    const paths = examType.map((v,i) => ({
+        params: { examType: v },
+      }))
+
+    return {
+        paths,
+        fallback: false
+    }
+}
+  
+export async function getStaticProps({ params }) {
+// Fetch necessary data for the blog post using params.id
+console.log(params.examType)
+    const qaData = examlist
+    return {
+        props: {
+            qaData
+        }
+    }
 }

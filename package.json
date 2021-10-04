@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
-    "start": "next start -p 80",
+    "start": "NODE_ENV=production node server.js",
     "dbsync": "npx prisma db pull",
     "dbgen": "npx prisma generate",
     "lint": "next lint",
