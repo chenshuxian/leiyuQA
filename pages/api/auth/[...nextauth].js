@@ -27,7 +27,7 @@ const getId = async (str) => {
   start = str.indexOf("asid=") + 5;
   end = str.indexOf("&height");
   id = str.substring(start,end);
-  return parseInt(id);
+  return id;
 }
 
 // For more information on each option (and a full list of options) go to
@@ -146,7 +146,7 @@ export default NextAuth({
     async signIn(user, account, profile) { 
       
       // 取得 profile id
-      let id = parseInt(profile.id);
+      let id = profile.id;
       console.log(id);
       // 驗證是否已經註
       const regist = await login(id);

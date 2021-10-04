@@ -8,11 +8,93 @@ datasource db {
 }
 
 model user {
-  id          BigInt    @id @db.UnsignedBigInt
-  name        String    @db.VarChar(45)
-  phone       String    @db.VarChar(45)
-  addr        String?   @db.VarChar(150)
-  is_play     Int       @default(1)
-  create_time DateTime  @default(now()) @db.Timestamp(0)
-  update_time DateTime? @db.Timestamp(0)
+  id          String   @id @db.Char(36)
+  name        String   @db.VarChar(64)
+  phone       String   @db.VarChar(45)
+  addr        String   @default("") @db.VarChar(255)
+  is_play     Boolean  @default(false)
+  is_shared   Boolean  @default(false)
+  create_time DateTime @default(now()) @db.Timestamp(0)
+  update_time DateTime @default(now()) @db.Timestamp(0)
+  ticket      ticket[]
+}
+
+model admin {
+  id          String   @id @db.Char(36)
+  name        String   @db.VarChar(64)
+  password    String   @db.Char(40)
+  create_time DateTime @default(now()) @db.Timestamp(0)
+  update_time DateTime @default(now()) @db.Timestamp(0)
+
+  @@index([name, password])
+}
+
+model exam {
+  exam_id        String    @id @db.Char(36)
+  exam_type_id   String    @db.Char(36)
+  exam_title     String    @default("") @db.VarChar(255)
+  exam_option    Json
+  exam_ans       Int       @db.TinyInt
+  exam_img_url   String    @default("") @db.VarChar(1024)
+  exam_video_url String    @default("") @db.VarChar(1024)
+  create_time    DateTime  @default(now()) @db.Timestamp(0)
+  update_time    DateTime  @default(now()) @db.Timestamp(0)
+  is_delete      Boolean   @default(false)
+  exam_type      exam_type @relation(fields: [exam_type_id], references: [exam_type_id])
+  ticket         ticket[]
+
+  @@index([exam_type_id], map: "exam_exam_type_id_fkey")
+  @@index([is_delete])
+}
+
+model exam_type {
+  exam_type_id   String   @id @db.Char(36)
+  exam_type_name String   @default("")
+  create_time    DateTime @default(now()) @db.Timestamp(0)
+  update_time    DateTime @default(now()) @db.Timestamp(0)
+  is_delete      Boolean  @default(false)
+  exam           exam[]
+
+  @@index([is_delete])
+}
+
+model game_rule {
+  game_rule_id      String   @id @db.Char(36)
+  game_rule_content String   @db.Text
+  create_time       DateTime @default(now()) @db.Timestamp(0)
+  update_time       DateTime @default(now()) @db.Timestamp(0)
+}
+
+model prize {
+  prize_id        String   @id @db.Char(36)
+  prize_name      String   @default("")
+  prize_image_url String   @default("") @db.VarChar(1024)
+  prize_title     String   @default("")
+  prize_num       Int      @default(1)
+  create_time     DateTime @default(now()) @db.Timestamp(0)
+  update_time     DateTime @default(now()) @db.Timestamp(0)
+  ticket          ticket[]
+}
+
+model pv {
+  id          String   @id @db.Char(8)
+  number      BigInt   @default(0) @db.UnsignedBigInt
+  create_time DateTime @default(now()) @db.Timestamp(0)
+}
+
+model ticket {
+  ticket_id    String   @id @db.Char(36)
+  ticket_scope Int      @default(0) @db.TinyInt
+  exam_id      String   @db.Char(36)
+  user_id      String   @db.Char(36)
+  prize_id     String?  @db.Char(36)
+  create_time  DateTime @default(now()) @db.Timestamp(0)
+  update_time  DateTime @default(now()) @db.Timestamp(0)
+  exam         exam     @relation(fields: [exam_id], references: [exam_id])
+  prize        prize?   @relation(fields: [prize_id], references: [prize_id])
+  user         user     @relation(fields: [user_id], references: [id])
+
+  @@index([exam_id], map: "ticket_exam_id_fkey")
+  @@index([prize_id], map: "ticket_prize_id_fkey")
+  @@index([user_id], map: "ticket_user_id_fkey")
 }
