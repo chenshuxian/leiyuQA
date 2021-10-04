@@ -30,16 +30,16 @@ model admin {
 }
 
 model ticket {
-  ticket_id    String   @id @default(uuid()) @db.Char(36)
-  ticket_scope Int      @default(0) @db.TinyInt
-  exam         exam     @relation(fields: [exam_id], references: [exam_id])
-  exam_id      String   @db.Char(36)
-  user         user     @relation(fields: [user_id], references: [id])
-  user_id      String   @db.Char(36)
-  prize        prize?   @relation(fields: [prize_id], references: [prize_id])
-  prize_id     String?  @db.Char(36)
-  create_time  DateTime @default(now()) @db.Timestamp(0)
-  update_time  DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  ticket_id    String    @id @default(uuid()) @db.Char(36)
+  ticket_score Int       @default(0) @db.TinyInt
+  exam_type    exam_type @relation(fields: [exam_type_id], references: [exam_type_id])
+  exam_type_id String    @db.Char(36)
+  user         user      @relation(fields: [user_id], references: [id])
+  user_id      String    @db.Char(36)
+  prize        prize?    @relation(fields: [prize_id], references: [prize_id])
+  prize_id     String?   @db.Char(36)
+  create_time  DateTime  @default(now()) @db.Timestamp(0)
+  update_time  DateTime  @default(now()) @updatedAt @db.Timestamp(0)
 }
 
 model exam {
@@ -55,9 +55,9 @@ model exam {
   create_time    DateTime  @default(now()) @db.Timestamp(0)
   update_time    DateTime  @default(now()) @updatedAt @db.Timestamp(0)
   is_delete      Boolean   @default(false)
-  ticket         ticket[]
 
   @@index([is_delete])
+  @@index([exam_id, exam_ans])
 }
 
 model exam_type {
