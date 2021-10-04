@@ -144,4 +144,36 @@ const getExamRandom = async function(filter, count = 10) {
   return exam;
 }
 
-export { getExam, createExam, updateExam, deleteExam, getExamRandom };
+const checkAnswer = async function(answerData) {
+  let count;
+  let prismaArgs = {};
+
+  if (!answerData || typeof answerData !== 'object') {
+    return 0;
+  }
+
+  prismaArgs['_count'] = { exam_id: true };
+  prismaArgs['where'] = {
+    OR: Object.entries(answerData).map(([exam_id, exam_ans]) => {
+      return {
+        AND: [{ exam_id, exam_ans }]
+      }
+    })
+  };
+
+  count = await prisma.exam.aggregate(prismaArgs);
+
+  if (count) {
+    return count._count.exam_id;
+  }
+
+  return 0;
+}
+
+const getExamTypeId = async function(id) {
+  let exam = (await getExam({ exam_id: id }))[0];
+
+  return exam.exam_type_id;
+}
+
+export { getExam, createExam, updateExam, deleteExam, getExamRandom, checkAnswer, getExamTypeId };
