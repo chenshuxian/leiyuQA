@@ -8,6 +8,7 @@ import {useRouter} from 'next/router';
 import React, {useEffect, useState} from "react";
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { Button } from 'react-bootstrap';
+import Score from '../score';
 const examlist = [
     {
         exam_id: 1,
@@ -81,6 +82,10 @@ export default function QA ({ qaData }) {
     const [ exam, setExam ] = useState(qaData)
     const [ examNum , setExamNum ] = useState(0)  // 題號
     const [ examAns , setExamAns ] = useState([0,0,0,0,0,0,0,0,0,0]) // 回答答案
+    const [ scorePage, setScorePage ] = useState(false);  //是否送出成績，顯示成績頁
+    const [ score, setScore ] = useState();
+    const [ ansList, setAnsList ] = useState([]);
+    const [ cName, setCName] = useState('qa');
 
     // console.log(session)
     // if(session === undefined || session === null){
@@ -126,62 +131,118 @@ export default function QA ({ qaData }) {
     // 取得成績
     const getScore = () => {
         console.log(`getScore: ${JSON.stringify(ans)}`)
+        setScorePage(true)
+        setCName('score')
+        setScore(80);
+        setAnsList([
+            {
+                exam_title: '烈嶼受東北季風侵擾，先民為驅除風害，廣設白雞、風獅爺，希冀能庇佑鄉里。位於烈嶼西方與后宅村落之間的「北風爺」，面朝北方，其高大威武、黑面蟒袍，為鄉里鎮風止煞。請問北風爺手上的法器是什麼？',
+                exam_ans: "符籙",
+                exam_ans_err: "木魚"
+            },
+            {
+                exam_title: '烈嶼受東北季風侵擾，先民為驅除風害，廣設白雞、風獅爺，希冀能庇佑鄉里。位於烈嶼西方與后宅村落之間的「北風爺」，面朝北方，其高大威武、黑面蟒袍，為鄉里鎮風止煞。請問北風爺手上的法器是什麼？',
+                exam_ans: "符籙",
+                exam_ans_err: "木魚"
+            }
+        ])
+
     }
+
+    const QA = () => (
+        <div className="inner">
+        <div className="textTitle">
+            <span></span>
+            <span className="right"></span>
+            <h2>文化題</h2>
+        </div>
+        <div className="globalContent">
+            <h3>{`${examNum+1}. ${exam[examNum].exam_title}`}</h3>
+            <ul className="radio">
+                {exam[examNum].exam_option.map((v,i)=> {
+                    // console.log( `${examAns[i]} : ${i+1}`)
+                     // console.log( examAns[i] === i+1)
+                    if(examAns[examNum] === i+1) {
+                        return (<li key={i}><Button style={{margin:"2px", height:"55px", width:"100%"}} variant='danger' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
+                    }else{
+                        return (
+                            <li key={i}><Button style={{margin:"2px", height:"55px", width:"100%"}} variant='info' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
+                    }
+                   
+                })}
+            </ul>
+           <ul className="pageNum">
+           <li><Button style={{margin:"2px", height:"40px", width:"100%"}} variant='success' onClick={()=> upQ(examNum)}> 上一題 </Button></li>
+               {examAns.map((v,i) => {
+                 if(examNum == i) {
+                     // focus
+                    return  (<li key={i}><Button style={{margin:"2px"}} variant='info' onClick={()=> changeQ(i)}> {i+1} </Button></li>)
+                  } else {
+                    if(v !== 0)
+                      return (<li key={i}><Button style={{margin:"2px"}} variant='danger' onClick={()=> changeQ(i)}> {i+1} </Button></li>)
+                    else
+                      return (<li key={i}><Button style={{margin:"2px"}} variant='success' onClick={()=>changeQ(i)}> {i+1} </Button></li>)
+                  }
+                }
+               )}
+               <li><Button style={{margin:"2px", height:"40px", width:"100%"}} variant='success' onClick={()=> nextQ(examNum)}> 下一題 </Button></li>
+           </ul>
+           <ul style={{textAlign:'center',marginTop:'6px'}}>
+               <li>
+                   <Button variant="info" onClick={()=>getScore()}>送出</Button>
+               </li>
+           </ul>
+        </div>
+    </div>
+    )
+
+    const SCORE = () => (
+        <div className="inner">
+        <div className="textTitle">
+            <span></span>
+            <span className="right"></span>
+            <h2>你的成積</h2>
+        </div>
+        <div className="globalContent">
+            <h6 className="number">你的分數 <b>{score}</b>分</h6>
+            <ul className="globalCounter">
+                {ansList.map((v,i)=> (
+                    <li key={i}>
+                        <h3>{v.exam_title}</h3>
+                        <ol className="radio">
+                            <li className="right">
+                            <Button style={{margin:"2px", height:"45px", width:"100%"}} variant='success'>{v.exam_ans}</Button>
+                            </li>
+                            <li className="wrong">
+                            <Button style={{margin:"2px", height:"45px", width:"100%"}} variant='danger'>{v.exam_ans_err}</Button>
+                            </li>
+                        </ol>
+                    </li>
+                ))}
+               
+            </ul>
+            <ul style={{textAlign:'center',marginTop:'6px'}}>
+                <li> <Button variant="info" onClick={()=>getScore()}>分享後可再玩一次</Button></li>
+            </ul>
+        </div>
+    </div>
+    )
+
+    
     
   return (
     <Layout>
         <div id="outerWp">
-        <div id="inter" className="qa">
+        <div id="inter" className={cName}>
             <div id="banner">
             <Image src={mainBanner} alt="mainBanner" class="banImg" />
             </div>
             <div id="contentWp">
                 <dl id="main">
                     <dd>
-                        <div className="inner">
-                            <div className="textTitle">
-                                <span></span>
-                                <span className="right"></span>
-                                <h2>文化題</h2>
-                            </div>
-                            <div className="globalContent">
-                                <h3>{`${examNum+1}. ${exam[examNum].exam_title}`}</h3>
-                                <ul className="radio">
-                                    {exam[examNum].exam_option.map((v,i)=> {
-                                        // console.log( `${examAns[i]} : ${i+1}`)
-                                         // console.log( examAns[i] === i+1)
-                                        if(examAns[examNum] === i+1) {
-                                            return (<li key={i}><Button style={{margin:"2px", height:"55px", width:"100%"}} variant='danger' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
-                                        }else{
-                                            return (
-                                                <li key={i}><Button style={{margin:"2px", height:"55px", width:"100%"}} variant='info' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
-                                        }
-                                       
-                                    })}
-                                </ul>
-                               <ul className="pageNum">
-                               <li><Button style={{margin:"2px", height:"40px", width:"100%"}} variant='success' onClick={()=> upQ(examNum)}> 上一題 </Button></li>
-                                   {examAns.map((v,i) => {
-                                     if(examNum == i) {
-                                         // focus
-                                        return  (<li key={i}><Button style={{margin:"2px"}} variant='info' onClick={()=> changeQ(i)}> {i+1} </Button></li>)
-                                      } else {
-                                        if(v !== 0)
-                                          return (<li key={i}><Button style={{margin:"2px"}} variant='danger' onClick={()=> changeQ(i)}> {i+1} </Button></li>)
-                                        else
-                                          return (<li key={i}><Button style={{margin:"2px"}} variant='success' onClick={()=>changeQ(i)}> {i+1} </Button></li>)
-                                      }
-                                    }
-                                   )}
-                                   <li><Button style={{margin:"2px", height:"40px", width:"100%"}} variant='success' onClick={()=> nextQ(examNum)}> 下一題 </Button></li>
-                               </ul>
-                               <ul style={{textAlign:'center',marginTop:'6px'}}>
-                                   <li>
-                                       <Button variant="info" onClick={()=>getScore()}>送出</Button>
-                                   </li>
-                               </ul>
-                            </div>
-                        </div>
+                        {
+                            scorePage ? <SCORE/> : <QA />
+                        }
                     </dd>
                 </dl>
             </div>

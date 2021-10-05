@@ -7,6 +7,7 @@ import { signIn, signOut, useSession } from 'next-auth/client'
 import { useState, useEffect } from 'react'
 import styles from './header.module.css'
 import { useRouter } from 'next/router'
+import { doc } from 'prettier'
 
 // The approach used in this component shows how to build a sign in and sign out
 // component that works on pages which support both client and server side
@@ -26,6 +27,7 @@ import { useRouter } from 'next/router'
 
 export default function Header () {
   const [ session, loading ] = useSession()
+  const [ toggled, setToggle] = useState(false)
   const router = useRouter()
 
 //   useEffect(()=>{
@@ -35,11 +37,21 @@ export default function Header () {
 //         }
 //     }
 //   },[session])
+  const toggle = () => {
+      if(!toggled){
+        document.getElementsByTagName('body')[0].className ='toggled'
+        document.getElementsByTagName('header')[0].className ='fixNav toggled'
+      }else{
+        document.getElementsByTagName('body')[0].className ='' 
+        document.getElementsByTagName('header')[0].className ='fixNav' 
+      }
+      setToggle(!toggled)
+  }
   
   return (
     <header className="fixNav">
     <a className="target-burger">
-        <ul className="buns">
+        <ul className="buns" onClick={toggle}>
             <li className="bun"></li>
             <li className="bun"></li>
         </ul>
