@@ -8,7 +8,6 @@ import {useRouter} from 'next/router';
 import React, {useEffect, useState} from "react";
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { Button } from 'react-bootstrap';
-import Score from '../score';
 const examlist = [
     {
         exam_id: 1,
@@ -134,8 +133,8 @@ export default function QA ({ qaData }) {
         setScorePage(true)
         setCName('score')
         setScore(80);
-        setAnsList([
-            {
+        setAnsList(
+             [{
                 exam_title: '烈嶼受東北季風侵擾，先民為驅除風害，廣設白雞、風獅爺，希冀能庇佑鄉里。位於烈嶼西方與后宅村落之間的「北風爺」，面朝北方，其高大威武、黑面蟒袍，為鄉里鎮風止煞。請問北風爺手上的法器是什麼？',
                 exam_ans: "符籙",
                 exam_ans_err: "木魚"
@@ -144,8 +143,8 @@ export default function QA ({ qaData }) {
                 exam_title: '烈嶼受東北季風侵擾，先民為驅除風害，廣設白雞、風獅爺，希冀能庇佑鄉里。位於烈嶼西方與后宅村落之間的「北風爺」，面朝北方，其高大威武、黑面蟒袍，為鄉里鎮風止煞。請問北風爺手上的法器是什麼？',
                 exam_ans: "符籙",
                 exam_ans_err: "木魚"
-            }
-        ])
+            }]
+        )
 
     }
 
