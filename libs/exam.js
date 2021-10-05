@@ -2,37 +2,44 @@ import prisma from './prisma'
 
 const getExam = async function(filter, pagination) {
   let exam;
+  let total;
   let prismaArgs = {};
 
   if (filter) {
     prismaArgs['where'] = filter;
   }
 
-  // if (includeOption) {
-  //   prismaArgs['include'] = {
-  //     exam_option: {
-  //       orderBy: {
-  //         exam_option_order: 'asc'
-  //       },
-  //       select: {
-  //           exam_option_order: true
-  //       }
-  //     }
-  //   };
-  // }
-
   if (pagination) {
     prismaArgs['skip'] = parseInt(pagination.offset) || 0;
     prismaArgs['take'] = parseInt(pagination.limit) || 50;
   }
 
-  exam = await prisma.exam.findMany(prismaArgs);
-
-  if (!exam || exam.length === 0) {
+  total = await getExamCount(filter);
+  if (!total) {
     throw { code: 404, msg: `Not Found` };
   }
 
-  return exam;
+  exam = await prisma.exam.findMany(prismaArgs);
+
+  return { exam, total };
+}
+
+const getExamCount = async function(filter) {
+  let count;
+  let prismaArgs = {};
+
+  prismaArgs['_count'] = { exam_id: true };
+  if (filter) {
+    prismaArgs['where'] = filter;
+  }
+
+  count = await prisma.exam.aggregate(prismaArgs);
+
+  if (count) {
+    return count._count.exam_id;
+  }
+
+  return 0;
 }
 
 const getExamUnDeletedCount = async function(filter) {
@@ -43,15 +50,9 @@ const getExamUnDeletedCount = async function(filter) {
     prismaArgs['where'] = Object.assign({ is_delete: false }, filter);
   }
 
-  prismaArgs['_count'] = { exam_id: true };
+  count = await getExamCount(filter);
 
-  count = await prisma.exam.aggregate(prismaArgs);
-
-  if (count) {
-    return count._count.exam_id;
-  }
-
-  return 0;
+  return count;
 }
 
 const createExam = async function(data) {

@@ -60,6 +60,9 @@ import { getExam, createExam } from '../../../libs/exam'
  *         type: array
  *         items:
  *           $ref: '#/definitions/exam'
+ *       total:
+ *         type: integer
+ *         example: 1
  *
  * components:
  *   schemas:
@@ -130,7 +133,8 @@ export default async(req, res) => {
     method
   } = req
 
-  let exam
+  let exam;
+  let total;
   switch (method) {
     case 'GET':
       let filter = {};
@@ -149,14 +153,14 @@ export default async(req, res) => {
       }
 
       try {
-        exam = await getExam(filter, pagination);
+        ({ exam, total } = await getExam(filter, pagination));
       } catch (e) {
         res.status(e.code).json(e.msg);
         return;
       }
 
       if (exam) {
-        res.status(200).json({ examList: exam });
+        res.status(200).json({ examList: exam, total });
         return;
       }
       break

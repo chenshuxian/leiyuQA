@@ -39,6 +39,9 @@ import { getExamType, createExamType } from '../../../libs/examType'
  *         type: array
  *         items:
  *           $ref: '#/definitions/examType'
+ *       total:
+ *         type: integer
+ *         example: 1
  *
  * components:
  *   schemas:
@@ -110,7 +113,8 @@ export default async(req, res) => {
     method
   } = req
 
-  let examType
+  let examType;
+  let total;
   switch (method) {
     case 'GET':
       let filter;
@@ -125,14 +129,14 @@ export default async(req, res) => {
       }
 
       try {
-        examType = await getExamType(filter, pagination);
+        ({ examType, total } = await getExamType(filter, pagination));
       } catch (e) {
         res.status(e.code).json(e.msg);
         return;
       }
 
       if (examType) {
-        res.status(200).json({ examTypeList: examType });
+        res.status(200).json({ examTypeList: examType, total });
         return;
       }
       break

@@ -47,6 +47,9 @@ import { getTicket } from '../../../libs/ticket'
  *         type: array
  *         items:
  *           $ref: '#/definitions/ticket'
+ *       total:
+ *         type: integer
+ *         example: 1
  *
  * components:
  *   schemas:
@@ -94,7 +97,8 @@ export default async(req, res) => {
     method
   } = req
 
-  let ticket
+  let ticket;
+  let total;
   switch (method) {
     case 'GET':
       let filter;
@@ -109,14 +113,14 @@ export default async(req, res) => {
       }
 
       try {
-        ticket = await getTicket(filter, pagination);
+        ({ ticket, total } = await getTicket(filter, pagination));
       } catch (e) {
         res.status(e.code).json(e.msg);
         return;
       }
 
       if (ticket) {
-        res.status(200).json({ ticketList: ticket});
+        res.status(200).json({ ticketList: ticket, total });
         return;
       }
       break

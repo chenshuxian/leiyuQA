@@ -2,6 +2,7 @@ import prisma from './prisma'
 
 const getExamType = async function(filter, pagination) {
   let examType;
+  let total;
   let prismaArgs = {};
 
   if (filter) {
@@ -13,13 +14,32 @@ const getExamType = async function(filter, pagination) {
     prismaArgs['take'] = parseInt(pagination.limit) || 50;
   }
 
-  examType = await prisma.exam_type.findMany(prismaArgs);
-
-  if (!examType || examType.length === 0) {
+  total = await getExamTypeCount(filter);
+  if (!total) {
     throw { code: 404, msg: `Not Found` };
   }
 
-  return examType;
+  examType = await prisma.exam_type.findMany(prismaArgs);
+
+  return { examType, total };
+}
+
+const getExamTypeCount = async function(filter) {
+  let count;
+  let prismaArgs = {};
+
+  prismaArgs['_count'] = { exam_type_id: true };
+  if (filter) {
+    prismaArgs['where'] = filter;
+  }
+
+  count = await prisma.exam_type.aggregate(prismaArgs);
+
+  if (count) {
+    return count._count.exam_type_id;
+  }
+
+  return 0;
 }
 
 const createExamType = async function(data) {
