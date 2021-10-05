@@ -1,4 +1,5 @@
-import { getExam, updateExam, deleteExam } from '../../../libs/exam'
+import { getExam, updateExam, deleteExam } from '../../../libs/exam';
+import errorCode from '../../../libs/errorCode';
 
 /**
  * @swagger
@@ -86,20 +87,20 @@ export default async(req, res) => {
       try {
         exam = (await getExam({ exam_id: id }))[0];
       } catch (e) {
-        res.status(e.code).json(e.msg);
+        res.status(e.statusCode).json(e);
         return;
       }
       break
     case 'PATCH':
       if (!examData) {
-        res.status(400).json(`Bad Request`)
+        res.status(400).json(errorCode.BadRequest)
         return;
       }
 
       try {
         exam = await updateExam(id, examData);
       } catch (e) {
-        res.status(e.code).json(e.msg);
+        res.status(e.statusCode).json(e);
         return;
       }
       break
@@ -107,13 +108,14 @@ export default async(req, res) => {
       try {
         exam = await deleteExam(id, isDelete === 'true' ? true : false);
       } catch (e) {
-        res.status(e.code).json(e.msg);
+        res.status(e.statusCode).json(e);
         return;
       }
       break
     default:
       res.setHeader('Allow', ['GET', 'PATCH', 'DELETE']);
-      res.status(405).end(`Method ${method} Not Allowed`);
+      res.status(405).json(errorCode.MethodNotAllowed);
+      res.end();
   }
 
   if (exam) {
@@ -121,5 +123,5 @@ export default async(req, res) => {
     return;
   }
 
-  res.status(500).json(`Internal Server Error`)
+  res.status(500).json(errorCode.InternalServerError);
 };

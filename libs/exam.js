@@ -1,4 +1,5 @@
-import prisma from './prisma'
+import prisma from './prisma';
+import errorCode from './errorCode';
 
 const getExam = async function(filter, pagination) {
   let exam;
@@ -16,7 +17,7 @@ const getExam = async function(filter, pagination) {
 
   total = await getExamCount(filter);
   if (!total) {
-    throw { code: 404, msg: `Not Found` };
+    throw errorCode.NotFound;
   }
 
   exam = await prisma.exam.findMany(prismaArgs);
@@ -63,7 +64,7 @@ const createExam = async function(data) {
       data
     });
   } catch (e) {
-    throw { code: 500, msg: `Internal Server Error` };
+    throw errorCode.InternalServerError;
   }
 
   return exam;
@@ -81,9 +82,9 @@ const updateExam = async function(examId, data) {
     })
   } catch (e) {
     if (e.code === "P2025") {
-      throw { code: 404, msg: `Not Found` };
+      throw errorCode.NotFound;
     }
-    throw { code: 500, msg: `Internal Server Error` };
+    throw errorCode.InternalServerError;
   }
 
   return exam;
@@ -111,9 +112,9 @@ const deleteExam = async function(examId, isDelete = false) {
     }
   } catch (e) {
     if (e.code === "P2025") {
-      throw { code: 404, msg: `Not Found` };
+      throw errorCode.NotFound;
     }
-    throw { code: 500, msg: `Internal Server Error` };
+    throw errorCode.InternalServerError;
   }
 
   return exam;
@@ -139,7 +140,7 @@ const getExamRandom = async function(filter, count = 10) {
   exam = await prisma.exam.findMany(prismaArgs);
 
   if (!exam) {
-    throw { code: 404, msg: `Not Found` };
+    throw errorCode.NotFound;
   }
 
   return exam;

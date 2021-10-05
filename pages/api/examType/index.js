@@ -1,4 +1,5 @@
-import { getExamType, createExamType } from '../../../libs/examType'
+import { getExamType, createExamType } from '../../../libs/examType';
+import errorCode from '../../../libs/errorCode';
 
 /**
  * @swagger
@@ -131,7 +132,7 @@ export default async(req, res) => {
       try {
         ({ examType, total } = await getExamType(filter, pagination));
       } catch (e) {
-        res.status(e.code).json(e.msg);
+        res.status(e.statusCode).json(e);
         return;
       }
 
@@ -142,14 +143,14 @@ export default async(req, res) => {
       break
     case 'POST':
       if (!examTypeData) {
-        res.status(400).json(`Bad Request`)
+        res.status(400).json(errorCode.BadRequest)
         return;
       }
 
       try {
         examType = await createExamType(examTypeData);
       } catch (e) {
-        res.status(e.code).json(e.msg);
+        res.status(e.statusCode).json(e);
         return;
       }
 
@@ -160,8 +161,9 @@ export default async(req, res) => {
       break
     default:
       res.setHeader('Allow', ['GET', 'POST']);
-      res.status(405).end(`Method ${method} Not Allowed`);
+      res.status(405).json(errorCode.MethodNotAllowed);
+      res.end();
   }
 
-  res.status(500).json(`Internal Server Error`);
+  res.status(500).json(errorCode.InternalServerError);
 };

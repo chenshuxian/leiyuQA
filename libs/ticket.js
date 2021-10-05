@@ -1,4 +1,5 @@
 import prisma from './prisma'
+import errorCode from './errorCode';
 
 const getTicket = async function(filter, pagination) {
   let ticket;
@@ -16,7 +17,7 @@ const getTicket = async function(filter, pagination) {
 
   total = await getTicketCount(filter);
   if (!total) {
-    throw { code: 404, msg: `Not Found` };
+    throw errorCode.BadRequest;
   }
 
   ticket = await prisma.ticket.findMany(prismaArgs);
@@ -50,7 +51,7 @@ const createTicket = async function(data) {
       data
     });
   } catch (e) {
-    throw { code: 500, msg: `Internal Server Error` };
+    throw errorCode.InternalServerError;
   }
   return examType;
 }

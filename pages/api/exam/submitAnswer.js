@@ -1,5 +1,6 @@
-import { checkAnswer, getExamTypeId } from '../../../libs/exam'
-import { createTicket } from '../../../libs/ticket'
+import { checkAnswer, getExamTypeId } from '../../../libs/exam';
+import { createTicket } from '../../../libs/ticket';
+import errorCode from '../../../libs/errorCode';
 
 const passScore = 8;
 
@@ -79,7 +80,7 @@ export default async(req, res) => {
       let isQuotaExceeded = false;
 
       if (!answerData || typeof answerData !== 'object') {
-        res.status(400).json(`Bad Request`)
+        res.status(400).json(errorCode.BadRequest);
         return;
       }
 
@@ -87,23 +88,17 @@ export default async(req, res) => {
         score = await checkAnswer(answerData);
         isPass = score >= passScore;
       } catch (e) {
-        res.status(e.code).json(e.msg);
+        res.status(e.statusCode).json(e);
         return;
       }
 
       if (!isPass) {
-        res.status(400).json({
-          code: 'IncorrectAnswer',
-          msg: 'It is not allowed to create a ticket because the answer is incorrect'
-        });
+        res.status(400).json(errorCode.IncorrectAnswer);
         return;
       }
 
       if (isQuotaExceeded) {
-        res.status(400).json({
-          code: 'QuotaExceeded',
-          msg: 'Daily quota exceeded'
-        });
+        res.status(400).json(errorCode.QuotaExceeded);
         return;
       }
 
@@ -114,7 +109,7 @@ export default async(req, res) => {
           user_id: '10158740544102776' //TODO: use session to get userId
         });
       } catch (e) {
-        res.status(e.code).json(e.msg);
+        res.status(e.statusCode).json(e);
         return;
       }
 
@@ -125,8 +120,9 @@ export default async(req, res) => {
       break
     default:
       res.setHeader('Allow', ['GET', 'POST']);
-      res.status(405).end(`Method ${method} Not Allowed`);
+      res.status(405).json(errorCode.MethodNotAllowed);
+      res.end()
   }
 
-  res.status(500).json(`Internal Server Error`);
+  res.status(500).json(errorCode.InternalServerError);
 };

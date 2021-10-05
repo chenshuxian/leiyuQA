@@ -1,4 +1,5 @@
-import { getTicket } from '../../../libs/ticket'
+import { getTicket } from '../../../libs/ticket';
+import errorCode from '../../../libs/errorCode';
 
 /**
  * @swagger
@@ -115,7 +116,7 @@ export default async(req, res) => {
       try {
         ({ ticket, total } = await getTicket(filter, pagination));
       } catch (e) {
-        res.status(e.code).json(e.msg);
+        res.status(e.statusCode).json(e);
         return;
       }
 
@@ -126,8 +127,9 @@ export default async(req, res) => {
       break
     default:
       res.setHeader('Allow', ['GET']);
-      res.status(405).end(`Method ${method} Not Allowed`);
+      res.status(405).json(errorCode.MethodNotAllowed);
+      res.end();
   }
 
-  res.status(500).json(`Internal Server Error`);
+  res.status(500).json(errorCode.InternalServerError);
 };
