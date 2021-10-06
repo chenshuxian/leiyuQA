@@ -147,35 +147,30 @@ const getExamRandom = async function(filter, count = 10) {
 }
 
 const checkAnswer = async function(answerData) {
-  let count;
+  let exam;
   let prismaArgs = {};
 
   if (!answerData || typeof answerData !== 'object') {
     return 0;
   }
 
-  prismaArgs['_count'] = { exam_id: true };
   prismaArgs['where'] = {
     OR: Object.entries(answerData).map(([exam_id, exam_ans]) => {
       return {
-        AND: [{ exam_id, exam_ans }]
+        AND: [{ exam_id, exam_ans: { not: exam_ans } }]
       }
     })
   };
 
-  count = await prisma.exam.aggregate(prismaArgs);
+  exam = await prisma.exam.findMany(prismaArgs);
 
-  if (count) {
-    return count._count.exam_id;
-  }
-
-  return 0;
+  return exam || {};
 }
 
 const getExamTypeId = async function(id) {
-  let exam = (await getExam({ exam_id: id }))[0];
+  let exam = (await getExam({ exam_id: id }));
 
-  return exam.exam_type_id;
+  return exam.total ? exam.exam[0].exam_type_id : '';
 }
 
 export { getExam, createExam, updateExam, deleteExam, getExamRandom, checkAnswer, getExamTypeId };
