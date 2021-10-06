@@ -27,7 +27,7 @@ export default function App ({ Component, pageProps }) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable =no, viewport-fit=cover" />
         <meta property="og:url"           content="https://lieyu.fantasyball.tw/" />
-        <meta property="og:type"          content="travel" />
+        <meta property="og:type"          content="website" />
         <meta property="og:title"         content="烈嶼知識問答" />
         <meta property="og:description"   content="讓我們經由知識問答小遊戲認識烈嶼取得大獎吧" />
         <meta property="og:image"         content="https://lieyu.fantasyball.tw/assets/images/bannerImg.png" />
