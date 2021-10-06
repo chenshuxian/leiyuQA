@@ -1,6 +1,7 @@
 import { checkAnswer, getExamTypeId } from '../../../libs/exam';
 import { createTicket } from '../../../libs/ticket';
 import errorCode from '../../../libs/errorCode';
+import { isLogin, getUserId } from '../../../libs/auth';
 
 const passScore = 80;
 
@@ -67,7 +68,7 @@ const passScore = 80;
  *                   type: string
  *                   description: The error code
  *                   example: IncorrectAnswer
- *                 msg:
+ *                 message:
  *                   type: string
  *                   description: The error message
  *                   example: It is not allowed to create a ticket because the answer is incorrect
@@ -82,7 +83,7 @@ const passScore = 80;
  *                   type: string
  *                   description: The error code
  *                   example: QuotaExceeded
- *                 msg:
+ *                 message:
  *                   type: string
  *                   description: The error message
  *                   example: Daily quota exceeded
@@ -92,6 +93,11 @@ export default async(req, res) => {
     body: answerData,
     method
   } = req
+
+  if (!await isLogin(req)) {
+    res.status(401).json(errorCode.Unauthorized);
+    return;
+  }
 
   let ticket
   switch (method) {
@@ -138,7 +144,7 @@ export default async(req, res) => {
           ticket = await createTicket({
             ticket_score: score,
             exam_type_id: await getExamTypeId(Object.keys(answerData)[0]),
-            user_id: '10158740544102776' //TODO: use session to get userId
+            user_id: await getUserId(req)
           });
 
           if (ticket) {
@@ -160,7 +166,7 @@ export default async(req, res) => {
     default:
       res.setHeader('Allow', ['GET', 'POST']);
       res.status(405).json(errorCode.MethodNotAllowed);
-      res.end()
+      return;
   }
 
   res.status(500).json(errorCode.InternalServerError);

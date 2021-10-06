@@ -1,4 +1,5 @@
 import { getExamRandom } from '../../../../libs/exam'
+import { isLogin } from '../../../libs/auth';
 
 /**
  * @swagger
@@ -35,13 +36,18 @@ export default async(req, res) => {
     method,
   } = req
 
+  if (!await isLogin(req)) {
+    res.status(401).json(errorCode.Unauthorized);
+    return;
+  }
+
   let exam
   switch (method) {
     case 'GET':
       try {
         exam = await getExamRandom({ exam_type_id: id }, count);
       } catch (e) {
-        res.status(e.code).json(e.msg);
+        res.status(e.statusCode).json(e);
         return;
       }
 
@@ -52,7 +58,8 @@ export default async(req, res) => {
       break
     default:
       res.setHeader('Allow', ['GET']);
-      res.status(405).end(`Method ${method} Not Allowed`);
+      res.status(405).json(errorCode.MethodNotAllowed);
+      return;
   }
 
   res.status(500).json(`Internal Server Error`)

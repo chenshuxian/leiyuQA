@@ -1,5 +1,6 @@
 import { getExam, createExam } from '../../../libs/exam';
 import errorCode from '../../../libs/errorCode';
+import { isLogin } from '../../../libs/auth';
 
 /**
  * @swagger
@@ -134,6 +135,11 @@ export default async(req, res) => {
     method
   } = req
 
+  if (!await isLogin(req)) {
+    res.status(401).json(errorCode.Unauthorized);
+    return;
+  }
+
   let exam;
   let total;
   switch (method) {
@@ -186,7 +192,7 @@ export default async(req, res) => {
     default:
       res.setHeader('Allow', ['GET', 'POST']);
       res.status(405).json(errorCode.MethodNotAllowed);
-      res.end();
+      return;
   }
 
   res.status(500).json(errorCode.InternalServerError)

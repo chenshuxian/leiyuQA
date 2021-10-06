@@ -1,5 +1,6 @@
 import { getExamType, updateExamType, deleteExamType } from '../../../libs/examType'
 import errorCode from '../../../libs/errorCode';
+import { isLogin } from '../../../libs/auth';
 
 /**
  * @swagger
@@ -86,6 +87,11 @@ export default async(req, res) => {
     method,
   } = req
 
+  if (!await isLogin(req)) {
+    res.status(401).json(errorCode.Unauthorized);
+    return;
+  }
+
   let examType
   switch (method) {
     case 'GET':
@@ -121,7 +127,7 @@ export default async(req, res) => {
     default:
       res.setHeader('Allow', ['GET', 'PATCH', 'DELETE']);
       res.status(405).json(errorCode.MethodNotAllowed);
-      res.end();
+      return;
   }
 
   if (examType) {

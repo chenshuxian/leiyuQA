@@ -1,5 +1,6 @@
 import { getExam, updateExam, deleteExam } from '../../../libs/exam';
 import errorCode from '../../../libs/errorCode';
+import { isLogin } from '../../../libs/auth';
 
 /**
  * @swagger
@@ -81,6 +82,11 @@ export default async(req, res) => {
     method,
   } = req
 
+  if (!await isLogin(req)) {
+    res.status(401).json(errorCode.Unauthorized);
+    return;
+  }
+
   let exam
   switch (method) {
     case 'GET':
@@ -116,7 +122,7 @@ export default async(req, res) => {
     default:
       res.setHeader('Allow', ['GET', 'PATCH', 'DELETE']);
       res.status(405).json(errorCode.MethodNotAllowed);
-      res.end();
+      return;
   }
 
   if (exam) {
