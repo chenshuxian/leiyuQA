@@ -17,6 +17,19 @@ export default function Page () {
         </div>
         <div id="contentWp">
             <dl id="main">
+                <dd id="evenInfo" className="section">
+                    <div className="inner">
+                        <div className="textTitle">
+                            <span></span>
+                            <span className="right"></span>
+                            <h2>活動說明</h2>
+                        </div>
+                        <div className="globalContent" style={{marginBottom:2}}>
+                            <h3>每日有一次遊戲機會，遊戲結束點擊分享鈕，將可獲得再玩一次的機會</h3>
+                            <h3>題目由地質、文化、綜合三大題庫，每題庫共10題問題，答對成績答80分，就可取得一張摸彩卷</h3> 
+                        </div>
+                    </div>
+                </dd>
                 <dd id="game" className="section">
                     <div className="inner">
                         <div className="textTitle">
@@ -29,19 +42,19 @@ export default function Page () {
                             <ul>
                                 <li>
                                     <img src="/assets/images/gameIcn1.png" />
-                                    <Link href="qa/1">
+                                    <Link href="qa/4034bd78-17c8-4919-93d5-d0f547a0401bs">
                                         <div className="qaTitle"><h4>人文</h4></div>
                                     </Link>
                                 </li>
                                 <li>
                                 <img src="/assets/images/gameIcn2.png" />
-                                    <Link href="qa/2">  
+                                    <Link href="qa/2b5ecce2-df3b-4a8c-9a00-17f52c71b15b">  
                                         <div className="qaTitle"><h4>文化</h4></div>
                                     </Link>
                                 </li>
                                 <li>
                                 <img src="/assets/images/gameIcn3.png" />
-                                    <Link href="qa/3">
+                                    <Link href="qa/4034bd78-17c8-4919-93d5-d0f547a0401b">
                                         <div className="qaTitle"><h4>綜合</h4></div>
                                     </Link>
                                 </li>
@@ -89,18 +102,6 @@ export default function Page () {
                                     <h4>鋼筆</h4>
                                 </li>
                             </ul>
-                        </div>
-                    </div>
-                </dd>
-                <dd id="evenInfo" className="section">
-                    <div className="inner">
-                        <div className="textTitle">
-                            <span></span>
-                            <span className="right"></span>
-                            <h2>活動說明</h2>
-                        </div>
-                        <div className="globalContent">
-                            <h3>共地質、文化、綜合三大題庫，每題庫共10題問題，答對成績答80分，就可取得一張摸彩卷</h3>
                         </div>
                     </div>
                 </dd>

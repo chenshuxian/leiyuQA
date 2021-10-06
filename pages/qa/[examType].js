@@ -73,7 +73,7 @@ const examlist = [
 
 let ans = {};
 
-export default function QA ({ qaData }) {
+export default function QA ({ qaData, examName }) {
 
     const router = useRouter()
     // const {examType} = router.query
@@ -81,21 +81,26 @@ export default function QA ({ qaData }) {
     const [ exam, setExam ] = useState(qaData)
     const [ examNum , setExamNum ] = useState(0)  // 題號
     const [ examAns , setExamAns ] = useState([0,0,0,0,0,0,0,0,0,0]) // 回答答案
-    const [ scorePage, setScorePage ] = useState(false);  //是否送出成績，顯示成績頁
+    const [ scorePage, setScorePage ] = useState("qa");  //是否送出成績，顯示成績頁
     const [ score, setScore ] = useState();
     const [ ansList, setAnsList ] = useState([]);
     const [ cName, setCName] = useState('qa');
 
     // console.log(session)
-    // if(session === undefined || session === null){
-    //     router.push('/auth/sigin')
-    // }
+    
 
     useEffect(()=>{
         if(session === undefined || session === null){
                 router.push('/auth/signin')
-            }
-      },[session])
+        }
+    },[session])
+
+    // 是否今日遊戲機會已用完
+    useEffect(()=>{
+        if(false){
+          setScorePage("ALERT")
+        }
+      })
 
     useEffect(()=>{
        // console.log(`examType: ${examType}`)
@@ -130,7 +135,7 @@ export default function QA ({ qaData }) {
     // 取得成績
     const getScore = () => {
         console.log(`getScore: ${JSON.stringify(ans)}`)
-        setScorePage(true)
+        setScorePage("score")
         setCName('score')
         setScore(80);
         setAnsList(
@@ -148,15 +153,26 @@ export default function QA ({ qaData }) {
 
     }
 
+    const share = () => {
+        // 分享到fb 取得在玩一次的機會
+        router.push("/#game")
+    }
+
     const QA = () => (
         <div className="inner">
         <div className="textTitle">
             <span></span>
             <span className="right"></span>
-            <h2>文化題</h2>
+            <h2>{examName}</h2>
         </div>
         <div className="globalContent">
             <h3>{`${examNum+1}. ${exam[examNum].exam_title}`}</h3>
+            <div id="videoImg">
+                <img src="/assets/images/bannerImg.png" />
+                <div className="youtube">
+                    <iframe src="https://www.youtube.com/embed/9agxjqRAZYU" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                </div>
+            </div>
             <ul className="radio">
                 {exam[examNum].exam_option.map((v,i)=> {
                     // console.log( `${examAns[i]} : ${i+1}`)
@@ -195,6 +211,7 @@ export default function QA ({ qaData }) {
     </div>
     )
 
+    // 成績頁面
     const SCORE = () => (
         <div className="inner">
         <div className="textTitle">
@@ -221,13 +238,36 @@ export default function QA ({ qaData }) {
                
             </ul>
             <ul style={{textAlign:'center',marginTop:'6px'}}>
-                <li> <Button variant="info" onClick={()=>getScore()}>分享後可再玩一次</Button></li>
+                <li> <Button variant="info" onClick={()=>share()}>分享後可再玩一次</Button></li>
             </ul>
         </div>
     </div>
     )
 
-    
+     // 警告提示頁面
+     const ALERT = () => (
+        <div className="inner">
+        <div className="textTitle">
+            <span></span>
+            <span className="right"></span>
+            <h2>提示</h2>
+        </div>
+        <div className="globalContent">
+            <h3>今日遊戲次數已用完，明日請早</h3>
+        </div>
+    </div>
+    )
+
+    const page = (name) => {
+        if(name == "qa") {
+            return (<QA />)
+        }else if(name == "score") {
+            return (<SCORE />)
+        }else {
+            return (<ALERT />)
+        }
+    }
+     
     
   return (
     <Layout>
@@ -239,9 +279,7 @@ export default function QA ({ qaData }) {
             <div id="contentWp">
                 <dl id="main">
                     <dd>
-                        {
-                            scorePage ? <SCORE/> : <QA />
-                        }
+                        {page(scorePage)}
                     </dd>
                 </dl>
             </div>
@@ -253,7 +291,7 @@ export default function QA ({ qaData }) {
 
 export async function getStaticPaths() {
     // Return a list of possible value for id
-    const examType = ['1','2','3'];
+    const examType = ['4034bd78-17c8-4919-93d5-d0f547a0401b','4034bd78-17c8-4919-93d5-d0f547a0401bs','2b5ecce2-df3b-4a8c-9a00-17f52c71b15b'];
 
     const paths = examType.map((v,i) => ({
         params: { examType: v },
@@ -269,9 +307,16 @@ export async function getStaticProps({ params }) {
 // Fetch necessary data for the blog post using params.id
 console.log(params.examType)
     const qaData = examlist
+    const examNameObj = { 
+        "4034bd78-17c8-4919-93d5-d0f547a0401bs" : "人文",
+        "2b5ecce2-df3b-4a8c-9a00-17f52c71b15b" : "文化",
+        "4034bd78-17c8-4919-93d5-d0f547a0401b" : "綜合",
+    }
+    const examName = examNameObj[params.examType]
     return {
         props: {
-            qaData
+            qaData,
+            examName
         }
     }
 }

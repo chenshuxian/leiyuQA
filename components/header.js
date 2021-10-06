@@ -62,10 +62,10 @@ export default function Header () {
         </a>
         <nav className="main-nav" role="navigation">
             <ul id="globalMu">
+            <li><Link href="/#evenInfo">活動說明</Link></li>
                 <li><Link href="/#game">開始遊戲</Link></li>
                 <li><Link href="/#gift">遊戲獎品</Link></li>
                 <li><Link href="/userProfile">會員摸彩</Link></li>
-                <li><Link href="/#evenInfo">活動說明</Link></li>
                 <li><a href="" onClick={(e) => {
                     e.preventDefault()
                     signOut()}}>烈嶼鄉公所</a></li>
