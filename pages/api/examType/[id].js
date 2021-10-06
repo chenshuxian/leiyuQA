@@ -90,7 +90,8 @@ export default async(req, res) => {
   switch (method) {
     case 'GET':
       try {
-        examType = (await getExamType({ exam_type_id: id }))[0];
+        ({ examType } = await getExamType({ exam_type_id: id }));
+        examType = examType[0];
       } catch (e) {
         res.status(e.statusCode).json(e);
         return;
