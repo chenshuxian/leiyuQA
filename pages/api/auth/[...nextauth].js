@@ -1,29 +1,7 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
-
-const login = async (id) => {
-  console.log(`process login: ${typeof(id)}`)
-  let regist = "";
-  try{
-    regist = await prisma.user.findUnique({
-      where:{
-      id: id
-    }, select: {
-        phone: true,
-        name: true,
-        addr: true,
-        is_shared: true
-      }, 
-    });
-  } catch(e) {
-    console.log(e)
-  }
-
-  console.log(`process login reg: ${regist}`)
-  return regist   
-}
+import { createUser, getUser } from "../../../libs/user"
+import errorCode from "../../../libs/errorCode"
 
 // 取出以下網址asid
 // https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10158740544102775&height=50&width=50&ext=1635565413&hash=AeQ-Uqx_Vh1jY2iz-Uk
@@ -151,67 +129,41 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     async signIn(user, account, profile) { 
+      let registeredUser;
       
-      // 取得 profile id
-      let id = profile.id;
-      console.log(`id: ${id}`);
-      // 驗證是否已經註
-      const regist = await login(id);
-      // const regist = await prisma.user.findUnique({
-      //   where:{
-      //   id: id
-      // }, select: {
-      //     phone: true,
-      //     name: true,
-      //     addr: true,
-      //     is_play: true
-      //   },    
-      // });
-
-      console.log(`reg: ${regist}`)
-
-      if(regist !== null) {
-      // 已註冊，進入首頁
-        return true
-      } else {
-        // console.log(`add User`)
-        try{
-          const user = await prisma.user.create({
-            data:{
-              id: id,
-              name: profile.name,
-              phone: '1'
-            }
-          })
-        }catch(e){
-          console.log(e)
+      try {
+        ({ user: registeredUser } = await getUser({ id: user.id }));
+        registeredUser = registeredUser[0];
+      } catch (e) {
+        if (e === errorCode.NotFound) {
+          try {
+            registeredUser = await createUser({
+              id: user.id,
+              name: user.name
+            });
+          } catch (e) {
+            return false;
+          }
         }
-        
-
-        if(user){
-          return true
-        }
-        
-     
-      // 未註冊，進入註冊頁，填寫名字、電話、地址
       }
-      // return true;
-    
+
+      return registeredUser ? true : false;
     },
     // async redirect(url, baseUrl) { return baseUrl },
     async session(session, user) { 
-      // console.log(JSON.stringify(session));
-      const id = await getId(session.user.image);
-      session.id = id;
+      let registeredUser;
       session.reg = false;
-      const regist = await login(id);
-      session.user.phone = regist.phone;
-      session.user.addr = regist.addr;
-      // console.log(`session ${JSON.stringify(regist)}`)
-      if(regist.phone == "1") {
-        // 需要進行註冊資料填寫
-        session.reg = true
+      try {
+        ({ user: registeredUser } = await getUser({ id: user.sub }));
+        registeredUser = registeredUser[0];
+        if (!registeredUser.phone) {
+          session.reg = true;
+        }
+        session.user.phone = registeredUser.phone;
+        session.user.addr = registeredUser.addr;
+      } catch (e) {
       }
+
       return session 
     },
     // async jwt(token, user, account, profile, isNewUser) { return token }
