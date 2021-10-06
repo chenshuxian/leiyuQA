@@ -155,7 +155,18 @@ export default function QA ({ qaData, examName }) {
 
     const share = () => {
         // 分享到fb 取得在玩一次的機會
-        router.push("/#game")
+        //router.push("/#game")
+        FB.ui({
+            display: 'popup',
+            method: 'feed',
+            link: 'https://lieyu.fantasyball.tw/'
+          }, function(response){ 
+              if (response && !response.error_message) {
+                    alert('Posting completed.');
+                } else {
+                    alert('Error while posting.11');
+                }
+            });
     }
 
     const QA = () => (
@@ -238,7 +249,7 @@ export default function QA ({ qaData, examName }) {
                
             </ul>
             <ul style={{textAlign:'center',marginTop:'6px'}}>
-                <li> <Button variant="info" onClick={()=>share()}>分享後可再玩一次</Button></li>
+            <li><Button style={{margin:"2px", height:"45px", width:"100%"}} variant='danger' onClick={share}>share</Button></li> 
             </ul>
         </div>
     </div>
@@ -291,7 +302,7 @@ export default function QA ({ qaData, examName }) {
 
 export async function getStaticPaths() {
     // Return a list of possible value for id
-    const examType = ['4034bd78-17c8-4919-93d5-d0f547a0401b','4034bd78-17c8-4919-93d5-d0f547a0401bs','2b5ecce2-df3b-4a8c-9a00-17f52c71b15b'];
+    const examType = ['2b5ecce2-df3b-4a8c-9a00-17f52c71b15b','4034bd78-17c8-4919-93d5-d0f547a0401b','669c21ce-0505-40cd-b479-19a8b700dab5'];
 
     const paths = examType.map((v,i) => ({
         params: { examType: v },
@@ -308,9 +319,9 @@ export async function getStaticProps({ params }) {
 console.log(params.examType)
     const qaData = examlist
     const examNameObj = { 
-        "4034bd78-17c8-4919-93d5-d0f547a0401bs" : "人文",
+        "4034bd78-17c8-4919-93d5-d0f547a0401b" : "圖書",
         "2b5ecce2-df3b-4a8c-9a00-17f52c71b15b" : "文化",
-        "4034bd78-17c8-4919-93d5-d0f547a0401b" : "綜合",
+        "669c21ce-0505-40cd-b479-19a8b700dab5" : "綜合",
     }
     const examName = examNameObj[params.examType]
     return {

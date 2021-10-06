@@ -8,15 +8,33 @@ import '../public/assets/css/style.css'
 // Use the <Provider> to improve performance and allow components that call
 // `useSession()` anywhere in your application to access the `session` object.
 export default function App ({ Component, pageProps }) {
-  
+
+  // useEffect(()=>{
+  //   window.fbAsyncInit = function(){' '}
+  //   {FB.init({
+  //     appId: '641136007247701',
+  //     autoLogAppEvents: true,
+  //     xfbml: true,
+  //     version: 'v8.0',
+  //   })}
+  //   ;
+  // })
+
   return (
     <React.Fragment>
       <Head>
        <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable =no, viewport-fit=cover" />
+        <meta property="og:url"           content="https://lieyu.fantasyball.tw/" />
+        <meta property="og:type"          content="travel" />
+        <meta property="og:title"         content="烈嶼知識問答" />
+        <meta property="og:description"   content="讓我們經由知識問答小遊戲認識烈嶼取得大獎吧" />
+        <meta property="og:image"         content="https://lieyu.fantasyball.tw/assets/images/bannerImg.png" />
         <title>烈嶼鄉知識問答</title>
-        {/* <script src="/assets/js/min/all.js"></script> */}
+
+        <script async defer crossOrigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v12.0&appId=641136007247701&autoLogAppEvents=1" nonce="LOtsuOcU"></script> 
+  
       </Head>
     <Provider
       // Provider options are not required but can be useful in situations where
