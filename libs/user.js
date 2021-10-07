@@ -95,34 +95,4 @@ const updateUser = async function(id, data) {
   return user;
 }
 
-const deleteExamType = async function(examTypeId, isDelete = false) {
-  let examType;
-
-  try {
-    if (isDelete) {
-      examType = await prisma.exam_type.delete({
-        where: {
-          exam_type_id: examTypeId
-        }
-      })
-    } else {
-      examType = await prisma.exam_type.update({
-        where: {
-          exam_type_id: examTypeId
-        },
-        data: {
-          is_delete: true
-        }
-      })
-    }
-  } catch (e) {
-    if (e.code === "P2025") {
-      throw errorCode.NotFound;
-    }
-    throw errorCode.InternalServerError;
-  }
-
-  return examType;
-}
-
 export { getUser, createUser, getUserById, updateUser }
