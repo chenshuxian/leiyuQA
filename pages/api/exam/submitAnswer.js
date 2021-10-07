@@ -2,6 +2,7 @@ import { checkAnswer, getExamTypeId } from '../../../libs/exam';
 import { createTicket } from '../../../libs/ticket';
 import errorCode from '../../../libs/errorCode';
 import { isLogin, getUserId } from '../../../libs/auth';
+import { getUserById, updateUser } from '../../../libs/user';
 
 const passScore = 80;
 
@@ -106,12 +107,24 @@ export default async(req, res) => {
       let score;
       let isPass = false;
       let isQuotaExceeded = false;
+      let userId;
+      let user;
       let ticketId;
 
       if (!answerData || typeof answerData !== 'object') {
         res.status(400).json(errorCode.BadRequest);
         return;
       }
+
+      userId = await getUserId(req);
+      user = await getUserById(userId);
+
+      if (!user) {
+        res.status(401).json(errorCode.Unauthorized);
+        return;
+      }
+
+      isQuotaExceeded = !user.is_shared && user.is_played
 
       if (isQuotaExceeded) {
         res.status(400).json(errorCode.QuotaExceeded);
@@ -144,8 +157,10 @@ export default async(req, res) => {
           ticket = await createTicket({
             ticket_score: score,
             exam_type_id: await getExamTypeId(Object.keys(answerData)[0]),
-            user_id: await getUserId(req)
+            user_id: userId
           });
+
+          updateUser(userId, { last_play_time: new Date() });
 
           if (ticket) {
             ticketId = ticket.ticket_id;

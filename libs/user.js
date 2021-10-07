@@ -1,5 +1,9 @@
 import prisma from './prisma';
 import errorCode from './errorCode';
+import dayjs from 'dayjs';
+import isToday from 'dayjs/plugin/isToday'
+
+dayjs.extend(isToday);
 
 const getUser = async function(filter, pagination) {
   let user;
@@ -57,13 +61,27 @@ const createUser = async function(data) {
   return user;
 }
 
-const updateExamType = async function(examTypeId, data) {
-  let examType;
+const getUserById = async function(id) {
+  let user = await prisma.user.findUnique({
+    where: {
+      id
+    }
+  });
+
+  if (user?.last_play_time) {
+    user.is_played = dayjs(user.last_play_time).isToday();
+  }
+
+  return user;
+}
+
+const updateUser = async function(id, data) {
+  let user;
 
   try {
-    examType = await prisma.exam_type.update({
+    user = await prisma.user.update({
       where: {
-        exam_type_id: examTypeId
+        id
       },
       data
     })
@@ -74,7 +92,7 @@ const updateExamType = async function(examTypeId, data) {
     throw errorCode.InternalServerError;
   }
 
-  return examType;
+  return user;
 }
 
 const deleteExamType = async function(examTypeId, isDelete = false) {
@@ -107,4 +125,4 @@ const deleteExamType = async function(examTypeId, isDelete = false) {
   return examType;
 }
 
-export { getUser, createUser }
+export { getUser, createUser, getUserById, updateUser }
