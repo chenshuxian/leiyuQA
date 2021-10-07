@@ -28,8 +28,8 @@ export default function App ({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable =no, viewport-fit=cover" />
         <meta property="og:url"           content="https://lieyu.fantasyball.tw/" />
         <meta property="og:type"          content="website" />
-        <meta property="og:title"         content="test" />
-        <meta property="og:description"   content="test2" />
+        <meta property="og:title"         content="烈嶼鄉知識問答" />
+        <meta property="og:description"   content="讓我們一起經由問答遊戲了解烈嶼抽大獎" />
         <meta property="og:image"         content="https://lieyu.fantasyball.tw/assets/images/bannerImg.png" />
         <title>烈嶼鄉知識問答</title>
 
