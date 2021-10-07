@@ -22,7 +22,7 @@ const prisma = new PrismaClient({
 
 var options = {
   key: fs.readFileSync("./ssl/lieyu.fantasyball.tw.key"),
-  cert: fs.readFileSync("./ssl/certificate.crt"),
+  cert: fs.readFileSync("./ssl/lieyu.chained.crt"),
 };
 
 app.prepare().then(() => {
