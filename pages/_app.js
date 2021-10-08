@@ -26,6 +26,7 @@ export default function App ({ Component, pageProps }) {
        <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable =no, viewport-fit=cover" />
+        <meta property="fb:app_id"          content="641136007247701" />
         <meta property="og:url"           content="https://lieyu.fantasyball.tw/" />
         <meta property="og:type"          content="website" />
         <meta property="og:title"         content="烈嶼鄉知識問答" />
