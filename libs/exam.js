@@ -95,20 +95,39 @@ const deleteExam = async function(examId, isDelete = false) {
 
   try {
     if (isDelete) {
-      exam = await prisma.exam.delete({
-        where: {
-          exam_id: examId
-        }
-      })
+      if (Array.isArray(examId)) {
+        exam = await prisma.exam.deleteMany({
+          where: {
+            exam_id: { in: examId }
+          }
+        });
+      } else {
+        exam = await prisma.exam.delete({
+          where: {
+            exam_id: examId
+          }
+        });
+      }
     } else {
-      exam = await prisma.exam.update({
-        where: {
-          exam_id: examId
-        },
-        data: {
-          is_delete: true
-        }
-      })
+      if (Array.isArray(examId)) {
+        exam = await prisma.exam.updateMany({
+          where: {
+            exam_id: { in: examId }
+          },
+          data: {
+            is_delete: true
+          }
+        });
+      } else {
+        exam = await prisma.exam.update({
+          where: {
+            exam_id: examId
+          },
+          data: {
+            is_delete: true
+          }
+        });
+      }
     }
   } catch (e) {
     if (e.code === "P2025") {
