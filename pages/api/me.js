@@ -94,6 +94,10 @@ import { isLogin, getUserId } from '../../libs/auth';
  *                 type: string
  *                 description: Address
  *                 example: 金門
+ *               is_shared:
+ *                 type: boolean 
+ *                 description: Is shared url to FB
+ *                 example: false
  *     responses:
  *       200:
  *         description: Successful operation
@@ -136,7 +140,8 @@ export default async(req, res) => {
         user = await updateUser(userId, {
           name: userData.name,
           phone: userData.phone,
-          addr: userData.addr
+          addr: userData.addr,
+          is_shared: userData.is_shared
         });
       } catch (e) {
         res.status(e.statusCode).json(e);
@@ -144,7 +149,7 @@ export default async(req, res) => {
       }
 
       if (user) {
-        res.status(201).json(user);
+        res.status(200).json(user);
         return;
       }
       break
