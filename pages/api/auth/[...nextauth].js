@@ -4,17 +4,24 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 const login = async (id) => {
-  const regist = await prisma.user.findUnique({
-    where:{
-    id: id
-  }, select: {
-      phone: true,
-      name: true,
-      addr: true,
-      is_play: true
-    }, 
-  });
+  console.log(`process login: ${typeof(id)}`)
+  let regist = "";
+  try{
+    regist = await prisma.user.findUnique({
+      where:{
+      id: id
+    }, select: {
+        phone: true,
+        name: true,
+        addr: true,
+        is_shared: true
+      }, 
+    });
+  } catch(e) {
+    console.log(e)
+  }
 
+  console.log(`process login reg: ${regist}`)
   return regist   
 }
 
@@ -147,7 +154,7 @@ export default NextAuth({
       
       // 取得 profile id
       let id = profile.id;
-      console.log(id);
+      console.log(`id: ${id}`);
       // 驗證是否已經註
       const regist = await login(id);
       // const regist = await prisma.user.findUnique({
@@ -160,6 +167,8 @@ export default NextAuth({
       //     is_play: true
       //   },    
       // });
+
+      console.log(`reg: ${regist}`)
 
       if(regist !== null) {
       // 已註冊，進入首頁
