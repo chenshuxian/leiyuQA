@@ -200,11 +200,13 @@ export default NextAuth({
     },
     // async redirect(url, baseUrl) { return baseUrl },
     async session(session, user) { 
-      console.log(JSON.stringify(session));
+      // console.log(JSON.stringify(session));
       const id = await getId(session.user.image);
       session.id = id;
       session.reg = false;
       const regist = await login(id);
+      session.user.phone = regist.phone;
+      session.user.addr = regist.addr;
       // console.log(`session ${JSON.stringify(regist)}`)
       if(regist.phone == "1") {
         // 需要進行註冊資料填寫

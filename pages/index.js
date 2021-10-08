@@ -4,11 +4,12 @@
 import Layout from '../components/layout'
 import Image from 'next/image'
 import bannerImg from '../public/assets/images/bannerImg.png';
-import gift1 from '../public/assets/images/gift1.png';
 import Link from "next/link"
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+const PRIZEURL = '/assets/images';
 
-
-export default function Page () {
+function Index ( { prizeData, examType }) {
   return (
     <Layout>
       <div id="outerWp">
@@ -40,24 +41,14 @@ export default function Page () {
                         <div className="globalContent">
                             <h3>文化、圖書、綜合三大題庫，每題庫共10題問題，答對成績答80分，就可取得一張摸彩卷</h3>
                             <ul>
-                                <li>
-                                    <img src="/assets/images/gameIcn1.png" />
-                                    <Link href="qa/2b5ecce2-df3b-4a8c-9a00-17f52c71b15b">
-                                        <div className="qaTitle"><h4>文化</h4></div>
-                                    </Link>
-                                </li>
-                                <li>
-                                <img src="/assets/images/gameIcn2.png" />
-                                    <Link href="qa/4034bd78-17c8-4919-93d5-d0f547a0401b">  
-                                        <div className="qaTitle"><h4>圖書</h4></div>
-                                    </Link>
-                                </li>
-                                <li>
-                                <img src="/assets/images/gameIcn3.png" />
-                                    <Link href="qa/669c21ce-0505-40cd-b479-19a8b700dab5">
-                                        <div className="qaTitle"><h4>綜合</h4></div>
-                                    </Link>
-                                </li>
+                                {examType.map((v,i) => (
+                                    <li key={`examType${i}`}>
+                                        <img src={`/assets/images/gameIcn${i+1}.png`} />
+                                        <Link href={`qa/${v.exam_type_id}`}>
+                                            <div className="qaTitle"><h4>{v.exam_type_name}</h4></div>
+                                        </Link>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </div>
@@ -71,36 +62,13 @@ export default function Page () {
                         </div>
                         <div className="globalContent">
                             <ul>
-                                <li>
-                                    <span>頭獎</span>
-                                    <img src="/assets/images/gift1.png" />
-                                    <h4>iPad</h4>
+                                {prizeData.map((v,i) => (
+                                    <li key={`prize${i}`}>
+                                    <span>{v.prize_title}</span>
+                                    <img src={PRIZEURL+v.prize_image_url} />
+                                    <h4>{v.prize_name}</h4>
                                 </li>
-                                <li>
-                                    <span>二獎</span>
-                                    <img src="/assets/images/gift2.png" />
-                                    <h4>Switch</h4>
-                                </li>
-                                <li>
-                                    <span>三獎</span>
-                                    <img src="/assets/images/gift3.png" />
-                                    <h4>馬克杯</h4>
-                                </li>
-                                <li>
-                                    <span>四獎</span>
-                                    <img src="/assets/images/gift4.png" />
-                                    <h4>明信片</h4>
-                                </li>
-                                <li>
-                                    <span>五獎</span>
-                                    <img src="/assets/images/gift5.png" />
-                                    <h4>高梁酒</h4>
-                                </li>
-                                <li>
-                                    <span>六獎</span>
-                                    <img src="/assets/images/gift6.png" />
-                                    <h4>鋼筆</h4>
-                                </li>
+                                ))}
                             </ul>
                         </div>
                     </div>
@@ -111,3 +79,30 @@ export default function Page () {
     </Layout>
   )
 }
+
+export async function getStaticProps(context) {
+
+    const examType = await prisma.exam_type.findMany({
+        select:{
+            exam_type_id:true,
+            exam_type_name:true
+        }
+    })
+    //console.log(`examType : ${JSON.stringify(examType)}`)
+    const prizeData = await prisma.prize.findMany({
+        select:{
+            prize_name:true,
+            prize_image_url:true,
+            prize_title:true
+        }
+    })
+
+    return {
+      props: {
+          prizeData,
+          examType
+      }, // will be passed to the page component as props
+    }
+}
+
+export default Index;

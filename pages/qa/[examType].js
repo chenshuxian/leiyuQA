@@ -162,7 +162,7 @@ export default function QA ({ qaData, examName }) {
             link: 'https://lieyu.fantasyball.tw/'
           }, function(response){ 
               if (response && !response.error_message) {
-                    alert('Posting completed.');
+                    router.push('/#game')
                 } else {
                     alert('Error while posting.11');
                 }
