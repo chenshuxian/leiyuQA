@@ -1,4 +1,4 @@
-import { getExam, updateExam, deleteExam } from '../../../libs/exam';
+import { getExamById, updateExam, deleteExam } from '../../../libs/exam';
 import errorCode from '../../../libs/errorCode';
 import { isLogin } from '../../../libs/auth';
 
@@ -91,8 +91,7 @@ export default async(req, res) => {
   switch (method) {
     case 'GET':
       try {
-        ({ exam } = await getExam({ exam_id: id }));
-        exam = exam[0];
+        exam = await getExamById(id);
       } catch (e) {
         res.status(e.statusCode).json(e);
         return;

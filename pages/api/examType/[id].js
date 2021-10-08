@@ -1,4 +1,4 @@
-import { getExamType, updateExamType, deleteExamType } from '../../../libs/examType'
+import { getExamTypeById, updateExamType, deleteExamType } from '../../../libs/examType'
 import errorCode from '../../../libs/errorCode';
 import { isLogin } from '../../../libs/auth';
 
@@ -96,8 +96,7 @@ export default async(req, res) => {
   switch (method) {
     case 'GET':
       try {
-        ({ examType } = await getExamType({ exam_type_id: id }));
-        examType = examType[0];
+        examType = await getExamTypeById(id);
       } catch (e) {
         res.status(e.statusCode).json(e);
         return;

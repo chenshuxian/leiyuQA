@@ -68,6 +68,10 @@ const getUserById = async function(id) {
     }
   });
 
+  if (!user) {
+    throw errorCode.NotFound;
+  }
+
   if (user?.last_play_time) {
     user.is_played = dayjs(user.last_play_time).isToday();
   }

@@ -25,6 +25,20 @@ const getExamType = async function(filter, pagination) {
   return { examType, total };
 }
 
+const getExamTypeById = async function(id) {
+  let examType = await prisma.exam_type.findUnique({
+    where: {
+      exam_type_id: id
+    }
+  });
+
+  if (!examType) {
+    throw errorCode.NotFound;
+  }
+
+  return examType;
+}
+
 const getExamTypeCount = async function(filter) {
   let count;
   let prismaArgs = {};
@@ -107,4 +121,4 @@ const deleteExamType = async function(examTypeId, isDelete = false) {
   return examType;
 }
 
-export { getExamType, createExamType, updateExamType, deleteExamType };
+export { getExamType, createExamType, updateExamType, deleteExamType, getExamTypeById };

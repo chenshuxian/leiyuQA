@@ -25,6 +25,20 @@ const getExam = async function(filter, pagination) {
   return { exam, total };
 }
 
+const getExamById = async function(id) {
+  let exam = await prisma.exam.findUnique({
+    where: {
+      exam_id: id
+    }
+  });
+
+  if (!exam) {
+    throw errorCode.NotFound;
+  }
+
+  return exam;
+}
+
 const getExamCount = async function(filter) {
   let count;
   let prismaArgs = {};
@@ -187,9 +201,9 @@ const checkAnswer = async function(answerData) {
 }
 
 const getExamTypeId = async function(id) {
-  let exam = (await getExam({ exam_id: id }));
+  let exam = await getExamById(id);
 
-  return exam.total ? exam.exam[0].exam_type_id : '';
+  return exam?.exam_type_id || '';
 }
 
-export { getExam, createExam, updateExam, deleteExam, getExamRandom, checkAnswer, getExamTypeId };
+export { getExam, createExam, updateExam, deleteExam, getExamRandom, checkAnswer, getExamTypeId, getExamById };

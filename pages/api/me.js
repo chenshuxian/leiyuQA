@@ -121,10 +121,13 @@ export default async(req, res) => {
   let user;
   switch (method) {
     case 'GET':
-      user = await getUserById(userId);
-      if (!user) {
+      try {
+        user = await getUserById(userId);
+      } catch (e) {
+        if (e === errorCode.NotFound) {
           res.status(401).json(errorCode.Unauthorized);
           return;
+        }
       }
 
       res.status(200).json(user);

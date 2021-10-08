@@ -1,6 +1,6 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
-import { createUser, getUser } from "../../../libs/user"
+import { createUser, getUserById } from "../../../libs/user"
 import errorCode from "../../../libs/errorCode"
 
 // 取出以下網址asid
@@ -132,8 +132,7 @@ export default NextAuth({
       let registeredUser;
       
       try {
-        ({ user: registeredUser } = await getUser({ id: user.id }));
-        registeredUser = registeredUser[0];
+        registeredUser = await getUserById(user.id);
       } catch (e) {
         if (e === errorCode.NotFound) {
           try {
@@ -154,8 +153,7 @@ export default NextAuth({
       let registeredUser;
       session.reg = false;
       try {
-        ({ user: registeredUser } = await getUser({ id: user.sub }));
-        registeredUser = registeredUser[0];
+        registeredUser = await getUserById(user.sub);
         if (!registeredUser.phone) {
           session.reg = true;
         }

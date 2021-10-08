@@ -117,11 +117,14 @@ export default async(req, res) => {
       }
 
       userId = await getUserId(req);
-      user = await getUserById(userId);
 
-      if (!user) {
-        res.status(401).json(errorCode.Unauthorized);
-        return;
+      try {
+        user = await getUserById(userId);
+      } catch (e) {
+        if (e === errorCode.NotFound) {
+          res.status(401).json(errorCode.Unauthorized);
+          return;
+        }
       }
 
       isQuotaExceeded = !user.is_shared && user.is_played
