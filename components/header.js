@@ -13,18 +13,6 @@ import { doc } from 'prettier'
 // component that works on pages which support both client and server side
 // rendering, and avoids any flash incorrect content on initial page load.
 
-// 取出以下網址asid
-// https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10158740544102775&height=50&width=50&ext=1635565413&hash=AeQ-Uqx_Vh1jY2iz-Uk
-// const getId = async (str) => {
-//   // console.log(str)
-//   let id;
-//   let start, end;
-//   start = str.indexOf("asid=") + 5;
-//   end = str.indexOf("&height");
-//   id = str.substring(start,end);
-//   return parseInt(id);
-// }
-
 export default function Header () {
   const [ session, loading ] = useSession()
   const [ toggled, setToggle] = useState(false)
@@ -66,9 +54,7 @@ export default function Header () {
                 <li><Link href="/#game">開始遊戲</Link></li>
                 <li><Link href="/#gift">遊戲獎品</Link></li>
                 <li><Link href="/auth/lottery">會員摸彩</Link></li>
-                <li><a href="" onClick={(e) => {
-                    e.preventDefault()
-                    signOut()}}>烈嶼鄉公所</a></li>
+                <li><a target="_blank" href="https://lieyu.kinmen.gov.tw/" rel="noreferrer">烈嶼鄉公所</a></li>
             </ul>
             <div className="otherLink">
                 <ul>

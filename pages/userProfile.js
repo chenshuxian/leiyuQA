@@ -5,6 +5,8 @@ import mainBanner from '../public/assets/images/mainBanner.png';
 import { postData } from '../libs/fetch';
 import { signIn, signOut, useSession, getSession } from 'next-auth/client';
 import { Button } from 'react-bootstrap';
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 // 
 
 function UserProfile () {
@@ -49,13 +51,36 @@ function UserProfile () {
         .catch(error => console.error(error))
         
     }
+
+    const columns = [{
+        dataField: 'id',
+        text:'彩卷號碼',
+        sort: true,
+        sortCaret: (order, column) => {
+            if (!order) return (<span>&nbsp;&nbsp;Desc/Asc</span>);
+            else if (order === 'asc') return (<span>&nbsp;&nbsp;Desc/<font color="red">Asc</font></span>);
+            else if (order === 'desc') return (<span>&nbsp;&nbsp;<font color="red">Desc</font>/Asc</span>);
+            return null;
+          }
+      }, {
+        dataField: 'name',
+        text: '時間',
+        sort: true
+      }, {
+        dataField: 'price',
+        text: '是否中獎',
+        sort: true
+      }];
+
+      const products = [{id:1,name:'iphone',price:'30'},{id:2,name:'iphone',price:'30'},{id:3,name:'iphone',price:'30'}] 
+      const products1 = [] 
     
   return (
     <Layout>
       <div id="outerWp">
         <div id="inter" className="userProfile">
             <div id="banner">
-            <Image src={mainBanner} alt="mainBanner" class="banImg" />
+            <Image src={mainBanner} alt="mainBanner" className="banImg" />
             </div>
             <div id="contentWp">
                 <dl id="main">
@@ -68,91 +93,22 @@ function UserProfile () {
                             </div>
                             <div className="globalContent">
                                 <ul className="input">
-                                <form onSubmit={submitForm}>
-                                    <li><b>姓名</b><input type="text" id="name" name="name"  onChange={changeState}/></li>
-                                    <li><b>手機</b><input type="text" id="phone" name="phone"  onChange={changeState}/></li>
-                                    <li><b>地址</b><input type="text" id="addr" name="addr"  onChange={changeState}/></li>
-                                    <li><input type="submit" value="修改" /></li>
-                                </form>
+                                    <form onSubmit={submitForm}>
+                                        <li><b>姓名</b><input type="text" id="name" name="name"  onChange={changeState}/></li>
+                                        <li><b>手機</b><input type="text" id="phone" name="phone"  onChange={changeState}/></li>
+                                        <li><b>地址</b><input type="text" id="addr" name="addr"  onChange={changeState}/></li>
+                                        <li><input type="submit" value="修改" /></li>
+                                    </form>
+                                    <li><Button onClick={()=> signOut()}>登出</Button></li>
                                 </ul>
-                                <table>
-                                    <col width="33%" />
-                                    <col width="33%" />
-                                    <col width="33%" />
-                                    <thead>
-                                        <tr>
-                                            <td>月份</td>
-                                            <td>摸彩卷</td>
-                                            <td>是否中獎</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>ticker88</td>
-                                            <td>中</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>ticker88</td>
-                                            <td>中</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>ticker88</td>
-                                            <td>中</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>ticker88</td>
-                                            <td>中</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>ticker88</td>
-                                            <td>中</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>ticker88</td>
-                                            <td>中</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>ticker88</td>
-                                            <td>中</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>ticker88</td>
-                                            <td>中</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>ticker88</td>
-                                            <td>中</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>ticker88</td>
-                                            <td>中</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                {/* <ul className="pageNum">
-                                    <li><a href="">上一頁</a></li>
-                                    <li><a href="" className="active">1</a></li>
-                                    <li><a href="">2</a></li>
-                                    <li><a href="">3</a></li>
-                                    <li><a href="">4</a></li>
-                                    <li><a href="">5</a></li>
-                                    <li><a href="">6</a></li>
-                                    <li><a href="">7</a></li>
-                                    <li><a href="">8</a></li>
-                                    <li><a href="">9</a></li>
-                                    <li><a href="">10</a></li>
-                                    <li><a href="">下一頁</a></li>
-                                </ul> */}
+                                <BootstrapTable
+                                    keyField='id'
+                                    data={ products }
+                                    columns= {columns}
+                                    bordered={ true }
+                                    noDataIndication="沒有任何彩卷"
+                                    pagination={ paginationFactory() }
+                                />
                             </div>
                         </div>
                     </dd>

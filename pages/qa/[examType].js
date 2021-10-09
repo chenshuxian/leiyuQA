@@ -249,7 +249,7 @@ export default function QA ({ qaData, examName }) {
                
             </ul>
             <ul style={{textAlign:'center',marginTop:'6px'}}>
-            <li><Button style={{margin:"2px", height:"45px", width:"100%"}} variant='danger' onClick={share}>share</Button></li> 
+            <li><Button style={{margin:"2px", height:"45px", width:"90px"}} variant='info' onClick={share}>分享</Button></li> 
             </ul>
         </div>
     </div>

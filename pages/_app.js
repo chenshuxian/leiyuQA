@@ -2,7 +2,6 @@
 import { Provider, useSession, signIn, SessionProvider } from 'next-auth/client'
 import React, { useEffect } from "react";
 import Head from "next/head";
-import 'bootstrap/dist/css/bootstrap.css'
 import '../public/assets/css/style.css'
 
 // Use the <Provider> to improve performance and allow components that call
@@ -33,6 +32,7 @@ export default function App ({ Component, pageProps }) {
         <meta property="og:description"   content="讓我們一起經由問答遊戲了解烈嶼抽大獎" />
         <meta property="og:image"         content="https://lieyu.fantasyball.tw/assets/images/bannerImg.png" />
         <title>烈嶼鄉知識問答</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" />
 
         <script async defer crossOrigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v12.0&appId=641136007247701&autoLogAppEvents=1" nonce="LOtsuOcU"></script> 
   
