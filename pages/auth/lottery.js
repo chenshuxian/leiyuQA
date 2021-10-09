@@ -6,7 +6,6 @@ import DatePicker from 'react-datepicker';
 import { useState } from 'react';
 import { FormGroup,ControlLabel, Container, Row, Col, Button } from 'react-bootstrap';
 import "../../node_modules/react-datepicker/dist/react-datepicker.min.css"
-import styles from "./lottery.module.css"
 
 export default function Lottery () {
     const date = new Date()
