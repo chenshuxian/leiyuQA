@@ -97,6 +97,7 @@ model prize {
   prize_image_url String   @default("") @db.VarChar(1024)
   prize_title     String   @default("")
   prize_num       Int      @default(1)
+  is_lottory      Boolean  @default(false)
   create_time     DateTime @default(now()) @db.Timestamp(0)
   update_time     DateTime @default(now()) @updatedAt @db.Timestamp(0)
   ticket          ticket[]
