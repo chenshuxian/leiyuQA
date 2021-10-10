@@ -1,5 +1,5 @@
 import errorCode from '../../../libs/errorCode';
-import { isLogin } from '../../../libs/auth';
+import { isAdmin } from '../../../libs/auth';
 import { uploadImage } from '../../../libs/uploadFile';
 
 /**
@@ -39,7 +39,7 @@ export default async(req, res) => {
     return;
   }
 
-  if (!await isLogin(req)) {
+  if (!await isAdmin(req)) {
     res.status(401).json(errorCode.Unauthorized);
     return;
   }

@@ -1,6 +1,6 @@
 import { getExamType, createExamType } from '../../../libs/examType';
 import errorCode from '../../../libs/errorCode';
-import { isLogin } from '../../../libs/auth';
+import { isLogin, isAdmin } from '../../../libs/auth';
 
 /**
  * @swagger
@@ -115,17 +115,17 @@ export default async(req, res) => {
     method
   } = req
 
-  if (!await isLogin(req)) {
-    res.status(401).json(errorCode.Unauthorized);
-    return;
-  }
-
   let examType;
   let total;
   switch (method) {
     case 'GET':
       let filter;
       let pagination;
+
+      if (!await isLogin(req)) {
+        res.status(401).json(errorCode.Unauthorized);
+        return;
+      }
 
       if (isDelete !== undefined) {
         filter = { is_delete: isDelete === 'true' ? true : false };
@@ -148,6 +148,11 @@ export default async(req, res) => {
       }
       break
     case 'POST':
+      if (!await isAdmin(req)) {
+        res.status(401).json(errorCode.Unauthorized);
+        return;
+      }
+
       if (!examTypeData) {
         res.status(400).json(errorCode.BadRequest)
         return;

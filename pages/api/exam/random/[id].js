@@ -1,5 +1,5 @@
 import { getExamRandom } from '../../../../libs/exam'
-import { isLogin } from '../../../libs/auth';
+import { isLogin } from '../../../../libs/auth';
 
 /**
  * @swagger

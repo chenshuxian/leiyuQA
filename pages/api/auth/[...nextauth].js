@@ -1,7 +1,9 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
 import { createUser, getUserById } from "../../../libs/user"
+import { adminLogin } from "../../../libs/auth"
 import errorCode from "../../../libs/errorCode"
+import { getAdminUserById } from "../../../libs/adminUser"
 
 // 取出以下網址asid
 // https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10158740544102775&height=50&width=50&ext=1635565413&hash=AeQ-Uqx_Vh1jY2iz-Uk
@@ -48,6 +50,17 @@ export default NextAuth({
           image: profile.picture.data.url,
         }
       },
+    }),
+    Providers.Credentials({
+      credentials: {
+        username: { label: 'Username', type: 'text', placeholder: 'Username'},
+        password: { label: 'password', type: 'text', placeholder: 'Password'}
+      },
+      async authorize(credentials) {
+        const admin = await adminLogin(credentials)
+
+        return admin;
+      }
     }),
     // Providers.GitHub({
     //   clientId: process.env.GITHUB_ID,
@@ -130,6 +143,12 @@ export default NextAuth({
   callbacks: {
     async signIn(user, account, profile) { 
       let registeredUser;
+
+      if (account.id === 'credentials') {
+        user.email = user.name;
+
+        return user;
+      }
       
       try {
         registeredUser = await getUserById(user.id);
@@ -151,15 +170,21 @@ export default NextAuth({
     // async redirect(url, baseUrl) { return baseUrl },
     async session(session, user) { 
       let registeredUser;
-      session.reg = false;
       try {
         registeredUser = await getUserById(user.sub);
-        if (!registeredUser.phone) {
-          session.reg = true;
-        }
+        session.reg = !!registeredUser.phone;
+        session.userId = user.sub;
         session.user.phone = registeredUser.phone;
         session.user.addr = registeredUser.addr;
       } catch (e) {
+        if (e === errorCode.NotFound) {
+          try {
+            registeredUser = await getAdminUserById(user.sub);
+            session.userId = user.sub;
+            session.isAdmin = true;
+          } catch (e) {
+          }
+        }
       }
 
       return session 

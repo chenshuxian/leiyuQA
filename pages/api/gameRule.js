@@ -1,5 +1,6 @@
 import { getGameRuleById, upsertGameRule } from '../../libs/gameRule'
 import errorCode from '../../libs/errorCode';
+import { isLogin, isAdmin } from '../../../libs/auth';
 
 /**
  * @swagger
@@ -81,12 +82,22 @@ export default async(req, res) => {
   let gameRule;
   switch (method) {
     case 'GET':
+      if (!await isLogin(req)) {
+        res.status(401).json(errorCode.Unauthorized);
+        return;
+      }
+
       gameRule = await getGameRuleById();
 
       res.status(200).json(gameRule || {});
       return;
       break
     case 'PUT':
+      if (!await isAdmin(req)) {
+        res.status(401).json(errorCode.Unauthorized);
+        return;
+      }
+
       if (!gameRuleData) {
         res.status(400).json(errorCode.BadRequest)
         return;

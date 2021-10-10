@@ -1,6 +1,6 @@
 import { getExam, createExam } from '../../../libs/exam';
 import errorCode from '../../../libs/errorCode';
-import { isLogin } from '../../../libs/auth';
+import { isAdmin } from '../../../libs/auth';
 
 /**
  * @swagger
@@ -135,17 +135,17 @@ export default async(req, res) => {
     method
   } = req
 
-  if (!await isLogin(req)) {
-    res.status(401).json(errorCode.Unauthorized);
-    return;
-  }
-
   let exam;
   let total;
   switch (method) {
     case 'GET':
       let filter = {};
       let pagination;
+
+      if (!await isAdmin(req)) {
+        res.status(401).json(errorCode.Unauthorized);
+        return;
+      }
 
       if (examTypeId) {
         filter['exam_type_id'] =  examTypeId;
@@ -172,6 +172,11 @@ export default async(req, res) => {
       }
       break
     case 'POST':
+      if (!await isAdmin(req)) {
+        res.status(401).json(errorCode.Unauthorized);
+        return;
+      }
+
       if (!examData) {
         res.status(400).json(errorCode.BadRequest)
         return;

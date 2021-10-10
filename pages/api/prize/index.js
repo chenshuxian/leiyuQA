@@ -1,6 +1,6 @@
 import { getPrize, createPrize } from '../../../libs/prize';
 import errorCode from '../../../libs/errorCode';
-import { isLogin } from '../../../libs/auth';
+import { isLogin, isAdmin } from '../../../libs/auth';
 
 /**
  * @swagger
@@ -122,17 +122,17 @@ export default async(req, res) => {
     method
   } = req
 
-  if (!await isLogin(req)) {
-    res.status(401).json(errorCode.Unauthorized);
-    return;
-  }
-
   let prize;
   let total;
   switch (method) {
     case 'GET':
       let filter;
       let pagination;
+
+      if (!await isLogin(req)) {
+        res.status(401).json(errorCode.Unauthorized);
+        return;
+      }
 
       if (isLottory !== undefined) {
         filter = { is_lottory: isLottory === 'true' ? true : false };
@@ -155,6 +155,11 @@ export default async(req, res) => {
       }
       break
     case 'POST':
+      if (!await isAdmin(req)) {
+        res.status(401).json(errorCode.Unauthorized);
+        return;
+      }
+
       if (!prizeData) {
         res.status(400).json(errorCode.BadRequest)
         return;

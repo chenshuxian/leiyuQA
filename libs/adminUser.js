@@ -148,4 +148,27 @@ const getPasswordHash = function(password) {
   return hash;
 }
 
-export { getAdminUser, createAdminUser, updateAdminUser, deleteAdminUser, getAdminUserById };
+const getAdminByCredentials = async function(name, password) {
+  password = getPasswordHash(password);
+
+  let adminUser;
+  try {
+    adminUser = await prisma.admin.findFirst({
+      where: {
+        name, password
+      },
+      select : {
+        id: true,
+        name: true,
+        create_time: true,
+        update_time: true
+      }
+    });
+  } catch (e) {
+    return null;
+  }
+
+  return adminUser;
+}
+
+export { getAdminUser, createAdminUser, updateAdminUser, deleteAdminUser, getAdminUserById, getAdminByCredentials };
