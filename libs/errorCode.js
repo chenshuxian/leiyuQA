@@ -33,6 +33,11 @@ const errorCode = {
     statusCode: 401,
     errorCode: 'Unauthorized',
     message: 'Not login'
+  },
+  UploadFailed: {
+    statusCode: 400,
+    errorCode: 'UploadFailed',
+    message: 'There was an error pasrsing the files'
   }
 }
 
