@@ -206,4 +206,79 @@ const getExamTypeId = async function(id) {
   return exam?.exam_type_id || '';
 }
 
-export { getExam, createExam, updateExam, deleteExam, getExamRandom, checkAnswer, getExamTypeId, getExamById };
+const importExam = async function(records, { examTypeId }) {
+  let data;
+  let count;
+  const fieldMapping = {
+    exam_title: 1,
+    exam_option: [3, 4, 5, 6],
+    exam_ans: 2,
+    exam_img_url: 7,
+    exam_video_url: 8
+  };
+  const headerMapping = {
+    '題目': 'exam_title',
+    '答案': 'exam_ans',
+    '照片': 'exam_img_url',
+    '影片': 'exam_video_url',
+    '選項1': [ 'exam_option', 0 ],
+    '選項2': [ 'exam_option', 1 ],
+    '選項3': [ 'exam_option', 2 ],
+    '選項4': [ 'exam_option', 3 ]
+  }
+
+  if (!Array.isArray(records)) {
+    throw errorCode.BadRequest;
+  }
+
+  let header = records[0];
+  let index = header.indexOf('題目');
+  if ((index = header.indexOf('題目')) !== -1) {
+    records.shift();
+
+    Object.entries(headerMapping).forEach(([headerValue, fieldKey]) => {
+      if ((index = header.indexOf(headerValue))) {
+        if (Array.isArray(fieldKey)) {
+          fieldMapping[fieldKey[0]][fieldKey[1]] = index;
+        } else {
+          fieldMapping[fieldKey] = index;
+        }
+      }
+    });
+  }
+
+  data = records.map((exam) => {
+    let record = { exam_type_id: examTypeId };
+
+    Object.entries(fieldMapping).forEach(([key, index]) => {
+      if (index === -1) {
+        return;
+      }
+
+      if (Array.isArray(index)) {
+        record[key] = [];
+        index.forEach((examIndex, optionIndex) => {
+          record[key][optionIndex] = exam[examIndex];
+        });
+      } else {
+        record[key] = exam[index];
+      }
+    });
+
+    record.exam_ans = parseInt(record.exam_ans);
+
+    return record;
+  });
+
+  try {
+    ({ count } = await prisma.exam.createMany({
+      data
+    }));
+  } catch (e) {
+    throw errorCode.InternalServerError;
+  }
+
+  return { data, count };
+}
+
+export { getExam, createExam, updateExam, deleteExam, getExamRandom, checkAnswer, getExamTypeId, getExamById, importExam };

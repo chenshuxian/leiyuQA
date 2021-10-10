@@ -1,5 +1,6 @@
 import errorCode from './errorCode';
 import formidable from 'formidable';
+import parse from 'csv-parse';
 import fs from 'fs';
 import path from 'path'
 
@@ -70,4 +71,54 @@ const uploadImage = function(req, res, imagePath) {
   });
 }
 
-export { uploadImage };
+const uploadCSV = function(req, res, cb, cbArgs) {
+  return new Promise((resolve, reject) => {
+    const form = formidable({ multiples: true });
+
+    form.parse(req, async function (err, _fields, files) {
+      if (err) {
+        res.status(400).json(errorCode.UploadFailed);
+        return;
+      }
+
+      if (!files.file || Array.isArray(files.file) ) {
+        res.status(400).json(errorCode.BadRequest);
+        return;
+      }
+
+      const file = files.file;
+      const fileExt = file.name.split('.').pop();
+      const isValid = fileExt.toLowerCase() === 'csv';
+
+      if (!isValid) {
+        res.status(400).json(errorCode.BadRequest);
+        return;
+      }
+
+      let records = []
+      const parser = fs.createReadStream(file.path).pipe(parse({}));
+      for await (const record of parser) {
+        if (!record[0]) {
+          continue;
+        }
+
+        records.push(record)
+      }
+
+      try {
+        fs.rmSync(file.path);
+      } catch (e) {
+        res.status(500).json(errorCode.InternalServerError);
+      }
+
+      try {
+        const result = await cb(records, cbArgs);
+        res.status(200).json(result);
+      } catch (e) {
+        res.status(e.statusCode).json(e);
+      }
+    });
+  });
+}
+
+export { uploadImage, uploadCSV };
