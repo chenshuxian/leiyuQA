@@ -8,7 +8,7 @@ dayjs.extend(advancedFormat);
 
 const ticketMax = 200;
 
-const getTicket = async function(filter, pagination) {
+const getTicket = async function(filter, pagination, orderBy, includeRelation) {
   let ticket;
   let total;
   let prismaArgs = {};
@@ -22,9 +22,33 @@ const getTicket = async function(filter, pagination) {
     prismaArgs['take'] = parseInt(pagination.limit) || 50;
   }
 
+  if (orderBy) {
+    prismaArgs['orderBy'] = orderBy;
+  }
+
+  if (includeRelation) {
+    prismaArgs['include'] = {
+      exam_type: {
+        select: {
+          exam_type_name: true
+        }
+      },
+      user: {
+        select: {
+          name: true,
+          phone: true,
+          addr: true
+        }
+      },
+      month_prize: true,
+      quarter_prize: true,
+      year_prize: true
+    };
+  }
+
   total = await getTicketCount(filter);
   if (!total) {
-    throw errorCode.BadRequest;
+    throw errorCode.NotFound;
   }
 
   ticket = await prisma.ticket.findMany(prismaArgs);

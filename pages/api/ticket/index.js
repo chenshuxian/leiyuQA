@@ -1,6 +1,6 @@
 import { getTicket } from '../../../libs/ticket';
 import errorCode from '../../../libs/errorCode';
-import { isLogin } from '../../../libs/auth';
+import { isAdmin, isLogin } from '../../../libs/auth';
 
 /**
  * @swagger
@@ -93,6 +93,28 @@ import { isLogin } from '../../../libs/auth';
  *         required: false
  *         schema:
  *           type: string
+ *       - name: isWinner
+ *         in: query
+ *         description: Is winner
+ *         required: false
+ *         schema:
+ *           type: boolean
+ *       - name: startDate
+ *         in: query
+ *         description: Start date
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *           description: Start date
+ *       - name: endDate
+ *         in: query
+ *         description: End date
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *           description: End date
  *       - name: offset
  *         in: query
  *         description: offset
@@ -115,7 +137,7 @@ import { isLogin } from '../../../libs/auth';
  */
 export default async(req, res) => {
   const {
-    query: { userId, offset, limit },
+    query: { userId, isWinner, startDate, endDate, offset, limit },
     method
   } = req
 
@@ -128,19 +150,55 @@ export default async(req, res) => {
   let total;
   switch (method) {
     case 'GET':
-      let filter;
+      let filter = {};
       let pagination;
+      let orderBy;
+      let includeRelation = await isAdmin();
 
       if (userId) {
         filter = { user_id: userId };
+      }
+
+      if (isWinner !== undefined ) {
+        if (isWinner === 'true') {
+          filter = Object.assign(filter, { OR: [
+            { NOT: [{ month_prize_id: null }] },
+            { NOT: [{ quarter_prize_id: null }] },
+            { NOT: [{ year_prize_id: null }] },
+          ]});
+        } else {
+          filter = Object.assign(filter, { AND: [
+            { month_prize_id: null },
+            { quarter_prize_id: null },
+            { year_prize_id: null },
+          ]});
+        }
+      }
+
+      if (startDate) {
+        if (!filter['AND']) {
+          filter['AND'] = [];
+        }
+
+        filter['AND'].push({ create_time: { gte: new Date(startDate) }});
+      }
+
+      if (endDate) {
+        if (!filter['AND']) {
+          filter['AND'] = [];
+        }
+
+        filter['AND'].push({ create_time: { lte: new Date(endDate) }});
       }
 
       if (offset || limit) {
         pagination = { offset, limit };
       }
 
+      orderBy = [{ create_time: 'desc' }];
+
       try {
-        ({ ticket, total } = await getTicket(filter, pagination));
+        ({ ticket, total } = await getTicket(filter, pagination, orderBy, includeRelation));
       } catch (e) {
         res.status(e.statusCode).json(e);
         return;

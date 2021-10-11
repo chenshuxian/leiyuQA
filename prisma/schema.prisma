@@ -48,6 +48,7 @@ model ticket {
   create_time      DateTime  @default(now()) @db.Timestamp(0)
   update_time      DateTime  @default(now()) @updatedAt @db.Timestamp(0)
 
+  @@index(create_time)
   @@index([user_id, month, month_prize_id])
   @@index([user_id, quarter, quarter_prize_id])
   @@index([user_id, year, year_prize_id])
