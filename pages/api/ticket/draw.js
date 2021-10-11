@@ -1,15 +1,11 @@
-import { getTicket } from '../../../libs/ticket';
+import { drawTicket } from '../../../libs/ticket';
 import errorCode from '../../../libs/errorCode';
-import { isLogin } from '../../../libs/auth';
+import { isAdmin } from '../../../libs/auth';
 
 /**
  * @swagger
- * tags:
- *   - name: ticket
- *     description: The ticket
- * 
  * definitions:
- *   ticket:
+ *   winner:
  *     type: object
  *     properties:
  *       ticket_id:
@@ -62,97 +58,137 @@ import { isLogin } from '../../../libs/auth';
  *         format: date-time
  *         description: The exam type updated time
  *         example: 2021-10-03T03:00:03.000Z
- *   ticketList:
+ *       exam_type:
+ *         type: object
+ *         description: The exam type object
+ *         $ref: '#/definitions/examType'
+ *       user:
+ *         type: object
+ *         description: The user object
+ *         $ref: '#/definitions/user'
+ *       month_prize:
+ *         type: object
+ *         description: The month prize object
+ *         $ref: '#/definitions/prize'
+ *       quarter_prize:
+ *         type: object
+ *         description: The quarter prize object
+ *         $ref: '#/definitions/prize'
+ *       year_prize:
+ *         type: object
+ *         description: The year prize object
+ *         $ref: '#/definitions/prize'
+ *   winnerList:
  *     type: object
  *     properties:
- *       ticketList:
+ *       winnerList:
  *         type: array
  *         items:
- *           $ref: '#/definitions/ticket'
+ *           $ref: '#/definitions/winner'
  *       total:
  *         type: integer
  *         example: 1
- *
+ * 
  * components:
  *   schemas:
- *     Ticket:
- *       $ref: '#/definitions/ticket'
+ *     Winner:
+ *       $ref: '#/definitions/winner'
  * 
- * /api/ticket:
- *   get:
+ * /api/ticket/draw:
+ *   post:
  *     tags:
  *       - ticket
- *     summary: Get a list of ticket
- *     description: Get a list of ticket
+ *     summary: Lucky draw
+ *     description: The list of winners
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: userId
+ *       - name: month
  *         in: query
- *         description: The user ID
+ *         description: The month of the draw
  *         required: false
  *         schema:
  *           type: string
- *       - name: offset
+ *       - name: quarter
  *         in: query
- *         description: offset
+ *         description: The quarter of the draw
  *         required: false
  *         schema:
- *           type: integer
- *       - name: limit 
+ *           type: string
+ *       - name: year
  *         in: query
- *         description: limit
+ *         description: The year of the draw
  *         required: false
  *         schema:
+ *           type: string
+ *       - name: number
+ *         in: query
+ *         description: Number of draws
+ *         required: true
+ *         schema:
  *           type: integer
+ *       - name: prize_id
+ *         in: query
+ *         description: The prize ID
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: A list of ticket
+ *         description: A list of winners
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/definitions/ticketList'
+ *               $ref: '#/definitions/winnerList'
  */
 export default async(req, res) => {
   const {
-    query: { userId, offset, limit },
+    query: { month, quarter, year, number, prize_id },
     method
   } = req
 
-  if (!await isLogin(req)) {
+  if (!await isAdmin(req)) {
     res.status(401).json(errorCode.Unauthorized);
     return;
   }
 
-  let ticket;
+  let winnerList;
   let total;
   switch (method) {
-    case 'GET':
-      let filter;
-      let pagination;
+    case 'POST':
+      let drawRange;
 
-      if (userId) {
-        filter = { user_id: userId };
+      if (month) {
+        drawRange = { month }
       }
 
-      if (offset || limit) {
-        pagination = { offset, limit };
+      if (quarter) {
+        drawRange = { quarter }
+      }
+
+      if (year) {
+        drawRange = { year }
+      }
+
+      if  (!drawRange) {
+        res.status(400).json(errorCode.BadRequest);
+        return;
       }
 
       try {
-        ({ ticket, total } = await getTicket(filter, pagination));
+        ({ winnerList, total } = await drawTicket(prize_id, number, drawRange));
       } catch (e) {
         res.status(e.statusCode).json(e);
         return;
       }
 
-      if (ticket) {
-        res.status(200).json({ ticketList: ticket, total });
+      if (winnerList) {
+        res.status(200).json({ winnerList, total });
         return;
       }
       break
     default:
-      res.setHeader('Allow', ['GET']);
+      res.setHeader('Allow', ['POST']);
       res.status(405).json(errorCode.MethodNotAllowed);
       return;
   }

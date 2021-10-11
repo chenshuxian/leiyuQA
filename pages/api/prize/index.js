@@ -32,7 +32,7 @@ import { isLogin, isAdmin } from '../../../libs/auth';
  *         type: Integer
  *         description: The number of prizes
  *         example: 1
- *       is_lottory:
+ *       is_lottery:
  *         type: boolean 
  *         description: Is the lottery been drawn
  *         example: false
@@ -71,7 +71,7 @@ import { isLogin, isAdmin } from '../../../libs/auth';
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: isLottory
+ *       - name: isLottery
  *         in: query
  *         description: Is the lottery been drawn
  *         required: false
@@ -117,7 +117,7 @@ import { isLogin, isAdmin } from '../../../libs/auth';
  */
 export default async(req, res) => {
   const {
-    query: { isLottory, offset, limit },
+    query: { isLottery, offset, limit },
     body: prizeData,
     method
   } = req
@@ -134,8 +134,8 @@ export default async(req, res) => {
         return;
       }
 
-      if (isLottory !== undefined) {
-        filter = { is_lottory: isLottory === 'true' ? true : false };
+      if (isLottery !== undefined) {
+        filter = { is_lottery: isLottery === 'true' ? true : false };
       }
 
       if (offset || limit) {
