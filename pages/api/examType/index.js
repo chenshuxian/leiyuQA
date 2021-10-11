@@ -18,7 +18,7 @@ import { isLogin, isAdmin } from '../../../libs/auth';
  *         example: 4034bd78-17c8-4919-93d5-d0f547a0401b
  *       exam_type_name:
  *         type: string
- *         description: The exam name
+ *         description: The exam type name
  *         example: 文化
  *       create_time:
  *         type: string

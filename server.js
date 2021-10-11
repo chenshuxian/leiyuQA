@@ -20,6 +20,8 @@ const prisma = new PrismaClient({
   errorFormat: "minimal",
 });
 
+const dayjs = require("dayjs");
+
 var options = {
   key: fs.readFileSync("./ssl/lieyu.fantasyball.tw.key"),
   cert: fs.readFileSync("./ssl/lieyu.chained.crt"),
@@ -47,27 +49,30 @@ app.prepare().then(() => {
   app.all("*", async (req, res) => {
     const reqUrl = url.parse(req.url);
     const urlPath = reqUrl.pathname;
-    // if (urlPath === "/" || urlPath === "/index") {
-    //   // 寫入登入人數
-    //   try {
-    //     const count = await prisma.pv.update({
-    //       where: {
-    //         id: 1,
-    //       },
-    //       data: {
-    //         count: {
-    //           increment: 1,
-    //         },
-    //         update_time: new Date(),
-    //       },
-    //     });
-    //     console.log("pv:" + JSON.stringify(count));
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
+    if (urlPath === "/" || urlPath === "/index") {
+      // 寫入登入人數
+      try {
+        const today = dayjs().format('YYYYMMDD');
+        const count = await prisma.pv.upsert({
+          where: {
+            id: today
+          },
+          update: {
+            number: {
+              increment: 1
+            }
+          },
+          create: {
+            id: today,
+            number: 1,
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
 
     //   console.log("pathName: " + urlPath);
-    // }
+    }
 
     return handle(req, res);
   });
