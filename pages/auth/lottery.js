@@ -4,13 +4,25 @@ import mainBanner from '../../public/assets/images/mainBanner.png';
 import { signIn, signOut, useSession } from 'next-auth/client'
 import DatePicker from 'react-datepicker';
 import { useState } from 'react';
-import { FormGroup,ControlLabel, Container, Row, Col, Button } from 'react-bootstrap';
+import { Form,DropdownButton, Dropdown, Container, Row, Col, Button } from 'react-bootstrap';
 import "../../node_modules/react-datepicker/dist/react-datepicker.min.css"
+import { registerLocale, setDefaultLocale } from 'react-datepicker';
+import zh_TW  from '../../node_modules/date-fns/locale/zh-TW'
+registerLocale('TW', zh_TW);
 
-export default function Lottery () {
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+
+
+function Lottery ({ prizeList, prizeObj }) {
     const date = new Date()
     const [startDate, setStartDate] = useState(date)
     const [endDate, setEndDate] =useState(date)
+    const [dropTitle, setDropTitle] = useState('獎品清單')
+
+    const prizeSelect = (v) => {
+      setDropTitle(prizeObj[v])
+    }
 
   return (
     <Layout>
@@ -29,39 +41,61 @@ export default function Lottery () {
                                 <h2>摸彩頁</h2>
                             </div>
                             <div className="globalContent"> 
-                                <Container>
+                                <Container className="lottery">
                                     <Row>
-                                        <Col>
-                                        <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} 
-                                         popperClassName="some-custom-class"
-                                         popperPlacement="bottom-end"
-                                         popperModifiers={[
-                                           {
-                                             name: "offset",
-                                             options: {
-                                               offset: [5, 10],
-                                             },
-                                           },
-                                           {
-                                             name: "preventOverflow",
-                                             options: {
-                                               rootBoundary: "viewport",
-                                               tether: true,
-                                               altAxis: false,
-                                             },
-                                           },
-                                         ]}
-                                        />
+                                      <Col xs={12} md={3}>
+                                      <Row> 
+                                            <div className="lable">
+                                            獎品清單:
+                                            </div>
+                                      <DropdownButton
+                                        title={dropTitle}
+                                        id="dropdown-menu-align-right"
+                                        onSelect={prizeSelect}
+                                          >
+                                            {prizeList.map((v,i) => (
+                                              <div key={i}>
+                                              <Dropdown.Item eventKey={v.prize_id}>{v.prize_name}</Dropdown.Item>
+                                              </div>
+                                            ))}
+                                        </DropdownButton>
+          
+                                        </Row>
+                                      </Col>
+                                      <Col xs={12} md={3}>
+                                
+                                          <div className="lable">
+                                          開始日期:
+                                          </div>
+                                          <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}
+                                            locale="TW"
+                                            withPortal
+                                            portalId="root-portal"
+                                            dateFormat="yyyy/MM"
+                                            showMonthYearPicker   />
+                                        
+                                      </Col>
+                                      <Col xs={12} md={3}>
+                                        <Row> 
+                                          <div className="lable">
+                                          結束日期:
+                                          </div>
+                                            <DatePicker selected={endDate} onChange={(date) => setEndDate(date)}
+                                              locale="TW"
+                                              withPortal
+                                              portalId="root-portal"
+                                              dateFormat="yyyy/MM"
+                                              showMonthYearPicker
+                                                 />
+                                            </Row>
                                         </Col>
-                                        <Col>
-                                        <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                        <Button style={{backgroundColor:'red',zIndex:'-1'}}>摸彩去</Button>
+                                        <Col xs={12} md={3}>
+                                          <Row> 
+                                            <div className="lable">
+                                            抽獎數量:
+                                            </div>
+                                            <Form.Control width="2" value="1" />
+                                            </Row>
                                         </Col>
                                     </Row>
                                 </Container>
@@ -93,4 +127,26 @@ export default function Lottery () {
     </div>
     </Layout>
   )
+
 }
+
+export async function getStaticProps(context) {
+
+  const prizeList = await prisma.prize.findMany({
+      select:{
+          prize_id:true,
+          prize_name:true
+      }
+  })
+
+  const prizeObj = prizeList.reduce((obj, cur) => ({...obj, [cur.prize_id]: cur.prize_name}), {})
+
+  return {
+    props: {
+        prizeList,
+        prizeObj
+    }, // will be passed to the page component as props
+  }
+}
+
+export default Lottery;

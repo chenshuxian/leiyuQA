@@ -3,6 +3,8 @@ import { Provider, useSession, signIn, SessionProvider } from 'next-auth/client'
 import React, { useEffect } from "react";
 import Head from "next/head";
 import '../public/assets/css/style.css'
+import "../public/assets/css/lottery.css"
+import "../public/assets/css/layout.css"
 
 // Use the <Provider> to improve performance and allow components that call
 // `useSession()` anywhere in your application to access the `session` object.
