@@ -8,50 +8,75 @@ datasource db {
 }
 
 model user {
-  id             String    @id @db.Char(36)
+  id             String    @id @default(uuid()) @db.Char(36)
   name           String    @db.VarChar(64)
   phone          String    @default("") @db.VarChar(45)
   addr           String    @default("") @db.VarChar(255)
+  last_play_time DateTime? @db.Timestamp(0)
   is_shared      Boolean   @default(false)
   create_time    DateTime  @default(now()) @db.Timestamp(0)
-  update_time    DateTime  @default(now()) @db.Timestamp(0)
-  last_play_time DateTime? @db.Timestamp(0)
+  update_time    DateTime  @default(now()) @updatedAt @db.Timestamp(0)
   ticket         ticket[]
 }
 
 model admin {
-  id          String   @id @db.Char(36)
+  id          String   @id @default(uuid()) @db.Char(36)
   name        String   @db.VarChar(64)
-  password    String   @db.Char(40)
+  password    String   @db.Char(64)
   create_time DateTime @default(now()) @db.Timestamp(0)
-  update_time DateTime @default(now()) @db.Timestamp(0)
+  update_time DateTime @default(now()) @updatedAt @db.Timestamp(0)
 
   @@index([name, password])
 }
 
+model ticket {
+  ticket_id        String    @id @default(uuid()) @db.Char(36)
+  ticket_score     Int       @default(0) @db.TinyInt
+  exam_type        exam_type @relation(fields: [exam_type_id], references: [exam_type_id])
+  exam_type_id     String    @db.Char(36)
+  user             user      @relation(fields: [user_id], references: [id])
+  user_id          String    @db.Char(36)
+  month_prize      prize?    @relation("month_prize", fields: [month_prize_id], references: [prize_id])
+  quarter_prize    prize?    @relation("quarter_prize", fields: [quarter_prize_id], references: [prize_id])
+  year_prize       prize?    @relation("year_prize", fields: [year_prize_id], references: [prize_id])
+  month_prize_id   String?   @db.Char(36)
+  quarter_prize_id String?   @db.Char(36)
+  year_prize_id    String?   @db.Char(36)
+  month            String    @default("0") @db.Char(6)
+  quarter          String    @default("0") @db.Char(6)
+  year             String    @default("0") @db.Char(4)
+  create_time      DateTime  @default(now()) @db.Timestamp(0)
+  update_time      DateTime  @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@index(create_time)
+  @@index([user_id, month, month_prize_id])
+  @@index([user_id, quarter, quarter_prize_id])
+  @@index([user_id, year, year_prize_id])
+}
+
 model exam {
-  exam_id        String    @id @db.Char(36)
+  exam_id        String    @id @default(uuid()) @db.Char(36)
+  exam_type      exam_type @relation(fields: [exam_type_id], references: [exam_type_id])
   exam_type_id   String    @db.Char(36)
   exam_title     String    @default("") @db.VarChar(255)
-  exam_option    Json
+  // exam_option    exam_option[]
+  exam_option    Json      @default("")
   exam_ans       Int       @db.TinyInt
   exam_img_url   String    @default("") @db.VarChar(1024)
   exam_video_url String    @default("") @db.VarChar(1024)
   create_time    DateTime  @default(now()) @db.Timestamp(0)
-  update_time    DateTime  @default(now()) @db.Timestamp(0)
+  update_time    DateTime  @default(now()) @updatedAt @db.Timestamp(0)
   is_delete      Boolean   @default(false)
-  exam_type      exam_type @relation(fields: [exam_type_id], references: [exam_type_id])
 
-  @@index([exam_id, exam_ans])
-  @@index([exam_type_id], map: "exam_exam_type_id_fkey")
   @@index([is_delete])
+  @@index([exam_id, exam_ans])
 }
 
 model exam_type {
-  exam_type_id   String   @id @db.Char(36)
+  exam_type_id   String   @id @default(uuid()) @db.Char(36)
   exam_type_name String   @default("")
   create_time    DateTime @default(now()) @db.Timestamp(0)
-  update_time    DateTime @default(now()) @db.Timestamp(0)
+  update_time    DateTime @default(now()) @updatedAt @db.Timestamp(0)
   is_delete      Boolean  @default(false)
   exam           exam[]
   ticket         ticket[]
@@ -59,43 +84,41 @@ model exam_type {
   @@index([is_delete])
 }
 
+// model exam_option {
+//   exam_option_id    String   @id @default(uuid()) @db.Char(36)
+//   exam_id           String   @db.Char(36)
+//   exam_option_order Int      @default(0) @db.TinyInt
+//   exam_option       String   @db.VarChar(255)
+//   create_time       DateTime @default(now()) @db.Timestamp(0)
+//   update_time       DateTime @default(now()) @updatedAt @db.Timestamp(0)
+//   exam              exam[]   @relation(references: [exam_id])
+
+//   @@index([exam_id])
+// }
+
 model game_rule {
-  game_rule_id      String   @id @db.Char(36)
+  game_rule_id      String   @id @default(uuid()) @db.Char(36)
   game_rule_content String   @db.Text
   create_time       DateTime @default(now()) @db.Timestamp(0)
-  update_time       DateTime @default(now()) @db.Timestamp(0)
+  update_time       DateTime @default(now()) @updatedAt @db.Timestamp(0)
 }
 
 model prize {
-  prize_id        String   @id @db.Char(36)
+  prize_id        String   @id @default(uuid()) @db.Char(36)
   prize_name      String   @default("")
   prize_image_url String   @default("") @db.VarChar(1024)
   prize_title     String   @default("")
   prize_num       Int      @default(1)
+  is_lottery      Boolean  @default(false)
   create_time     DateTime @default(now()) @db.Timestamp(0)
-  update_time     DateTime @default(now()) @db.Timestamp(0)
-  ticket          ticket[]
+  update_time     DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  month_ticket    ticket[] @relation("month_prize")
+  quarter_ticket  ticket[] @relation("quarter_prize")
+  year_ticket     ticket[] @relation("year_prize")
 }
 
 model pv {
   id          String   @id @db.Char(8)
   number      BigInt   @default(0) @db.UnsignedBigInt
   create_time DateTime @default(now()) @db.Timestamp(0)
-}
-
-model ticket {
-  ticket_id    String    @id @db.Char(36)
-  user_id      String    @db.Char(36)
-  prize_id     String?   @db.Char(36)
-  create_time  DateTime  @default(now()) @db.Timestamp(0)
-  update_time  DateTime  @default(now()) @db.Timestamp(0)
-  exam_type_id String    @db.Char(36)
-  ticket_score Int       @default(0) @db.TinyInt
-  exam_type    exam_type @relation(fields: [exam_type_id], references: [exam_type_id])
-  prize        prize?    @relation(fields: [prize_id], references: [prize_id])
-  user         user      @relation(fields: [user_id], references: [id])
-
-  @@index([exam_type_id], map: "ticket_exam_type_id_fkey")
-  @@index([prize_id], map: "ticket_prize_id_fkey")
-  @@index([user_id], map: "ticket_user_id_fkey")
 }

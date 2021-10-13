@@ -35,7 +35,7 @@ export default function App ({ Component, pageProps }) {
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" />
 
         <script async defer crossOrigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v12.0&appId=641136007247701&autoLogAppEvents=1" nonce="LOtsuOcU"></script> 
-  
+
       </Head>
     <Provider
       // Provider options are not required but can be useful in situations where
