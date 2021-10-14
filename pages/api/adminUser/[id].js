@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { getAdminUserById, updateAdminUser, deleteAdminUser } from '../../../libs/adminUser'
 import errorCode from '../../../libs/errorCode';
 import { isAdmin } from '../../../libs/auth';

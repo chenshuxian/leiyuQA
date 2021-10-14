@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { checkAnswer, getExamTypeId } from '../../../libs/exam';
 import { createTicket } from '../../../libs/ticket';
 import errorCode from '../../../libs/errorCode';

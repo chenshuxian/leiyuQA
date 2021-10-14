@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { getExamTypeById, updateExamType, deleteExamType } from '../../../libs/examType'
 import errorCode from '../../../libs/errorCode';
 import { isAdmin } from '../../../libs/auth';

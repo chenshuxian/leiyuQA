@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { getUserById, updateUser } from '../../libs/user';
 import errorCode from '../../libs/errorCode';
 import { isLogin, getUserId } from '../../libs/auth';

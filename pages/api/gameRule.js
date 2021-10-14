@@ -1,6 +1,7 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { getGameRuleById, upsertGameRule } from '../../libs/gameRule'
 import errorCode from '../../libs/errorCode';
-import { isLogin, isAdmin } from '../../../libs/auth';
+import { isLogin, isAdmin } from '../../libs/auth';
 
 /**
  * @swagger

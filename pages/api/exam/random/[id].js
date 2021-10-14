@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { getExamRandom } from '../../../../libs/exam'
 import { isLogin } from '../../../../libs/auth';
 

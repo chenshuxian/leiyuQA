@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { deleteExam } from '../../../libs/exam';
 import errorCode from '../../../libs/errorCode';
 import { isAdmin } from '../../../libs/auth';
