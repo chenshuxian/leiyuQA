@@ -118,11 +118,13 @@ export default async(req, res) => {
       }
 
       userId = await getUserId(req);
+      //console.log(`authID: ${userId}`)
 
       try {
         user = await getUserById(userId);
       } catch (e) {
         if (e === errorCode.NotFound) {
+          //console.log(`post auth err NotFound`)
           res.status(401).json(errorCode.Unauthorized);
           return;
         }
@@ -138,6 +140,8 @@ export default async(req, res) => {
       try {
         examAnsErr = await checkAnswer(answerData);
         if (examAnsErr) {
+          // 更新is_shared 狀態為false
+          updateUser(userId, { is_shared: false });
           score = (Object.keys(answerData).length - examAnsErr.length) * 10
           examAnsErr = examAnsErr.map( exam => {
             return {
