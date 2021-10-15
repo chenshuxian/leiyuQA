@@ -86,8 +86,6 @@ export default function QA ({examTypeId, examTitle}) {
     const setAns = (i, a, eId) => {
         let newA = [...examAns];
         newA[i] = a;
-        // console.log(newA)
-        // console.log(`ansObj${eId}: ${JSON.stringify(a)}`)
         ans[eId] = a;
         setExamAns(newA)
         nextQ(i);
@@ -119,8 +117,16 @@ export default function QA ({examTypeId, examTitle}) {
             method: 'feed',
             link: 'https://lieyu.fantasyball.tw/'
           }, function(response){ 
-              if (response && !response.error_message) {
-                    router.push('/#game')
+                if (response && !response.error_message) {
+                    let data = {is_shared: true}
+                    axios.patch('/api/me',data)
+                    .then((res) => {
+                        router.push('/#game')
+                    }
+                    ).catch((e)=>{
+                        console.log(`share fb err: ${e}`)
+                    })
+                    
                 } else {
                     alert('Error while posting.11');
                 }
@@ -144,9 +150,6 @@ export default function QA ({examTypeId, examTitle}) {
                         {exam[examNum].exam_video_url ? (<div className="youtube">
                             <iframe src={exam[examNum].exam_video_url} title={exam[examNum].exam_title} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                         </div>) : null}
-                        {/* <div className="youtube">
-                            <iframe src="https://www.youtube.com/embed/9agxjqRAZYU" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                        </div> */}
                     </div>
                     <ul className="radio">
                         {exam[examNum].exam_option.map((v,i)=> {
