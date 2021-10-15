@@ -21,7 +21,7 @@ export default function Signin () {
      <div id="outerWp">
         <div id="inter" className="fbLogin">
             <div id="banner">
-                <Image src={mainBanner} alt="mainBanner" class="banImg" />
+                <Image src={mainBanner} alt="mainBanner" className="banImg" />
             </div>
             <div id="contentWp">
                 <dl id="main">
