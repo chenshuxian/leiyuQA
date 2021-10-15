@@ -143,16 +143,18 @@ export default NextAuth({
   callbacks: {
     async signIn(user, account, profile) { 
       let registeredUser;
-
+      // console.log(`user: ${JSON.stringify(user)} account: ${JSON.stringify(account)} profile: ${JSON.stringify(profile)}`)
       if (account.id === 'credentials') {
         user.email = user.name;
 
         return user;
       }
-      
+
       try {
         registeredUser = await getUserById(user.id);
+       
       } catch (e) {
+       
         if (e === errorCode.NotFound) {
           try {
             registeredUser = await createUser({
@@ -169,6 +171,7 @@ export default NextAuth({
     },
     // async redirect(url, baseUrl) { return baseUrl },
     async session(session, user) { 
+      // console.log(`sessionBak1: ${JSON.stringify(user)}`)
       let registeredUser;
       try {
         registeredUser = await getUserById(user.sub);
@@ -176,6 +179,7 @@ export default NextAuth({
         session.userId = user.sub;
         session.user.phone = registeredUser.phone;
         session.user.addr = registeredUser.addr;
+        session.user.is_shared = registeredUser.is_shared;
       } catch (e) {
         if (e === errorCode.NotFound) {
           try {
