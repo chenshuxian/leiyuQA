@@ -9,7 +9,7 @@ export default function Signin () {
     const [ session, loading ] = useSession()
     useEffect(()=>{
         if(session){
-            if(session.reg){
+            if(!session.reg){
                 router.push("/register")
             }
                 router.push("/")

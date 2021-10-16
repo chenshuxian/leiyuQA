@@ -38,18 +38,19 @@ export default function QA ({examTypeId, examTitle}) {
             console.log('rediret to signin')
             router.push('/auth/signin')
         }else{
-            // const agent = new https.Agent({  
-            //     rejectUnauthorized: false
-            //   });
-            axios.get(`/api/exam/random/${examTypeId}`)
-            .then((res)=>
-            { 
-                //console.log(`examList: ${JSON.stringify(res.data.examList)}`)
-                const examList = res.data.examList;
-                examList.map((v) => ans[v.exam_id] = 0 )
-                setExam(examList)
-            })
-            .catch((e)=>console.log(`loadExamErr: ${e}`))
+            if(!session.is_shared){
+                setScorePage('ALERT')
+            }else{
+                axios.get(`/api/exam/random/${examTypeId}`)
+                .then((res)=>
+                { 
+                    //console.log(`examList: ${JSON.stringify(res.data.examList)}`)
+                    const examList = res.data.examList;
+                    examList.map((v) => ans[v.exam_id] = 0 )
+                    setExam(examList)
+                })
+                .catch((e)=>console.log(`loadExamErr: ${e}`))
+            }
         }
     },[])
 
