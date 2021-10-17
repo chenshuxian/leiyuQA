@@ -7,7 +7,7 @@ import { signIn, signOut, useSession, getSession } from 'next-auth/client';
 import { Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-// 
+import axios from 'axios';
 
 function UserProfile () {
     const [session, loading] = useSession()
@@ -16,8 +16,10 @@ function UserProfile () {
         name: '',
         phone: '',
         addr: '',
-        id: session ? session.id : ''
+        id: session ? session.userId : ''
     })
+    //const [userId, setUserId] = useState()
+    const [products, setProducts] = useState([])
 
     useEffect(()=>{
         if(session){
@@ -25,7 +27,13 @@ function UserProfile () {
           document.getElementById("phone").value = session.user.phone
           document.getElementById("addr").value = session.user.addr
           Object.assign(form,{name:session.user.name,phone:session.user.phone,addr:session.user.addr})
-          setForm(form)
+	   axios.get(`/api/ticket?userId=${session.userId}`)
+	  .then((res) => {
+		 // console.log(res);
+		setProducts(res.data.ticketList)
+	  })
+	  .catch((e) => console.log(e));
+	  setForm(form)
         }
       }, [session, form])
 
@@ -40,7 +48,7 @@ function UserProfile () {
     const submitForm = async (e) => {
         e.preventDefault();
         console.log(`formData : ${JSON.stringify(form)}`);
-        const res = await postData('/api/register',form)
+         axios.patch('/api/me',form)
         .then(data => {
             console.log(data)
             if(data.success){
@@ -53,7 +61,7 @@ function UserProfile () {
     }
 
     const columns = [{
-        dataField: 'id',
+        dataField: 'ticket_id',
         text:'彩卷號碼',
         sort: true,
         sortCaret: (order, column) => {
@@ -63,18 +71,16 @@ function UserProfile () {
             return null;
           }
       }, {
-        dataField: 'name',
+        dataField: 'month',
         text: '時間',
         sort: true
       }, {
-        dataField: 'price',
+        dataField: 'month_prize_id',
         text: '是否中獎',
         sort: true
       }];
 
-      const products = [{id:1,name:'iphone',price:'30'},{id:2,name:'iphone',price:'30'},{id:3,name:'iphone',price:'30'}] 
-      const products1 = [] 
-    
+
   return (
     <Layout>
       <div id="outerWp">
@@ -102,7 +108,7 @@ function UserProfile () {
                                     <li><Button onClick={()=> signOut()}>登出</Button></li>
                                 </ul>
                                 <BootstrapTable
-                                    keyField='id'
+                                    keyField='ticket_id'
                                     data={ products }
                                     columns= {columns}
                                     bordered={ true }

@@ -38,28 +38,33 @@ export default function QA ({examTypeId, examTitle}) {
             console.log('rediret to signin')
             router.push('/auth/signin')
         }else{
-            if(!session.is_shared){
-                setScorePage('ALERT')
-            }else{
+            //console.log(session.is_shared
                 axios.get(`/api/exam/random/${examTypeId}`)
                 .then((res)=>
                 { 
                     //console.log(`examList: ${JSON.stringify(res.data.examList)}`)
-                    const examList = res.data.examList;
+                    ans = {};
+		    const examList = res.data.examList;
                     examList.map((v) => ans[v.exam_id] = 0 )
                     setExam(examList)
                 })
                 .catch((e)=>console.log(`loadExamErr: ${e}`))
-            }
         }
-    },[])
+    },[session])
 
     // 是否今日遊戲機會已用完
     useEffect(()=>{
-        if(false){
-          setScorePage("ALERT")
-        }
-      })
+        axios.get('/api/me')
+	.then((res) => {
+		const is_shared = res.data.is_shared;
+		if(!is_shared){
+			setScorePage('ALERT')
+		}
+	})
+	.catch((e) => {
+		console.log(`exam is_shared err: ${e}`)
+	})
+      },[])
 
     // useEffect(()=>{
     //    // console.log(`examType: ${examType}`)
