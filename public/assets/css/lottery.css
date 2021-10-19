@@ -14,6 +14,52 @@
     font-size: 20px !important;  
     margin: 6px !important;  
   }
+  .react-datepicker__input-container {
+    width:100px
+  }
   .react-datepicker__input-container input {
-    width: 40%
+    width: 100%;
+    height: calc(2.25rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  }
+  .form-label {
+    margin-right: 10px;
+  }
+  .row {
+    align-items: center;
+  }
+  .lotteryImg {
+    border-radius: 100%;
+    border: 8px solid #ffc000;
+    margin: 30px auto 40px auto;
+    padding: 20px;
+    max-width: 70%;
+  }
+
+  .lottery .container .row {
+    margin-top: 20px;
+  }
+
+  .lottery .form-inline {
+    margin-top: 20px;
+    border-bottom: #495057;
+    border-bottom-width: 10rem;
+  }
+
+  .lottery hr {
+    border: #495057 1rem;
+    z-index: 2;
+  }
+
+  .lottery h1 {
+    font-size: 60px;
+    font-weight: bold;
   }
