@@ -37,34 +37,49 @@ export default function QA ({examTypeId, examTitle}) {
         if(session === undefined || session === null){
             console.log('rediret to signin')
             router.push('/auth/signin')
-        }else{
-            //console.log(session.is_shared
-                axios.get(`/api/exam/random/${examTypeId}`)
-                .then((res)=>
-                { 
-                    //console.log(`examList: ${JSON.stringify(res.data.examList)}`)
-                    ans = {};
-		    const examList = res.data.examList;
-                    examList.map((v) => ans[v.exam_id] = 0 )
-                    setExam(examList)
-                })
-                .catch((e)=>console.log(`loadExamErr: ${e}`))
         }
+        // else{
+        //     //console.log(session.is_shared
+        //         axios.get(`/api/exam/random/${examTypeId}`)
+        //         .then((res)=>
+        //         { 
+        //             //console.log(`examList: ${JSON.stringify(res.data.examList)}`)
+        //             ans = {};
+		//         const examList = res.data.examList;
+        //             examList.map((v) => ans[v.exam_id] = 0 )
+        //             setExam(examList)
+        //         })
+        //         .catch((e)=>console.log(`loadExamErr: ${e}`))
+        // }
     },[session])
+
+    //load 題目
+    useEffect(()=>{
+        axios.get(`/api/exam/random/${examTypeId}`)
+        .then((res)=>
+        { 
+            //console.log(`examList: ${JSON.stringify(res.data.examList)}`)
+            ans = {};
+        const examList = res.data.examList;
+            examList.map((v) => ans[v.exam_id] = 0 )
+            setExam(examList)
+        })
+        .catch((e)=>console.log(`loadExamErr: ${e}`))
+    },[])
 
     // 是否今日遊戲機會已用完
     useEffect(()=>{
         axios.get('/api/me')
-	.then((res) => {
+	    .then((res) => {
 		const is_shared = res.data.is_shared;
 		if(!is_shared){
 			setScorePage('ALERT')
 		}
-	})
-	.catch((e) => {
-		console.log(`exam is_shared err: ${e}`)
-	})
-      },[])
+        })
+        .catch((e) => {
+            console.log(`exam is_shared err: ${e}`)
+        })
+    },[])
 
     // useEffect(()=>{
     //    // console.log(`examType: ${examType}`)
