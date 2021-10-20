@@ -13,3 +13,11 @@
     font-size: 20px;
     align-items: baseline;
 }
+
+header ul#globalMu li:nth-child(1n) {
+    margin-right: 24px;
+}
+
+header ul#globalMu {
+    width: 80%;
+}

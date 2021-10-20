@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
+import react, {useEffect} from 'react'
+import router from 'next/router';
 import Layout from '../../components/layout'
 import Image from 'next/image'
 import mainBanner from '../../public/assets/images/mainBanner.png';
@@ -23,6 +25,15 @@ function Lottery ({ prizeList, prizeObj }) {
     const [endDate, setEndDate] =useState(date)
     const [prizeId, setPrizeId] = useState(Object.keys(prizeObj)[0])
     const [luckyName, setLuckyName] = useState("準備中")
+    const [ session, loading ] = useSession()
+
+    useEffect(()=>{
+      if(session){
+          if(!session.isAdmin){
+              router.push("/admin/login")
+          }    
+      }
+    },[session])
     
 
     const prizeSelect = (e) => {
