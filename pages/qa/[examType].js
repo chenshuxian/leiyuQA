@@ -68,7 +68,7 @@ export default function QA ({examTypeId, examTitle}) {
     },[])
 
     // 是否今日遊戲機會已用完
-    useEffect(()=>{
+	{/* useEffect(()=>{
         axios.get('/api/me')
 	    .then((res) => {
 		const is_shared = res.data.is_shared;
@@ -79,7 +79,7 @@ export default function QA ({examTypeId, examTitle}) {
         .catch((e) => {
             console.log(`exam is_shared err: ${e}`)
         })
-    },[])
+    },[])*/}
 
     // useEffect(()=>{
     //    // console.log(`examType: ${examType}`)
