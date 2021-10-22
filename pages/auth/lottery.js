@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import react, {useEffect} from 'react'
 import router from 'next/router';
-import Layout from '../../components/layout'
+import Layout from '../../components/adminLayout'
 import Image from 'next/image'
 import mainBanner from '../../public/assets/images/mainBanner.png';
 import { signIn, signOut, useSession } from 'next-auth/client'
@@ -15,6 +15,7 @@ import zh_TW  from '../../node_modules/date-fns/locale/zh-TW'
 registerLocale('TW', zh_TW);
 
 import { PrismaClient } from '@prisma/client'
+import axios from 'axios';
 const prisma = new PrismaClient()
 
 
@@ -52,7 +53,9 @@ function Lottery ({ prizeList, prizeObj }) {
       }
 
       let timeoutID = setInterval(() => { randomName()},100)
-      setTimeout(()=>{clearInterval(timeoutID)},5000)
+      setTimeout(()=>{
+        clearInterval(timeoutID)
+      },5000)
     }
 
   return (

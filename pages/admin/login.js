@@ -4,6 +4,7 @@ import AdminLayout from "../../components/adminLayout"
 import Image from 'next/image'
 import mainBanner from '../../public/assets/images/mainBanner.png';
 import router from 'next/router';
+import { Form, Col, Button } from 'react-bootstrap'
 
 export default function SignIn({ csrfToken }) {
     const [ session, loading ] = useSession()
@@ -17,6 +18,14 @@ export default function SignIn({ csrfToken }) {
                 
         }
       },[session])
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData(document.getElementById('form'));
+        const data = { 'username': formData.get('account'), 'password': formData.get('pw') }
+        signIn("credentials",data)
+        //console.log(`login admin: ${JSON.stringify(formData)} pw: ${formData.password}`)
+      }
   return (
     <AdminLayout>
     <div id="outerWp">
@@ -34,11 +43,28 @@ export default function SignIn({ csrfToken }) {
                                <h2>管理者登入</h2>
                            </div>
                            <div className="globalContent">
+                            <Form id="form" style={{margin:"auto", width:"50%"}} onSubmit={handleSubmit}>
+                                <Form.Row xs={12} md={6}>
+                                  <Form.Group as={Col}  controlId="account" >
+                                    <Form.Label>帳號: </Form.Label>
+                                    <Form.Control type="text" defaultValue="admin" name="account"></Form.Control>
+                                  </Form.Group>
+                                </Form.Row>
+                                <Form.Row xs={12} md={6}>
+                                <Form.Group as={Col}  controlId="password">
+                                    <Form.Label>密碼: </Form.Label>
+                                    <Form.Control type="password" name="pw" ></Form.Control>
+                                  </Form.Group>
+                                </Form.Row>
+                                <Form.Row>
+                                    <Button type="submit">登入</Button>
+                                </Form.Row>
+                            </Form>
                           
-                            <button style={{zIndex:2, position:"relative"}} onClick={()=>{
+                            {/* <button style={{zIndex:2, position:"relative"}} onClick={()=>{
                                 console.log('credentials')
                                 signIn("credentials", { username: "jacky", password: "admin" })}
-                                }>Sign in</button>
+                                }>Sign in</button> */}
    
                            </div>
                        </div>
