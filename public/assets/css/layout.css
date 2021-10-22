@@ -21,3 +21,7 @@ header ul#globalMu li:nth-child(1n) {
 header ul#globalMu {
     width: 80%;
 }
+
+.indexPage .gameUl li {
+    cursor: pointer;
+}

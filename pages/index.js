@@ -16,7 +16,7 @@ function Index ( { prizeData, examType }) {
         <div id="banner">
         <Image className="banImg" src={bannerImg} alt="gameIcn1" />
         </div>
-        <div id="contentWp">
+        <div id="contentWp" className="indexPage">
             <dl id="main">
                 <dd id="evenInfo" className="section">
                     <div className="inner">
@@ -40,7 +40,7 @@ function Index ( { prizeData, examType }) {
                         </div>
                         <div className="globalContent">
                             <h3>文化、圖書、綜合三大題庫，每題庫共10題問題，答對成績答80分，就可取得一張摸彩卷</h3>
-                            <ul>
+                            <ul className="gameUl">
                                 {examType.map((v,i) => (
                                     <li key={`examType${i}`}>
                                         <img src={`/assets/images/gameIcn${i+1}.png`} />
