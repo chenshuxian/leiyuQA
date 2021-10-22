@@ -1,5 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { getUserById, updateUser } from '../../libs/user';
+import { getUserById, updateIsShare, updateUser } from '../../libs/user';
 import errorCode from '../../libs/errorCode';
 import { isLogin, getUserId } from '../../libs/auth';
 
@@ -120,6 +120,7 @@ export default async(req, res) => {
 
   let userId = await getUserId(req);
   let user;
+  console.log(`method ${method}`)
   switch (method) {
     case 'GET':
       try {
@@ -157,6 +158,19 @@ export default async(req, res) => {
         return;
       }
       break
+    case 'PUT':
+        try {
+          user = await updateIsShare();
+        } catch (e) {
+          res.status(e.statusCode).json(e);
+          return;
+        }
+  
+        if (user) {
+          res.status(200).json(user);
+          return;
+        }
+        break
     default:
       res.setHeader('Allow', ['GET', 'PATCH']);
       res.status(405).json(errorCode.MethodNotAllowed);

@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
-import Layout from '../../components/layout'
+import react, {useEffect} from 'react'
+import router from 'next/router';
+import Layout from '../../components/adminLayout'
 import Image from 'next/image'
 import mainBanner from '../../public/assets/images/mainBanner.png';
 import { signIn, signOut, useSession } from 'next-auth/client'
@@ -13,6 +15,7 @@ import zh_TW  from '../../node_modules/date-fns/locale/zh-TW'
 registerLocale('TW', zh_TW);
 
 import { PrismaClient } from '@prisma/client'
+import axios from 'axios';
 const prisma = new PrismaClient()
 
 
@@ -23,6 +26,15 @@ function Lottery ({ prizeList, prizeObj }) {
     const [endDate, setEndDate] =useState(date)
     const [prizeId, setPrizeId] = useState(Object.keys(prizeObj)[0])
     const [luckyName, setLuckyName] = useState("準備中")
+    const [ session, loading ] = useSession()
+
+    useEffect(()=>{
+      if(session){
+          if(!session.isAdmin){
+              router.push("/admin/login")
+          }    
+      }
+    },[session])
     
 
     const prizeSelect = (e) => {
@@ -41,7 +53,9 @@ function Lottery ({ prizeList, prizeObj }) {
       }
 
       let timeoutID = setInterval(() => { randomName()},100)
-      setTimeout(()=>{clearInterval(timeoutID)},5000)
+      setTimeout(()=>{
+        clearInterval(timeoutID)
+      },5000)
     }
 
   return (

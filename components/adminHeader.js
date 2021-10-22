@@ -1,30 +1,28 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import logo from '../public/assets/images/logo.png'
-import fbLogo from '../public/assets/images/fbLogo.png'
-import userIcon from '../public/assets/images/userIcon.png'
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { useState, useEffect } from 'react'
 import styles from './header.module.css'
 import { useRouter } from 'next/router'
-import { doc } from 'prettier'
+import { Button } from 'react-bootstrap'
 
 // The approach used in this component shows how to build a sign in and sign out
 // component that works on pages which support both client and server side
 // rendering, and avoids any flash incorrect content on initial page load.
 
-export default function Header () {
+export default function AdminHeader () {
   const [ session, loading ] = useSession()
   const [ toggled, setToggle] = useState(false)
   const router = useRouter()
 
-	{/*   useEffect(()=>{
-     if(session){
-         if(!session.reg){
-             router.push("/register")
-         }
-     }
-   },[session])*/}
+//   useEffect(()=>{
+//     if(session){
+//         if(session.reg){
+//             router.push("/register")
+//         }
+//     }
+//   },[session])
   const toggle = () => {
       if(!toggled){
         document.getElementsByTagName('body')[0].className ='toggled'
@@ -50,38 +48,16 @@ export default function Header () {
         </a>
         <nav className="main-nav" role="navigation">
             <ul id="globalMu">
-                <li><Link href="/#evenInfo">活動說明</Link></li>
-                <li><Link href="/#game">開始遊戲</Link></li>
-                <li><Link href="/#gift">遊戲獎品</Link></li>
-                {/* <li><Link href="/auth/lottery">會員摸彩</Link></li> */}
-                <li><a target="_blank" href="https://lieyu.kinmen.gov.tw/" rel="noreferrer">烈嶼鄉公所</a></li>
+                <li><Link href="/#evenInfo">題庫管理</Link></li>
+                <li><Link href="/#game">題庫類別管理</Link></li>
+                <li><Link href="/#gift">數據統計</Link></li>
+                <li><Link href="/auth/lottery">會員摸彩</Link></li>
             </ul>
             <div className="otherLink">
                 <ul>
-                {!session &&
-                <>
                     <li>
-                        <a href={`/api/auth/signin`}
-                            onClick={(e) => {
-                              e.preventDefault()
-                              signIn()
-                            }}>
-                            <Image src={fbLogo} alt="fbLogo" />
-                        </a>
+                       <Button>登出</Button>
                     </li>
-                </>}
-                {session && <>
-                    <li>
-                        <a href=""
-                            className={styles.button}
-                            onClick={(e) => {
-                              e.preventDefault()
-                              router.push("/userProfile")
-                            }}>
-                        {session.user.image && <span style={{backgroundImage: `url(${session.user.image})` }} className={styles.avatar}/>}
-                        </a>
-                    </li>
-                </>}
                 </ul>
             </div>
         </nav>

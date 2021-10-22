@@ -1,29 +1,38 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/link-passhref */
-import Layout from '../components/layout'
+import react, {useEffect} from 'react'
+import { useSession, signIn } from "next-auth/client"
+import AdminLayout from '../../components/adminLayout'
 import Image from 'next/image'
-import bannerImg from '../public/assets/images/bannerImg.png';
+import bannerImg from '../../public/assets/images/bannerImg.png';
 import Link from "next/link"
 import { PrismaClient } from '@prisma/client'
+import router from 'next/router';
 const prisma = new PrismaClient()
-const PRIZEURL = '/assets/images';
+const PRIZEURL = '../assets/images';
 
-function Index ( { prizeData, examType }) {
+function AdminIndex ( { prizeData, examType }) {
+    const [ session, loading ] = useSession()
+    useEffect(()=>{
+        if(!session){
+            router.push("/admin/login")    
+        }
+      },[session])
   return (
-    <Layout>
+    <AdminLayout>
       <div id="outerWp">
         <div id="banner">
         <Image className="banImg" src={bannerImg} alt="gameIcn1" />
         </div>
-        <div id="contentWp" className="indexPage">
+        <div id="contentWp">
             <dl id="main">
                 <dd id="evenInfo" className="section">
                     <div className="inner">
                         <div className="textTitle">
                             <span></span>
                             <span className="right"></span>
-                            <h2>活動說明</h2>
+                            <h2>ADMIN PAGE</h2>
                         </div>
                         <div className="globalContent" style={{marginBottom:2}}>
                             <h3>每日有一次遊戲機會，遊戲結束點擊分享鈕，將可獲得再玩一次的機會</h3>
@@ -40,7 +49,7 @@ function Index ( { prizeData, examType }) {
                         </div>
                         <div className="globalContent">
                             <h3>文化、圖書、綜合三大題庫，每題庫共10題問題，答對成績答80分，就可取得一張摸彩卷</h3>
-                            <ul className="gameUl">
+                            <ul>
                                 {examType.map((v,i) => (
                                     <li key={`examType${i}`}>
                                         <img src={`/assets/images/gameIcn${i+1}.png`} />
@@ -76,7 +85,7 @@ function Index ( { prizeData, examType }) {
             </dl>
         </div>
     </div>
-    </Layout>
+    </AdminLayout>
   )
 }
 
@@ -105,4 +114,4 @@ export async function getStaticProps(context) {
     }
 }
 
-export default Index;
+export default AdminIndex;

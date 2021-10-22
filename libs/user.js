@@ -99,4 +99,22 @@ const updateUser = async function(id, data) {
   return user;
 }
 
-export { getUser, createUser, getUserById, updateUser }
+const updateIsShare = async function() {
+  let user;
+  try {
+    user = await prisma.user.updateMany({
+      data : {
+        is_shared : true
+      }
+    })
+  } catch (e) {
+    if (e.code === "P2025") {
+      throw errorCode.NotFound;
+    }
+    throw errorCode.InternalServerError;
+  }
+
+  return user;
+}
+
+export { getUser, createUser, getUserById, updateUser, updateIsShare }
