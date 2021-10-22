@@ -6,7 +6,7 @@ import mainBanner from '../public/assets/images/mainBanner.png';
 import {  signin, signIn, signOut, useSession } from 'next-auth/client'
 import { postData } from '../libs/fetch';
 import router from 'next/router';
-
+import axios from 'axios';
 
 export default function Register () {
     const [ session, loading ] = useSession()
@@ -14,6 +14,7 @@ export default function Register () {
         name: '',
         phone: '',
         addr: '',
+	is_shared: true,
         id: session ? session.id : ''
     })
 
@@ -37,14 +38,11 @@ export default function Register () {
 
     const submitForm = async (e) => {
         e.preventDefault();
-        console.log(`formData : ${JSON.stringify(form)}`);
-        const res = await postData('/api/register',form)
+        console.log(`reg formData : ${JSON.stringify(form)}`);
+        axios.patch('/api/me',form)
         .then(data => {
-            console.log(data)
-            if(data.success){
-                router.push("/");
-            }
-           
+            // console.log(data)
+            router.push("/");
         })
         .catch(error => console.error(error))
         

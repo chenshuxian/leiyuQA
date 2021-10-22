@@ -8,6 +8,8 @@ import { Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import axios from 'axios';
+import { useRouter } from 'next/router'
+
 
 function UserProfile () {
     const [session, loading] = useSession()
@@ -20,7 +22,8 @@ function UserProfile () {
     })
     //const [userId, setUserId] = useState()
     const [products, setProducts] = useState([])
-
+    
+    const router = useRouter()	
     useEffect(()=>{
         if(session){
           document.getElementById("name").value = session.user.name
@@ -34,7 +37,9 @@ function UserProfile () {
 	  })
 	  .catch((e) => console.log(e));
 	  setForm(form)
-        }
+        }else{
+		router.push('/auth/signin')
+	}
       }, [session, form])
 
     const changeState = (e) => {
