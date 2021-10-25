@@ -18,13 +18,13 @@ export default function Header () {
   const [ toggled, setToggle] = useState(false)
   const router = useRouter()
 
-//   useEffect(()=>{
-//     if(session){
-//         if(session.reg){
-//             router.push("/register")
-//         }
-//     }
-//   },[session])
+	{/*   useEffect(()=>{
+     if(session){
+         if(!session.reg){
+             router.push("/register")
+         }
+     }
+   },[session])*/}
   const toggle = () => {
       if(!toggled){
         document.getElementsByTagName('body')[0].className ='toggled'

@@ -68,18 +68,18 @@ export default function QA ({examTypeId, examTitle}) {
     },[])
 
     // 是否今日遊戲機會已用完
-    // useEffect(()=>{
-    //     axios.get('/api/me')
-	//     .then((res) => {
-	// 	const is_shared = res.data.is_shared;
-	// 	if(!is_shared){
-	// 		setScorePage('ALERT')
-	// 	}
-    //     })
-    //     .catch((e) => {
-    //         console.log(`exam is_shared err: ${e}`)
-    //     })
-    // },[])
+	{/* useEffect(()=>{
+        axios.get('/api/me')
+	    .then((res) => {
+		const is_shared = res.data.is_shared;
+		if(!is_shared){
+			setScorePage('ALERT')
+		}
+        })
+        .catch((e) => {
+            console.log(`exam is_shared err: ${e}`)
+        })
+    },[])*/}
 
     // useEffect(()=>{
     //    // console.log(`examType: ${examType}`)
