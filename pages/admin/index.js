@@ -9,16 +9,22 @@ import bannerImg from '../../public/assets/images/bannerImg.png';
 import Link from "next/link"
 import { PrismaClient } from '@prisma/client'
 import router from 'next/router';
+import Login from '../admin/login';
 const prisma = new PrismaClient()
 const PRIZEURL = '../assets/images';
 
 function AdminIndex ( { prizeData, examType }) {
     const [ session, loading ] = useSession()
-    useEffect(()=>{
-        if(!session){
-            router.push("/admin/login")    
-        }
-      },[session])
+    if(!session){
+        return <Login />
+    }
+
+    // useEffect(()=>{
+    //     console.log(`adminpage: ${session}`)
+    //     if(!session){
+    //         router.push("/admin/login")    
+    //     }
+    //   },[session])
   return (
     <AdminLayout>
       <div id="outerWp">

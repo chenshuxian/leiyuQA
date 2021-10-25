@@ -71,6 +71,18 @@ import { isLogin, getUserId } from '../../libs/auth';
  *           application/json:
  *             schema:
  *               $ref: '#/definitions/user'
+ *   put:
+ *     tags:
+ *       - user 
+ *     summary: Auto update user info
+ *     description: Auto update user isShared status at 00:00
+ *     responses:
+ *       200:
+ *         description: User info
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/user'
  *   patch:
  *     tags:
  *       - user 

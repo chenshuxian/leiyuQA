@@ -8,21 +8,21 @@ import { Form, Col, Button } from 'react-bootstrap'
 
 export default function SignIn({ csrfToken }) {
     const [ session, loading ] = useSession()
-    useEffect(()=>{
-        if(session){
-            if(session.isAdmin){
-                router.push("/admin")
-            }else{
-                router.push("/admin/login")
-            }
+    // useEffect(()=>{
+    //     if(session){
+    //         if(session.isAdmin){
+    //             router.push("/admin")
+    //         }else{
+    //             router.push("/admin/login")
+    //         }
                 
-        }
-      },[session])
+    //     }
+    //   },[session])
 
       const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(document.getElementById('form'));
-        const data = { 'username': formData.get('account'), 'password': formData.get('pw') }
+        const data = {callbackUrl: 'https://localhost/admin', 'username': formData.get('account'), 'password': formData.get('pw') }
         signIn("credentials",data)
         //console.log(`login admin: ${JSON.stringify(formData)} pw: ${formData.password}`)
       }
@@ -60,11 +60,6 @@ export default function SignIn({ csrfToken }) {
                                     <Button type="submit">登入</Button>
                                 </Form.Row>
                             </Form>
-                          
-                            {/* <button style={{zIndex:2, position:"relative"}} onClick={()=>{
-                                console.log('credentials')
-                                signIn("credentials", { username: "jacky", password: "admin" })}
-                                }>Sign in</button> */}
    
                            </div>
                        </div>

@@ -4,7 +4,7 @@ import logo from '../public/assets/images/logo.png'
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { useState, useEffect } from 'react'
 import styles from './header.module.css'
-import { useRouter } from 'next/router'
+import { useRouter, withRouter } from 'next/router'
 import { Button } from 'react-bootstrap'
 
 // The approach used in this component shows how to build a sign in and sign out
@@ -16,13 +16,13 @@ export default function AdminHeader () {
   const [ toggled, setToggle] = useState(false)
   const router = useRouter()
 
-//   useEffect(()=>{
-//     if(session){
-//         if(session.reg){
-//             router.push("/register")
-//         }
-//     }
-//   },[session])
+  //console.log(`path: ${router.pathname.includes('login')}`)
+  let isLogin = router.pathname.includes('login');
+  if(!isLogin) {
+      if(!session){
+        isLogin = true;
+      }
+  }
   const toggle = () => {
       if(!toggled){
         document.getElementsByTagName('body')[0].className ='toggled'
@@ -48,15 +48,17 @@ export default function AdminHeader () {
         </a>
         <nav className="main-nav" role="navigation">
             <ul id="globalMu">
-                <li><Link href="/#evenInfo">題庫管理</Link></li>
-                <li><Link href="/#game">題庫類別管理</Link></li>
-                <li><Link href="/#gift">數據統計</Link></li>
-                <li><Link href="/auth/lottery">會員摸彩</Link></li>
+                <li><Link href="/admin/#evenInfo">題庫管理</Link></li>
+                <li><Link href="/admin/#game">題庫類別管理</Link></li>
+                <li><Link href="/admin/#gift">數據統計</Link></li>
+                <li><Link href="/admin/lottery">會員摸彩</Link></li>
             </ul>
             <div className="otherLink">
                 <ul>
                     <li>
+                        {!isLogin && 
                        <Button>登出</Button>
+                        }
                     </li>
                 </ul>
             </div>

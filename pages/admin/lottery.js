@@ -11,7 +11,8 @@ import { useState } from 'react';
 import { Form, DropdownButton, Dropdown, Container, Row, Col, Button } from 'react-bootstrap';
 import "../../node_modules/react-datepicker/dist/react-datepicker.min.css"
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
-import zh_TW  from '../../node_modules/date-fns/locale/zh-TW'
+import zh_TW  from 'date-fns'
+import Login from "../admin/login"
 registerLocale('TW', zh_TW);
 
 import { PrismaClient } from '@prisma/client'
@@ -28,13 +29,16 @@ function Lottery ({ prizeList, prizeObj }) {
     const [luckyName, setLuckyName] = useState("準備中")
     const [ session, loading ] = useSession()
 
-    useEffect(()=>{
-      if(session){
-          if(!session.isAdmin){
-              router.push("/admin/login")
-          }    
-      }
-    },[session])
+    // useEffect(()=>{
+    //   if(session){
+    //       if(!session.isAdmin){
+    //           router.push("/admin/login")
+    //       }    
+    //   }
+    // },[session])
+    if(!session){
+      return <Login />
+    }
     
 
     const prizeSelect = (e) => {

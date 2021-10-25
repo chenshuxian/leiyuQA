@@ -58,7 +58,7 @@ export default function Header () {
             </ul>
             <div className="otherLink">
                 <ul>
-                {!session &&
+                {(!session || session.isAdmin) &&
                 <>
                     <li>
                         <a href={`/api/auth/signin`}

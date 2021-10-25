@@ -24,7 +24,7 @@ const dayjs = require("dayjs");
 
 var options = {
   key: fs.readFileSync("./ssl/lieyu.fantasyball.tw.key"),
-  cert: fs.readFileSync("./ssl/lieyu.chained.crt"),
+  cert: fs.readFileSync("./ssl/AAACertificateServices.crt"),
 };
 
 app.prepare().then(() => {
