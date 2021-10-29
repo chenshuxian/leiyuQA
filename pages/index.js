@@ -1,15 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/link-passhref */
+import { useEffect,useState } from 'react';
 import Layout from '../components/layout'
 import Image from 'next/image'
 import bannerImg from '../public/assets/images/bannerImg.png';
 import Link from "next/link"
 import { PrismaClient } from '@prisma/client'
+import axios from 'axios';
 const prisma = new PrismaClient()
 const PRIZEURL = '/assets/images';
 
-function Index ( { prizeData, examType }) {
+function Index ( { examType }) {
+    const [prizeList, setPrizeList] = useState();
+    useEffect(()=> {
+        axios.get('/api/prize')
+        .then((res) => {
+            setPrizeList(res.data.prizeList)
+        })
+        .catch((e) =>  console.log(`index get prize err: ${e}`))
+    },[])
   return (
     <Layout>
       <div id="outerWp">
@@ -62,7 +72,7 @@ function Index ( { prizeData, examType }) {
                         </div>
                         <div className="globalContent">
                             <ul>
-                                {prizeData.map((v,i) => (
+                                {Array.isArray(prizeList) && prizeList.map((v,i) => (
                                     <li key={`prize${i}`}>
                                     <span>{v.prize_title}</span>
                                     <img src={PRIZEURL+v.prize_image_url} />
@@ -89,17 +99,16 @@ export async function getStaticProps(context) {
         }
     })
     //console.log(`examType : ${JSON.stringify(examType)}`)
-    const prizeData = await prisma.prize.findMany({
-        select:{
-            prize_name:true,
-            prize_image_url:true,
-            prize_title:true
-        }
-    })
+    // const prizeData = await prisma.prize.findMany({
+    //     select:{
+    //         prize_name:true,
+    //         prize_image_url:true,
+    //         prize_title:true
+    //     }
+    // })
 
     return {
       props: {
-          prizeData,
           examType
       }, // will be passed to the page component as props
     }

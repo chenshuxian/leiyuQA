@@ -76,10 +76,10 @@ export default async(req, res) => {
     method,
   } = req
 
-  if (!await isAdmin(req)) {
-    res.status(401).json(errorCode.Unauthorized);
-    return;
-  }
+  // if (!await isAdmin(req)) {
+  //   res.status(401).json(errorCode.Unauthorized);
+  //   return;
+  // }
 
   let prize
   switch (method) {

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { getPrize, createPrize } from '../../../libs/prize';
 import errorCode from '../../../libs/errorCode';
 import { isLogin, isAdmin } from '../../../libs/auth';
@@ -129,10 +130,10 @@ export default async(req, res) => {
       let filter;
       let pagination;
 
-      if (!await isLogin(req)) {
-        res.status(401).json(errorCode.Unauthorized);
-        return;
-      }
+      // if (!await isLogin(req)) {
+      //   res.status(401).json(errorCode.Unauthorized);
+      //   return;
+      // }
 
       if (isLottery !== undefined) {
         filter = { is_lottery: isLottery === 'true' ? true : false };
