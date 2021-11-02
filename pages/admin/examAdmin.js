@@ -61,7 +61,7 @@ function examAdmin ({examList, examTypeObj}) {
           {id:'exam_id','value':row['exam_id'],'text':'題號','type':'','placeholder':'', readOnly:true},
           {id:'exam_type_id','value':row['exam_type_id'],'text':'類別','type':'select','placeholder':'','option':examTypeObj},
           {id:'exam_title','value':row['exam_title'],'text':'標題','type':'','placeholder':''},
-          {id:'exam_option','value':row['exam_option'],'text':'選項','type':'','placeholder':''},
+          {id:'exam_option','value':row['exam_option'],'text':'選項','type':'','placeholder':'格式: 選項1,選項2,選項3,選項4'},
           {id:'exam_ans','value':row['exam_ans'],'text':'答案','type':'','placeholder':''},
           {id:'exam_img_url','value':row['exam_img_url'],'text':'圖片','type':'file','placeholder':''},
           {id:'exam_video_url','value':row['exam_video_url'],'text':'影片','type':'','placeholder':''},
@@ -75,7 +75,22 @@ function examAdmin ({examList, examTypeObj}) {
         // console.log(`del ${cell} ${row}`)
         let yes =confirm('你確認要刪除數據嗎')
         if(yes){
-          axios.delete(`/api/exam/${cell}`);
+          axios.delete(`/api/exam/${cell}`)
+          .then((res) => {
+            if(res.data){
+              setModalShow(false)
+              list.filter(function(item, index, array){
+                if(item.exam_id === res.data.exam_id){
+                  let newList = [...list];
+                  newList.splice(index,1);
+                  setList(newList);
+                  alert('刪除成功')
+                }
+              })
+            
+             }
+        })
+        .catch((e) => console.log(`upload img ERR: ${e}`))
         }
       }
 
@@ -105,6 +120,12 @@ function examAdmin ({examList, examTypeObj}) {
           setFileName(file.name)
         };
       }
+
+      const cancelImage = () => {
+        setFiles();
+        setImages();
+        setFileName('圖片上傳');
+      }
     
       const inputType = (v) => {
         switch (v.type) {
@@ -121,42 +142,61 @@ function examAdmin ({examList, examTypeObj}) {
             custom
             onChange={handleImageChange}
           />
-          <img src={images} style={{maxHeight:300}}></img>
+          <img src={images} style={{maxHeight:300, margin:5}}></img>
+          {files ? <Button onClick={cancelImage}>取消上傳圖片</Button> : null}
           </>)
             break
           default:
-            return (<Form.Control placeholder="" defaultValue={v.value} readOnly={v.readOnly} name={v.id} />)
+            return (<Form.Control placeholder={v.placeholder} defaultValue={v.value} readOnly={v.readOnly} name={v.id} />)
         }
       }
 
+      const updateData = (id, data) => {
+        axios.patch(`/api/exam/${id}`,data)
+        .then((res) => {
+          if(res.data){
+            setModalShow(false)
+            list.filter(function(item, index, array){
+              if(item.exam_id === res.data.exam_id){
+                let newList = [...list];
+                newList[index] = res.data
+                setList(newList);
+                alert('修改成功')
+              }
+            })
+          
+           }
+      })
+      .catch((e) => console.log(`upload img ERR: ${e}`))
+      }
+
       const handleUpdate = () => {
+
         let f = document.querySelector('form')
         let fd = new FormData(f);
-        fd.append('file',files)
         let id = fd.get('exam_id')
+        let data = Object.fromEntries(fd);
+        data.exam_ans = parseInt(data.exam_ans)
+        data.exam_option = data.exam_option.split(',')
+
         if(files){
-          // console.log('upload img')
+          // 上傳檔案
+          fd.append('file',files)
           axios.post('/api/exam/uploadImage', fd, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           })  
           .then((res) => {
-              console.log(`upload img success: ${res.data.imageUrl}`)
-              let imgUrl = res.data.imageUrl
+              // console.log(`upload img success: ${res.data.imageUrl}`)
               fd.delete('file')
-              // fd.append('exam_img_url',imgUrl)
-              var object = {};
-              fd.forEach((value, key) => object[key] = value);
-              var json = JSON.stringify(object);
-              axios.patch(`/api/exam/${id}`,json)
+              data.exam_img_url = res.data.imageUrl
+              updateData(id,data)
           })
           .catch((e) => console.log(`upload img ERR: ${e}`))
         }else{
-          var object = {};
-          fd.forEach((value, key) => object[key] = value);
-          axios.patch(`/api/exam/${id}`,JSON.stringify(object))
-          console.log('upload data')
+          // 無上傳檔案
+          updateData(id, data)
         }
       }
   
@@ -257,7 +297,7 @@ function examAdmin ({examList, examTypeObj}) {
                                 {
                                 props => (
                                     <div>
-                                    <h3>Input something at below input field:</h3>
+                                    <h3>題庫修改</h3>
                                     <SearchBar style={{zIndex:2, position:'relative'}} { ...props.searchProps } />
                                     <hr />
                                     <BootstrapTable

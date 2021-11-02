@@ -7,9 +7,9 @@ export default function AdminLayout ({children}) {
 
   const handleScroll = () => {
     if(document.body.scrollTop > 90 || document.documentElement.scrollTop > 90){
-      document.getElementsByTagName('header')[0].className ='fixNav fixNavActive'
+      document.getElementsByTagName('header')[0].className ='fixNav fixNavActive admin'
     }else{
-      document.getElementsByTagName('header')[0].className ='fixNav'
+      document.getElementsByTagName('header')[0].className ='fixNav admin'
     }
   }
   useEffect(() => {

@@ -22,7 +22,7 @@ export default function SignIn({ csrfToken }) {
       const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(document.getElementById('form'));
-        const data = {callbackUrl: 'https://localhost/admin', 'username': formData.get('account'), 'password': formData.get('pw') }
+        const data = {callbackUrl: 'https://localhost/admin/examAdmin', 'username': formData.get('account'), 'password': formData.get('pw') }
         signIn("credentials",data)
         //console.log(`login admin: ${JSON.stringify(formData)} pw: ${formData.password}`)
       }

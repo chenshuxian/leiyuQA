@@ -26,7 +26,7 @@ export default function AdminHeader () {
   const toggle = () => {
       if(!toggled){
         document.getElementsByTagName('body')[0].className ='toggled'
-        document.getElementsByTagName('header')[0].className ='fixNav toggled'
+        document.getElementsByTagName('header')[0].className ='fixNav toggled '
       }else{
         document.getElementsByTagName('body')[0].className ='' 
         document.getElementsByTagName('header')[0].className ='fixNav' 
@@ -35,7 +35,7 @@ export default function AdminHeader () {
   }
   
   return (
-    <header className="fixNav">
+    <header className="admin fixNav">
     <a className="target-burger">
         <ul className="buns" onClick={toggle}>
             <li className="bun"></li>
@@ -48,8 +48,9 @@ export default function AdminHeader () {
         </a>
         <nav className="main-nav" role="navigation">
             <ul id="globalMu">
-                <li><Link href="/admin/#evenInfo">題庫管理</Link></li>
+                <li><Link href="/admin/examAdmin">題庫管理</Link></li>
                 <li><Link href="/admin/#game">題庫類別管理</Link></li>
+                <li><Link href="/admin/#game">獎品清單管理</Link></li>
                 <li><Link href="/admin/#gift">數據統計</Link></li>
                 <li><Link href="/admin/lottery">會員摸彩</Link></li>
             </ul>
@@ -57,7 +58,7 @@ export default function AdminHeader () {
                 <ul>
                     <li>
                         {!isLogin && 
-                       <Button>登出</Button>
+                       <Button onClick={()=> signOut()}>登出</Button>
                         }
                     </li>
                 </ul>
