@@ -52,12 +52,12 @@ function Index ( { examType }) {
                             <h3>文化、圖書、綜合三大題庫，每題庫共10題問題，答對成績答80分，就可取得一張摸彩卷</h3>
                             <ul className="gameUl">
                                 {examType.map((v,i) => (
-                                    <li key={`examType${i}`}>
+                                    <Link key={`examType${i}`} href={`qa/${v.exam_type_id}`}>
+                                    <li >
                                         <img src={`/assets/images/gameIcn${i+1}.png`} />
-                                        <Link href={`qa/${v.exam_type_id}`}>
-                                            <div className="qaTitle"><h4>{v.exam_type_name}</h4></div>
-                                        </Link>
+                                        <div className="qaTitle"><h4>{v.exam_type_name}</h4></div>
                                     </li>
+                                    </Link>
                                 ))}
                             </ul>
                         </div>

@@ -14,6 +14,7 @@ const prisma = new PrismaClient()
 
 import axios from "axios";
 import https from "https";
+import { red } from '@material-ui/core/colors';
 
 let ans = {};
 
@@ -136,7 +137,7 @@ export default function QA ({examTypeId, examTitle}) {
         FB.ui({
             display: 'popup',
             method: 'feed',
-            link: 'https://lieyu.fantasyball.tw/'
+            link: 'https://lyquiz.kinmen.travel/'
           }, function(response){ 
                 if (response && !response.error_message) {
                     let data = {is_shared: true}
@@ -205,6 +206,12 @@ export default function QA ({examTypeId, examTitle}) {
                         <li>
                             <Button variant="info" onClick={()=>getScore()}>送出</Button>
                         </li>
+                        {examAns.indexOf(0) < 0 ?
+                        <li style={{margin:5, color:'red'}}>
+                            <h6 >完成答題,如無需修正請按送出</h6>
+                        </li>
+                        : null
+                        }
                     </ul>
                     </>
                  ): null}
@@ -222,6 +229,8 @@ export default function QA ({examTypeId, examTitle}) {
         </div>
         <div className="globalContent">
             <h6 className="number">你的分數 <b>{score}</b>分</h6>
+            {score >= 80 ? <h6 className="number">恭喜你獲得一張摸彩卷</h6> : 
+            <h6 className="number">成績低於 80 未獲得彩卷，再接再勵</h6>}
             <ul className="globalCounter">
                 {ansList.map((v,i)=> (
                     <li key={i}>

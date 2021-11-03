@@ -7,7 +7,7 @@ import { signIn, signOut, useSession } from 'next-auth/client'
 import { useState, useEffect } from 'react'
 import styles from './header.module.css'
 import { useRouter } from 'next/router'
-import { doc } from 'prettier'
+import { Button } from 'react-bootstrap'
 
 // The approach used in this component shows how to build a sign in and sign out
 // component that works on pages which support both client and server side
@@ -61,13 +61,17 @@ export default function Header () {
                 {(!session || session.isAdmin) &&
                 <>
                     <li>
-                        <a href={`/api/auth/signin`}
+                        {/* <a href={`/api/auth/signin`}
                             onClick={(e) => {
                               e.preventDefault()
                               signIn()
-                            }}>
-                            <Image src={fbLogo} alt="fbLogo" />
-                        </a>
+                            }}> */}
+                            {/* <Image src={fbLogo} alt="fbLogo" /> */}
+                            <Button style={{ margin: 10, borderRadius:180}} onClick={(e) => {
+                              e.preventDefault()
+                              signIn()
+                            }}>登入</Button>
+                        {/* </a> */}
                     </li>
                 </>}
                 {session && <>
