@@ -228,9 +228,9 @@ export default function QA ({examTypeId, examTitle}) {
             <h2>你的成積</h2>
         </div>
         <div className="globalContent">
-            <h6 className="number">你的分數 <b>{score}</b>分</h6>
-            {score >= 80 ? <h6 className="number">恭喜你獲得一張摸彩卷</h6> : 
-            <h6 className="number">成績低於 80 未獲得彩卷，再接再勵</h6>}
+            <h6 className="number">你的分數 <b>{score}</b>分  {score >= 80 ? <h6 >恭喜你獲得一張摸彩卷</h6> : 
+            <h6 >成績低於 80 未獲得彩卷，再接再勵</h6>}</h6>
+          
             <ul className="globalCounter">
                 {ansList.map((v,i)=> (
                     <li key={i}>
