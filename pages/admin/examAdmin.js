@@ -20,13 +20,23 @@ const prisma = new PrismaClient()
 
 
 
-function examAdmin ({examList, examTypeObj}) {
+function examAdmin ( {examTypeObj}) {
     const date = new Date()
     const [ session, loading ] = useSession();
-    const [list, setList] = useState(examList);
+    const [list, setList] = useState([]);
     const [modalShow, setModalShow] = useState(false);
     const [cols, setCols] = useState();
     const { SearchBar } = Search;
+
+    useEffect(()=>{
+      axios.get(`/api/exam/`)
+      .then((res)=>
+      { 
+          //console.log(`examList: ${JSON.stringify(res.data.examList)}`)
+          setList(res.data.examList)
+      })
+      .catch((e)=>console.log(`loadExamErr: ${e}`))
+   },[])
 
     const titleTrans = {
       exam_id:'題號',
@@ -42,6 +52,7 @@ function examAdmin ({examList, examTypeObj}) {
     if(!session){
       return <Login />
     }
+
 
     // const selectOptions = {'圖書':'圖書','文化':'文化','綜合':'綜合'}
 
@@ -330,20 +341,20 @@ function examAdmin ({examList, examTypeObj}) {
 
 export async function getStaticProps(context) {
 
-  const examList = await prisma.exam.findMany({
-      select:{
-          exam_id:true,
-          exam_type_id:true,
-          exam_title:true,
-          exam_option:true,
-          exam_ans:true,
-          exam_img_url:true,
-          exam_video_url:true
-      },
-      orderBy: {
-          exam_type_id: 'asc'
-      }
-  })
+  // const examList = await prisma.exam.findMany({
+  //     select:{
+  //         exam_id:true,
+  //         exam_type_id:true,
+  //         exam_title:true,
+  //         exam_option:true,
+  //         exam_ans:true,
+  //         exam_img_url:true,
+  //         exam_video_url:true
+  //     },
+  //     orderBy: {
+  //         exam_type_id: 'asc'
+  //     }
+  // })
 
   const examTypeList = await prisma.exam_type.findMany({
       select:{
@@ -357,7 +368,6 @@ export async function getStaticProps(context) {
 
   return {
     props: {
-        examList,
         examTypeObj
     }, // will be passed to the page component as props
   }
