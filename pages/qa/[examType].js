@@ -61,7 +61,7 @@ export default function QA ({examTypeId, examTitle}) {
         { 
             //console.log(`examList: ${JSON.stringify(res.data.examList)}`)
             ans = {};
-        const examList = res.data.examList;
+            const examList = res.data.examList;
             examList.map((v) => ans[v.exam_id] = 0 )
             setExam(examList)
         })
@@ -133,26 +133,26 @@ export default function QA ({examTypeId, examTitle}) {
 
     const share = () => {
         // 分享到fb 取得在玩一次的機會
-        //router.push("/#game")
-        FB.ui({
-            display: 'popup',
-            method: 'feed',
-            link: 'https://lyquiz.kinmen.travel/'
-          }, function(response){ 
-                if (response && !response.error_message) {
-                    let data = {is_shared: true}
-                    axios.patch('/api/me',data)
-                    .then((res) => {
-                        router.push('/#game')
-                    }
-                    ).catch((e)=>{
-                        console.log(`share fb err: ${e}`)
-                    })
+        router.push("/#game")
+        // FB.ui({
+        //     display: 'popup',
+        //     method: 'feed',
+        //     link: 'https://lyquiz.kinmen.travel/'
+        //   }, function(response){ 
+        //         if (response && !response.error_message) {
+        //             let data = {is_shared: true}
+        //             axios.patch('/api/me',data)
+        //             .then((res) => {
+        //                 router.push('/#game')
+        //             }
+        //             ).catch((e)=>{
+        //                 console.log(`share fb err: ${e}`)
+        //             })
                     
-                } else {
-                    alert('Error while posting.11');
-                }
-            });
+        //         } else {
+        //             alert('Error while posting.11');
+        //         }
+        //     });
     }
 
     const QA = () => (
