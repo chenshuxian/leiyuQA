@@ -23,11 +23,11 @@ const prisma = new PrismaClient()
 
 function examAdmin ( {examTypeObj}) {
     const rows = [
-      {id:'exam_id','value':'','text':'題號','type':'','placeholder':'系統自動產生', readOnly:true},
+      {id:'exam_id','value':'','text':'題號','type':'','placeholder':'系統自動產生', readOnly:true },
       {id:'exam_type_id','value':'','text':'類別','type':'select','placeholder':'','option':examTypeObj},
-      {id:'exam_title','value':'','text':'標題','type':'','placeholder':''},
-      {id:'exam_option','value':'','text':'選項','type':'','placeholder':'格式: 選項1,選項2,選項3,選項4'},
-      {id:'exam_ans','value':'','text':'答案','type':'','placeholder':'格式: 1,2,3,4'},
+      {id:'exam_title','value':'','text':'標題','type':'','placeholder':'', required:true},
+      {id:'exam_option','value':'','text':'選項','type':'','placeholder':'格式: 選項1,選項2,選項3,選項4', required:true},
+      {id:'exam_ans','value':'','text':'答案','type':'','placeholder':'格式: 1,2,3,4', required:true},
       {id:'exam_img_url','value':'','text':'圖片','type':'file','placeholder':''},
       {id:'exam_video_url','value':'','text':'影片','type':'','placeholder':'格式: http://www.youtube.com/xxxxxxx'}
     ] 
