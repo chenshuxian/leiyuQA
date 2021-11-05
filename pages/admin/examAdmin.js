@@ -13,6 +13,7 @@ import filterFactory,{ selectFilter } from 'react-bootstrap-table2-filter';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import "../../node_modules/react-datepicker/dist/react-datepicker.min.css"
 import Login from "../admin/login"
+import ExamAdminModal from '../../components/examAdminModal'
 
 import { PrismaClient } from '@prisma/client'
 import axios from 'axios';
@@ -21,32 +22,36 @@ const prisma = new PrismaClient()
 
 
 function examAdmin ( {examTypeObj}) {
+    const rows = [
+      {id:'exam_id','value':'','text':'題號','type':'','placeholder':'系統自動產生', readOnly:true},
+      {id:'exam_type_id','value':'','text':'類別','type':'select','placeholder':'','option':examTypeObj},
+      {id:'exam_title','value':'','text':'標題','type':'','placeholder':''},
+      {id:'exam_option','value':'','text':'選項','type':'','placeholder':'格式: 選項1,選項2,選項3,選項4'},
+      {id:'exam_ans','value':'','text':'答案','type':'','placeholder':'格式: 1,2,3,4'},
+      {id:'exam_img_url','value':'','text':'圖片','type':'file','placeholder':''},
+      {id:'exam_video_url','value':'','text':'影片','type':'','placeholder':'格式: http://www.youtube.com/xxxxxxx'}
+    ] 
     const date = new Date()
     const [ session, loading ] = useSession();
     const [list, setList] = useState([]);
     const [modalShow, setModalShow] = useState(false);
     const [cols, setCols] = useState();
+    const [action, setAction] = useState();
+    const [examIdList, setExamIdList] = useState([]);
     const { SearchBar } = Search;
 
-    useEffect(()=>{
-      axios.get(`/api/exam/`)
+    const getList = () => {
+      axios.get(`/api/exam?isDelete=false`)
       .then((res)=>
       { 
           //console.log(`examList: ${JSON.stringify(res.data.examList)}`)
           setList(res.data.examList)
       })
       .catch((e)=>console.log(`loadExamErr: ${e}`))
-   },[])
-
-    const titleTrans = {
-      exam_id:'題號',
-      exam_type_id:'類別',
-      exam_title:'標題',
-      exam_option:'選項',
-      exam_ans:'答案',
-      exam_img_url:'圖片',
-      exam_video_url:'影片'
     }
+    useEffect(()=>{
+      getList()
+   },[])
 
 
     if(!session){
@@ -63,27 +68,19 @@ function examAdmin ( {examTypeObj}) {
     const examOption = (cell, row, rowIndex) => {
         return cell.join(' / ')
     }
+ 
 
     const editorArea = (cell, row, rowIndex) => {
       const handleEdit = () => {
          console.log(`edit ${JSON.stringify(row)}`)
-
-        const rows = [
-          {id:'exam_id','value':row['exam_id'],'text':'題號','type':'','placeholder':'', readOnly:true},
-          {id:'exam_type_id','value':row['exam_type_id'],'text':'類別','type':'select','placeholder':'','option':examTypeObj},
-          {id:'exam_title','value':row['exam_title'],'text':'標題','type':'','placeholder':''},
-          {id:'exam_option','value':row['exam_option'],'text':'選項','type':'','placeholder':'格式: 選項1,選項2,選項3,選項4'},
-          {id:'exam_ans','value':row['exam_ans'],'text':'答案','type':'','placeholder':''},
-          {id:'exam_img_url','value':row['exam_img_url'],'text':'圖片','type':'file','placeholder':''},
-          {id:'exam_video_url','value':row['exam_video_url'],'text':'影片','type':'','placeholder':''},
-        ]
-        
+        rows.map((v,i) => v.value = row[v.id])
+        setAction('update')
         setCols(rows);
         setModalShow(true)
       }
 
       const handleDel = () => {
-        // console.log(`del ${cell} ${row}`)
+        //console.log(`del ${cell} ${row}`)
         let yes =confirm('你確認要刪除數據嗎')
         if(yes){
           axios.delete(`/api/exam/${cell}`)
@@ -111,141 +108,183 @@ function examAdmin ( {examTypeObj}) {
         <Button variant="danger" onClick={handleDel}>刪除</Button>
       </>)
     }
-    
-   
-    function UpdatedModal(props) {
 
-      const { show, onHide, title, cols } = props
-      const [files, setFiles] = useState();
-      const [images, setImages] = useState();
-      const [fileName, setFileName] = useState('圖片上傳');
-     
-      const handleImageChange = (e) => {
-        e.preventDefault();
-        let reader = new FileReader();
-        let file = e.target.files[0];
-        reader.readAsDataURL(file);
-        reader.onloadend = (e) => {
-          setFiles(file)
-          setImages(reader.result)
-          setFileName(file.name)
-        };
-      }
-
-      const cancelImage = () => {
-        setFiles();
-        setImages();
-        setFileName('圖片上傳');
-      }
-    
-      const inputType = (v) => {
-        switch (v.type) {
-          case 'select':
-                return(
-                <Form.Control as="select" placeholder="" defaultValue={v.value} name={v.id} >
-                    {Object.keys(v.option).map((k,i)=> (<option key={i} value={k}>{v.option[k]}</option>))}
-                </Form.Control>)
-            break
-          case 'file':
-           return(<><Form.File 
-            id="image-file"
-            label={fileName}
-            custom
-            onChange={handleImageChange}
-          />
-          <img src={images} style={{maxHeight:300, margin:5}}></img>
-          {files ? <Button onClick={cancelImage}>取消上傳圖片</Button> : null}
-          </>)
-            break
-          default:
-            return (<Form.Control placeholder={v.placeholder} defaultValue={v.value} readOnly={v.readOnly} name={v.id} />)
-        }
-      }
-
-      const updateData = (id, data) => {
-        axios.patch(`/api/exam/${id}`,data)
-        .then((res) => {
-          if(res.data){
-            setModalShow(false)
-            list.filter(function(item, index, array){
-              if(item.exam_id === res.data.exam_id){
-                let newList = [...list];
-                newList[index] = res.data
-                setList(newList);
-                alert('修改成功')
-              }
-            })
-          
-           }
-      })
-      .catch((e) => console.log(`upload img ERR: ${e}`))
-      }
-
-      const handleUpdate = () => {
-
-        let f = document.querySelector('form')
-        let fd = new FormData(f);
-        let id = fd.get('exam_id')
-        let data = Object.fromEntries(fd);
-        data.exam_ans = parseInt(data.exam_ans)
-        data.exam_option = data.exam_option.split(',')
-
-        if(files){
-          // 上傳檔案
-          fd.append('file',files)
-          axios.post('/api/exam/uploadImage', fd, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          })  
-          .then((res) => {
-              // console.log(`upload img success: ${res.data.imageUrl}`)
-              fd.delete('file')
-              data.exam_img_url = res.data.imageUrl
-              updateData(id,data)
-          })
-          .catch((e) => console.log(`upload img ERR: ${e}`))
-        }else{
-          // 無上傳檔案
-          updateData(id, data)
-        }
-      }
-  
-      return (
-        <Modal
-          show={show} 
-          onHide={onHide}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">
-              {title}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body style={{marginLeft:"60px", maxHeight: 'calc(100vh - 210px)',
-      overflowY: 'auto'}}>
-           <Form>
-             {cols && cols.map((v,i) => (
-                <Form.Group key={`examForm${i}`} as={Row}>
-                  <Form.Label column sm={2}>
-                    {v.text}
-                  </Form.Label>
-                  <Col sm={8}>
-                    {inputType(v)}
-                  </Col>
-                </Form.Group>
-             ))}
-           </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant='warning' onClick={handleUpdate}>修改</Button>
-            <Button onClick={props.onHide}>Close</Button>
-          </Modal.Footer>
-        </Modal>
-      );
+    const addBtn = () => {
+      setModalShow(true);
+      setAction('insert');
+      setCols(rows)
     }
+
+    const batchDel = () => {
+
+      const data = {exam_id_list : examIdList};
+      let yes =confirm('是否進行批量刪除')
+
+      if(yes){
+        axios.post('/api/exam/batchDelete',data)
+        .then((res) => {
+          if(res.data.count){
+            getList()
+          }
+        })
+        .catch((e)=> console.log(`exam delete batch err: ${e}`))
+      }
+    }
+    
+    const updateData = (data) => {
+      axios.patch(`/api/exam/${data.exam_id}`,data)
+      .then((res) => {
+        if(res.data){
+          setModalShow(false)
+          list.filter(function(item, index, array){
+            if(item.exam_id === res.data.exam_id){
+              let newList = [...list];
+              newList[index] = res.data
+              setList(newList);
+              alert('修改成功')
+            }
+          })
+        
+         }
+    })
+    .catch((e) => console.log(`upload img ERR: ${e}`))
+    }
+
+    const formData = () => {
+      let f = document.querySelector('form')
+      let fd = new FormData(f);
+      let data = Object.fromEntries(fd);
+      data.exam_ans = parseInt(data.exam_ans)
+      data.exam_option = data.exam_option.split(',')
+
+      return data;
+    }
+ 
+    const handleUpdate = (files) => {
+
+      let data = formData();
+
+      if(files){
+        // 上傳檔案
+        //fd.append('file',files)
+        let fileData = new FormData();
+        fileData.append('file',files);
+        axios.post('/api/exam/uploadImage', fileData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })  
+        .then((res) => {
+            // console.log(`upload img success: ${res.data.imageUrl}`)
+            data.exam_img_url = res.data.imageUrl
+            updateData(data)
+        })
+        .catch((e) => console.log(`upload img ERR: ${e}`))
+      }else{
+        // 無上傳檔案
+        updateData(data)
+      }
+    }
+
+    const handleInsert = (e) => {
+      let data = formData();
+      delete data.exam_id;
+      axios.post('/api/exam',data)
+      .then((res) => {
+        console.log(res);
+        setModalShow(false)
+        let newList = [...list];
+        newList.unshift(res.data)
+        setList(newList);
+        alert('新增成功')
+      })
+      .catch((e) => console.log(`insert exam data ERR: ${e}`))
+      }
+   
+    // function UpdatedModal(props) {
+
+    //   const { show, onHide, title, cols } = props
+    //   const [files, setFiles] = useState();
+    //   const [images, setImages] = useState();
+    //   const [fileName, setFileName] = useState('圖片上傳');
+     
+    //   const handleImageChange = (e) => {
+    //     e.preventDefault();
+    //     let reader = new FileReader();
+    //     let file = e.target.files[0];
+    //     reader.readAsDataURL(file);
+    //     reader.onloadend = (e) => {
+    //       setFiles(file)
+    //       setImages(reader.result)
+    //       setFileName(file.name)
+    //     };
+    //   }
+
+    //   const cancelImage = () => {
+    //     setFiles();
+    //     setImages();
+    //     setFileName('圖片上傳');
+    //   }
+    
+    //   const inputType = (v) => {
+    //     switch (v.type) {
+    //       case 'select':
+    //             return(
+    //             <Form.Control as="select" placeholder="" defaultValue={v.value} name={v.id} >
+    //                 {Object.keys(v.option).map((k,i)=> (<option key={i} value={k}>{v.option[k]}</option>))}
+    //             </Form.Control>)
+    //         break
+    //       case 'file':
+    //        return(<><Form.File 
+    //         id="image-file"
+    //         label={fileName}
+    //         custom
+    //         onChange={handleImageChange}
+    //       />
+    //       <img src={images} style={{maxHeight:300, margin:5}}></img>
+    //       {files ? <Button onClick={cancelImage}>取消上傳圖片</Button> : null}
+    //       </>)
+    //         break
+    //       default:
+    //         return (<Form.Control placeholder={v.placeholder} defaultValue={v.value} readOnly={v.readOnly} name={v.id} />)
+    //     }
+    //   }
+  
+    //   return (
+    //     <Modal
+    //       show={show} 
+    //       onHide={onHide}
+    //       size="lg"
+    //       aria-labelledby="contained-modal-title-vcenter"
+    //       centered
+    //     >
+    //       <Modal.Header closeButton>
+    //         <Modal.Title id="contained-modal-title-vcenter">
+    //           {title}
+    //         </Modal.Title>
+    //       </Modal.Header>
+    //       <Modal.Body style={{marginLeft:"60px", maxHeight: 'calc(100vh - 210px)',
+    //   overflowY: 'auto'}}>
+    //        <Form>
+    //          {cols && cols.map((v,i) => (
+    //             <Form.Group key={`examForm${i}`} as={Row}>
+    //               <Form.Label column sm={2}>
+    //                 {v.text}
+    //               </Form.Label>
+    //               <Col sm={8}>
+    //                 {inputType(v)}
+    //               </Col>
+    //             </Form.Group>
+    //          ))}
+    //        </Form>
+    //       </Modal.Body>
+    //       <Modal.Footer>
+    //         <Button variant='warning' onClick={() => handleUpdate(files)}>修改</Button>
+    //         <Button onClick={props.onHide}>Close</Button>
+    //       </Modal.Footer>
+    //     </Modal>
+    //   );
+    // }
 
     const columns = [
       {
@@ -276,7 +315,22 @@ function examAdmin ( {examTypeObj}) {
         text: '編輯區',
         formatter: editorArea
       }];
-    
+
+      const handleRowSelect = (row, isSelected, e) => {
+        console.log(row)
+        console.log(isSelected)
+        if(isSelected) {
+          setExamIdList(oldArr => [...oldArr, row.exam_id])
+        }else{
+          setExamIdList(examIdList.filter(item => item !== row.exam_id))
+        }
+        //console.log(examIdList)
+      }
+     
+      const selectRow = {
+        mode: 'checkbox',  // multi select
+        onSelect: handleRowSelect
+      };
 
   return (
     <Layout>
@@ -307,25 +361,31 @@ function examAdmin ( {examTypeObj}) {
                             >
                                 {
                                 props => (
-                                    <div>
+                                    <div style={{zIndex:2, position:'relative'}}>
                                     <h3>題庫修改</h3>
-                                    <SearchBar style={{zIndex:2, position:'relative'}} { ...props.searchProps } />
+                                    <SearchBar  { ...props.searchProps } />
+                                    <span style={{float:'right'}}>
+                                    <Button variant='danger' style={{ margin:5}} onClick={batchDel}>批量刪除</Button>
+                                    <Button variant='success' onClick={addBtn}>新增</Button>
+                                    </span>
                                     <hr />
                                     <BootstrapTable
                                         { ...props.baseProps }
                                         pagination={ paginationFactory({showTotal:true}) }
                                         filter={ filterFactory() }
-                                        selectRow={ { mode: 'checkbox' } }
+                                        selectRow={ selectRow }
                                     />
                                     </div>
                                 )
                                 }
                             </ToolkitProvider>
-                            <UpdatedModal 
+                            <ExamAdminModal 
                               show={modalShow} 
                               onHide={() => setModalShow(false)} 
-                              title="題庫修改"
                               cols = {cols}
+                              handleUpdate = {handleUpdate}
+                              handleInsert = {handleInsert}
+                              action = {action}
                             />
                             </div>
                         </div>
