@@ -177,10 +177,25 @@ function examAdmin ( {examTypeObj}) {
         }
         //console.log(examIdList)
       }
+
+      const handleSelectAll = (isSelected, rows, e) => {
+        console.log(rows)
+        console.log(isSelected)
+        if(isSelected) {
+          rows.map(v => {
+            console.log(v.exam_id)
+            setExamIdList(oldArr => [...oldArr, v.exam_id])
+          })
+        }else{
+          setExamIdList([])
+        }
+        // console.log(examIdList)
+      }
      
       const selectRow = {
         mode: 'checkbox',  // multi select
-        onSelect: handleRowSelect
+        onSelect: handleRowSelect,
+        onSelectAll: handleSelectAll
       };
 
   return (
