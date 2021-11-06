@@ -76,9 +76,9 @@ export default function ExamAdminModal (props) {
             break
           default: {
               if (action === 'insert') {
-                return (<Form.Control  required placeholder={v.placeholder} readOnly={v.readOnly} name={v.id} />)
+                return (<Form.Control  required={v.required} placeholder={v.placeholder} readOnly={v.readOnly} name={v.id} />)
               }
-              return (<Form.Control  required placeholder={v.placeholder} defaultValue={v.value} readOnly={v.readOnly} name={v.id} />)
+              return (<Form.Control  required={v.required} placeholder={v.placeholder} defaultValue={v.value} readOnly={v.readOnly} name={v.id} />)
            
           }
            
