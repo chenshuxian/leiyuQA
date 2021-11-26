@@ -37,7 +37,7 @@ function Index ( { examType }) {
                         </div>
                         <div className="globalContent" style={{marginBottom:2}}>
                             <h3>每日有一次遊戲機會，遊戲結束點擊分享鈕，將可獲得再玩一次的機會</h3>
-                            <h3>題目由地質、文化、綜合三大題庫，每題庫共10題問題，答對成績答80分，就可取得一張摸彩卷</h3> 
+                            <h3>題目由文化、圖書、綜合三大題庫，每題庫共10題問題，答對成績答80分，就可取得一張摸彩卷</h3> 
                         </div>
                     </div>
                 </dd>
