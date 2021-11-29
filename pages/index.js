@@ -37,7 +37,7 @@ function Index ( { examType }) {
                         </div>
                         <div className="globalContent" style={{marginBottom:2}}>
                             <h3>每日有一次遊戲機會，遊戲結束點擊分享鈕，將可獲得再玩一次的機會</h3>
-                            <h3>題目由文化、圖書、綜合三大題庫，每題庫共10題問題，答對成績答80分，就可取得一張摸彩卷</h3> 
+                            <h3>題目分為文化、圖書、綜合三大題庫，每次試卷10題，成績達80分，就可獲得一張摸彩卷</h3> 
                         </div>
                     </div>
                 </dd>
@@ -49,7 +49,7 @@ function Index ( { examType }) {
                             <h2>開始遊戲</h2>
                         </div>
                         <div className="globalContent">
-                            <h3>文化、圖書、綜合三大題庫，每題庫共10題問題，答對成績答80分，就可取得一張摸彩卷</h3>
+                            <h3>文化、圖書、綜合三大題庫，每次試卷10題，成績達80分，就可獲得一張摸彩卷</h3>
                             <ul className="gameUl">
                                 {examType.map((v,i) => (
                                     <Link key={`examType${i}`} href={`qa/${v.exam_type_id}`}>
