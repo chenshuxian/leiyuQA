@@ -48,9 +48,9 @@ export default function AdminHeader () {
         </a>
         <nav className="main-nav" role="navigation">
             <ul id="globalMu">
-                <li><Link href="/admin/examAdmin">題庫管理</Link></li>
-                <li><Link href="/admin/#game">題庫類別管理</Link></li>
-                <li><Link href="/admin/#game">獎品清單管理</Link></li>
+                <li><Link href="/admin/">題庫管理</Link></li>
+                <li><Link href="/admin/examType">題庫類別管理</Link></li>
+                <li><Link href="/admin/prize">獎品清單管理</Link></li>
                 <li><Link href="/admin/#gift">數據統計</Link></li>
                 <li><Link href="/admin/lottery">會員摸彩</Link></li>
             </ul>

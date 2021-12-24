@@ -40,6 +40,7 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+prisma/
 
 # TypeScript v1 declaration files
 typings/
@@ -106,7 +107,12 @@ dist
 .vercel
 .now
 .env.local
+.eslintrc.json
 
 .DS_Store
 
 package-lock.json
+
+public/assets/images/
+
+images/

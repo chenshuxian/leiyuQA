@@ -32,6 +32,7 @@ import { uploadImage } from '../../../libs/uploadFile';
  *                   description: The image URL
  *                   example: /prize/92994eade8cba6f5fd3eb3321a997bf82.png
  */
+// eslint-disable-next-line import/no-anonymous-default-export
 export default async(req, res) => {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']);

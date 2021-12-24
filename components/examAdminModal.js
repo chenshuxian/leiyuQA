@@ -9,10 +9,10 @@ export default function ExamAdminModal (props) {
       const [images, setImages] = useState();
       const [fileName, setFileName] = useState('圖片上傳');
       const [validated, setValidated] = useState(false);
-      let title = '修改題庫';
+      let title = '修改';
 
       if(action === 'insert'){
-        title = '新增題庫'
+        title = '新增'
       }
     
       const handleImageChange = (e) => {
@@ -68,7 +68,7 @@ export default function ExamAdminModal (props) {
           {action === 'insert' ?
            <img src={images} style={{maxHeight:300, margin:5}}></img>
            :
-           <img src={images ? images : `assets/images${v.value}`} style={{maxHeight:300, margin:5}}></img>
+           <img src={images ? images : `/assets/images/${v.value}`} style={{maxHeight:300, margin:5}}></img>
           }
          
           {files ? <Button onClick={cancelImage}>取消上傳圖片</Button> : null}

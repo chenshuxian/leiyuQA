@@ -45,6 +45,7 @@ const uploadImage = function(req, res, imagePath) {
         try {
           fs.mkdirSync(uploadFolder);
         } catch (e) {
+          console.log(`upload image err: ${e}`)
           res.status(500).json(errorCode.InternalServerError);
           return;
         }

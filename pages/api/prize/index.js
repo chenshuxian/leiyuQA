@@ -37,6 +37,10 @@ import { isLogin, isAdmin } from '../../../libs/auth';
  *         type: boolean 
  *         description: Is the lottery been drawn
  *         example: false
+ *       is_delete:
+ *         type: boolean 
+ *         description: Is the file delete 
+ *         example: false
  *       create_time:
  *         type: string
  *         format: date-time
@@ -72,6 +76,12 @@ import { isLogin, isAdmin } from '../../../libs/auth';
  *     produces:
  *       - application/json
  *     parameters:
+ *       - name: isDelete
+ *         in: query
+ *         description: is delete
+ *         required: false
+ *         schema:
+ *           type: boolean      
  *       - name: isLottery
  *         in: query
  *         description: Is the lottery been drawn
@@ -118,7 +128,7 @@ import { isLogin, isAdmin } from '../../../libs/auth';
  */
 export default async(req, res) => {
   const {
-    query: { isLottery, offset, limit },
+    query: { isDelete, isLottery, offset, limit },
     body: prizeData,
     method
   } = req
@@ -134,6 +144,10 @@ export default async(req, res) => {
       //   res.status(401).json(errorCode.Unauthorized);
       //   return;
       // }
+
+      if (isDelete !== undefined) {
+        filter = { is_delete: isDelete === 'true' ? true : false };
+      }
 
       if (isLottery !== undefined) {
         filter = { is_lottery: isLottery === 'true' ? true : false };

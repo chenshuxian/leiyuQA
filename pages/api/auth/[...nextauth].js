@@ -206,4 +206,25 @@ export default NextAuth({
 
   // Enable debug messages in the console if you are having problems
   debug: false,
+  cookies: {
+    sessionToken: {
+      name: `__Secure-next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true
+      }
+    },
+    callbackUrl: {
+      name: `__Secure-next-auth.callback-url`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true
+      }
+    }
+   
+  }
 })

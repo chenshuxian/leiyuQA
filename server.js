@@ -21,10 +21,11 @@ const prisma = new PrismaClient({
 });
 
 const dayjs = require("dayjs");
+const exp = require("constants");
 
 var options = {
-  key: fs.readFileSync("./ssl/lieyu.fantasyball.tw.key"),
-  cert: fs.readFileSync("./ssl/AAACertificateServices.crt"),
+  key: fs.readFileSync("./ssl/old/lieyu.fantasyball.tw.key"),
+  cert: fs.readFileSync("./ssl/old/lieyu.fantasyball.tw.chained.crt"),
 };
 
 app.prepare().then(() => {
@@ -43,6 +44,8 @@ app.prepare().then(() => {
     verbose: false,
   });
 
+  // create static server
+  app.use(express.static(path.join(__dirname + '/images')));
   // setup the logger
   app.use(morgan("combined", { stream: accessLogStream }));
 

@@ -9,7 +9,7 @@ import Link from "next/link"
 import { PrismaClient } from '@prisma/client'
 import axios from 'axios';
 const prisma = new PrismaClient()
-const PRIZEURL = '/assets/images';
+const PRIZEURL = '/assets/images/';
 
 function Index ( { examType }) {
     const [prizeList, setPrizeList] = useState();
@@ -93,6 +93,9 @@ function Index ( { examType }) {
 export async function getStaticProps(context) {
 
     const examType = await prisma.exam_type.findMany({
+        where:{
+            is_delete: false
+        }, 
         select:{
             exam_type_id:true,
             exam_type_name:true

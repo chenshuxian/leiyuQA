@@ -82,6 +82,7 @@ const updatePrize = async function(prizeId, data) {
       data
     })
   } catch (e) {
+    console.log(`prize update : ${e}`)
     if (e.code === "P2025") {
       throw errorCode.NotFound;
     }
@@ -91,15 +92,50 @@ const updatePrize = async function(prizeId, data) {
   return prize;
 }
 
-const deletePrize = async function(prizeId) {
+const deletePrize = async function(prizeId, isDelete = false) {
   let prize;
 
   try {
-    prize = await prisma.prize.delete({
-      where: {
-        prize_id: prizeId
+    // prize = await prisma.prize.delete({
+    //   where: {
+    //     prize_id: prizeId
+    //   }
+    // });
+    if (isDelete) {
+      if (Array.isArray(prizeId)) {
+        prize = await prisma.prize.deleteMany({
+          where: {
+            prize_id: { in: prizeId }
+          }
+        });
+      } else {
+        prize = await prisma.prize.delete({
+          where: {
+            prize_id: prizeId
+          }
+        });
       }
-    });
+    } else {
+      if (Array.isArray(prizeId)) {
+        prize = await prisma.prize.updateMany({
+          where: {
+            prize_id: { in: prizeId }
+          },
+          data: {
+            is_delete: true
+          }
+        });
+      } else {
+        prize = await prisma.prize.update({
+          where: {
+            prize_id: prizeId
+          },
+          data: {
+            is_delete: true
+          }
+        });
+      }
+    }
   } catch (e) {
     if (e.code === "P2025") {
       throw errorCode.NotFound;

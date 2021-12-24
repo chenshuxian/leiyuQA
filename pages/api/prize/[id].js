@@ -61,6 +61,12 @@ import { isAdmin } from '../../../libs/auth';
  *         description: ID of the prize
  *         schema:
  *           type: string
+ *       - in: query
+ *         name: isDelete
+ *         description: is delete
+ *         required: false
+ *         schema:
+ *           type: boolean
  *     responses:
  *       200:
  *         description: prize
@@ -69,9 +75,10 @@ import { isAdmin } from '../../../libs/auth';
  *             schema:
  *               $ref: '#/definitions/prize'
  */
+// eslint-disable-next-line import/no-anonymous-default-export
 export default async(req, res) => {
   const {
-    query: { id },
+    query: { id, isDelete },
     body: prizeData,
     method,
   } = req
@@ -106,7 +113,7 @@ export default async(req, res) => {
       break
     case 'DELETE':
       try {
-        prize = await deletePrize(id);
+        prize = await deletePrize(id, isDelete === 'true' ? true : false);
       } catch (e) {
         res.status(e.statusCode).json(e);
         return;

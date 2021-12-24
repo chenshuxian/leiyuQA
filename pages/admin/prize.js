@@ -14,23 +14,18 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import "../../node_modules/react-datepicker/dist/react-datepicker.min.css"
 import Login from "../admin/login"
 import ExamAdminModal from '../../components/examAdminModal'
-import { getList, singleDel, batchDel, updateData, addData } from '../../libs/front/examAdmin';
-
-import { PrismaClient } from '@prisma/client'
+import { getList, singleDel, updateData, addData } from '../../libs/front/prize';
+import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
-const prisma = new PrismaClient()
 
 
-
-function examAdmin ( {examTypeObj}) {
+function Prize () {
     const rows = [
-      {id:'exam_id','value':'','text':'題號','type':'','placeholder':'系統自動產生', readOnly:true },
-      {id:'exam_type_id','value':'','text':'類別','type':'select','placeholder':'','option':examTypeObj},
-      {id:'exam_title','value':'','text':'標題','type':'','placeholder':'', required:true},
-      {id:'exam_option','value':'','text':'選項','type':'','placeholder':'格式: 選項1,選項2,選項3,選項4', required:true},
-      {id:'exam_ans','value':'','text':'答案','type':'','placeholder':'格式: 1,2,3,4', required:true},
-      {id:'exam_img_url','value':'','text':'圖片','type':'file','placeholder':''},
-      {id:'exam_video_url','value':'','text':'影片','type':'','placeholder':'格式: http://www.youtube.com/xxxxxxx'}
+      {id:'prize_id','value':'','text':'獎項ID','type':'','placeholder':'系統自動產生', readOnly:true },
+      {id:'prize_name','value':'','text':'獎項名稱','type':'','placeholder':'', required:true},
+      {id:'prize_title','value':'','text':'獎槓標題','type':'','placeholder':'', required:true},
+      {id:'prize_num','value':'','text':'獎項數量','type':'','placeholder': '', required:true},
+      {id:'prize_image_url','value':'','text':'圖片','type':'file','placeholder':''},
     ] 
     const date = new Date()
     const [ session, loading ] = useSession();
@@ -38,7 +33,7 @@ function examAdmin ( {examTypeObj}) {
     const [modalShow, setModalShow] = useState(false);
     const [cols, setCols] = useState();
     const [action, setAction] = useState();
-    const [examIdList, setExamIdList] = useState([]);
+    const [prizeIdList, setPrizeIdList] = useState([]);
     const { SearchBar } = Search;
 
     useEffect(()=>{
@@ -53,18 +48,9 @@ function examAdmin ( {examTypeObj}) {
       let f = document.querySelector('form')
       let fd = new FormData(f);
       let data = Object.fromEntries(fd);
-      data.exam_ans = parseInt(data.exam_ans)
-      data.exam_option = data.exam_option.split(',')
+      data.prize_num = parseInt(data.prize_num);
 
       return data;
-    }
-
-    const autoId = (cell, row, rowIndex) => {
-        return rowIndex+1
-    }
-    
-    const examOption = (cell, row, rowIndex) => {
-        return cell.join(' / ')
     }
  
     const editorArea = (cell, row, rowIndex) => {
@@ -97,13 +83,13 @@ function examAdmin ( {examTypeObj}) {
       setCols(rows)
     }
 
-    const batchDelBtn = () => {
-      const data = {exam_id_list : examIdList};
-      let yes =confirm('是否進行批量刪除')
-      if(yes){
-        batchDel(data, setList)
-      }
-    }
+    // const batchDelBtn = () => {
+    //   const data = {prize_id_list : prizeIdList};
+    //   let yes =confirm('是否進行批量刪除')
+    //   if(yes){
+    //     batchDel(data, setList)
+    //   }
+    // }
  
     const handleUpdate = (files) => {
 
@@ -114,14 +100,14 @@ function examAdmin ( {examTypeObj}) {
         //fd.append('file',files)
         let fileData = new FormData();
         fileData.append('file',files);
-        axios.post('/api/exam/uploadImage', fileData, {
+        axios.post('/api/prize/uploadImage', fileData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })  
         .then((res) => {
             // console.log(`upload img success: ${res.data.imageUrl}`)
-            data.exam_img_url = res.data.imageUrl
+            data.prize_image_url = res.data.imageUrl
             updateData(data, list, setModalShow, setList)
         })
         .catch((e) => console.log(`upload img ERR: ${e}`))
@@ -133,70 +119,62 @@ function examAdmin ( {examTypeObj}) {
 
     const handleInsert = (e) => {
       let data = formData();
-      delete data.exam_id;
+      data.prize_id = uuidv4();
       addData(data, list, setModalShow, setList)
     }
 
     const columns = [
       {
-        dataField: 'id',
-        text:'題號',
-        formatter: autoId
+        dataField: 'prize_id',
+        text:'獎項ID',
       }, {
-        dataField: 'exam_type_id',
-        text: '類別',
-        formatter: cell => examTypeObj[cell],
-        filter: selectFilter({
-          options: examTypeObj
-        })
-      }, {
-        dataField: 'exam_title',
-        text: '問題',
+        dataField: 'prize_name',
+        text: '獎項名稱',
         searchable: true
+      }, {
+        dataField: 'prize_title',
+        text: '獎項標題',
       },
       {
-        dataField: 'exam_option',
-        text: '選項',
-        formatter: examOption
-      }, {
-        dataField: 'exam_ans',
-        text: '答案',
-      },{
-        dataField: 'exam_id',
+        dataField: 'prize_num',
+        text: '獎項數題',
+      },
+     {
+        dataField: 'prize_id',
         text: '編輯區',
         formatter: editorArea
       }];
 
-      const handleRowSelect = (row, isSelected, e) => {
-        console.log(row)
-        console.log(isSelected)
-        if(isSelected) {
-          setExamIdList(oldArr => [...oldArr, row.exam_id])
-        }else{
-          setExamIdList(examIdList.filter(item => item !== row.exam_id))
-        }
-        //console.log(examIdList)
-      }
+      // const handleRowSelect = (row, isSelected, e) => {
+      //   console.log(row)
+      //   console.log(isSelected)
+      //   if(isSelected) {
+      //     setPrizeIdList(oldArr => [...oldArr, row.exam_id])
+      //   }else{
+      //     setPrizeIdList(prizeIdList.filter(item => item !== row.exam_id))
+      //   }
+      //   //console.log(prizeIdList)
+      // }
 
-      const handleSelectAll = (isSelected, rows, e) => {
-        console.log(rows)
-        console.log(isSelected)
-        if(isSelected) {
-          rows.map(v => {
-            console.log(v.exam_id)
-            setExamIdList(oldArr => [...oldArr, v.exam_id])
-          })
-        }else{
-          setExamIdList([])
-        }
-        // console.log(examIdList)
-      }
+      // const handleSelectAll = (isSelected, rows, e) => {
+      //   console.log(rows)
+      //   console.log(isSelected)
+      //   if(isSelected) {
+      //     rows.map(v => {
+      //       console.log(v.exam_id)
+      //       setPrizeIdList(oldArr => [...oldArr, v.exam_id])
+      //     })
+      //   }else{
+      //     setPrizeIdList([])
+      //   }
+      //   // console.log(prizeIdList)
+      // }
      
-      const selectRow = {
-        mode: 'checkbox',  // multi select
-        onSelect: handleRowSelect,
-        onSelectAll: handleSelectAll
-      };
+      // const selectRow = {
+      //   mode: 'checkbox',  // multi select
+      //   onSelect: handleRowSelect,
+      //   onSelectAll: handleSelectAll
+      // };
 
   return (
     <Layout>
@@ -231,7 +209,7 @@ function examAdmin ( {examTypeObj}) {
                                     <h3>題庫修改</h3>
                                     <SearchBar  { ...props.searchProps } />
                                     <span style={{float:'right'}}>
-                                    <Button variant='danger' style={{ margin:5}} onClick={batchDelBtn}>批量刪除</Button>
+                                    {/* <Button variant='danger' style={{ margin:5}} onClick={batchDelBtn}>批量刪除</Button> */}
                                     <Button variant='success' onClick={addBtn}>新增</Button>
                                     </span>
                                     <hr />
@@ -239,7 +217,7 @@ function examAdmin ( {examTypeObj}) {
                                         { ...props.baseProps }
                                         pagination={ paginationFactory({showTotal:true}) }
                                         filter={ filterFactory() }
-                                        selectRow={ selectRow }
+                                        // selectRow={ selectRow }
                                     />
                                     </div>
                                 )
@@ -265,23 +243,4 @@ function examAdmin ( {examTypeObj}) {
 
 }
 
-export async function getStaticProps(context) {
-
-  const examTypeList = await prisma.exam_type.findMany({
-      select:{
-          exam_type_id: true,
-          exam_type_name: true
-      }
-  })
-
-    const examTypeObj = examTypeList.reduce((obj, cur) => ({...obj, [cur.exam_type_id]: cur.exam_type_name}), {})
-    // console.log(`examList ${JSON.stringify(examTypeObj)}`)
-
-  return {
-    props: {
-        examTypeObj
-    }, // will be passed to the page component as props
-  }
-}
-
-export default examAdmin;
+export default Prize;

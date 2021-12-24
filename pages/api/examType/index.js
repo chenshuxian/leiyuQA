@@ -108,6 +108,7 @@ import { isLogin, isAdmin } from '../../../libs/auth';
  *             schema:
  *               $ref: '#/definitions/examType'
  */
+// eslint-disable-next-line import/no-anonymous-default-export
 export default async(req, res) => {
   const {
     query: { isDelete, offset, limit },

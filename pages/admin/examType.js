@@ -12,35 +12,24 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import filterFactory,{ selectFilter } from 'react-bootstrap-table2-filter';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import "../../node_modules/react-datepicker/dist/react-datepicker.min.css"
-import Login from "./login"
+import Login from "../admin/login"
 import ExamAdminModal from '../../components/examAdminModal'
-import { getList, singleDel, batchDel, updateData, addData } from '../../libs/front/examAdmin';
+import { getList, singleDel, updateData, addData } from '../../libs/front/examType';
 import { v4 as uuidv4 } from 'uuid';
 
-import { PrismaClient } from '@prisma/client'
 import axios from 'axios';
-const prisma = new PrismaClient()
 
-
-
-function examAdmin ( {examTypeObj}) {
+function examType () {
     const rows = [
-      {id:'exam_id','value':'','text':'題號','type':'','placeholder':'系統自動產生', readOnly:true },
-      {id:'exam_type_id','value':'','text':'類別','type':'select','placeholder':'','option':examTypeObj},
-      {id:'exam_title','value':'','text':'標題','type':'','placeholder':'', required:true},
-      {id:'exam_option','value':'','text':'選項','type':'','placeholder':'格式: 選項1,選項2,選項3,選項4', required:true},
-      {id:'exam_ans','value':'','text':'答案','type':'','placeholder':'格式: 1,2,3,4', required:true},
-      {id:'exam_img_url','value':'','text':'圖片','type':'file','placeholder':''},
-      {id:'exam_video_url','value':'','text':'影片','type':'','placeholder':'格式: http://www.youtube.com/xxxxxxx'}
+        {id:'exam_type_id','value':'','text':'類別ID','type':'','placeholder':'系統自動產生', readOnly:true },
+        {id:'exam_type_name','value':'','text':'類別名稱','type':'','placeholder':'', required:true}
     ] 
-    const date = new Date()
     const [ session, loading ] = useSession();
     const [list, setList] = useState([]);
     const [modalShow, setModalShow] = useState(false);
     const [cols, setCols] = useState();
     const [action, setAction] = useState();
     const [examIdList, setExamIdList] = useState([]);
-    const { SearchBar } = Search;
 
     useEffect(()=>{
       getList(setList)
@@ -54,18 +43,8 @@ function examAdmin ( {examTypeObj}) {
       let f = document.querySelector('form')
       let fd = new FormData(f);
       let data = Object.fromEntries(fd);
-      data.exam_ans = parseInt(data.exam_ans)
-      data.exam_option = data.exam_option.split(',')
 
       return data;
-    }
-
-    const autoId = (cell, row, rowIndex) => {
-        return rowIndex+1
-    }
-    
-    const examOption = (cell, row, rowIndex) => {
-        return cell.join(' / ')
     }
  
     const editorArea = (cell, row, rowIndex) => {
@@ -87,7 +66,7 @@ function examAdmin ( {examTypeObj}) {
 
       return (
       <>
-        <Button variant='warning' onClick={handleEdit}>編輯</Button>
+        <Button variant='warning' onClick={handleEdit} style={{marginRight:"6px"}}>編輯</Button>
         <Button variant="danger" onClick={handleDel}>刪除</Button>
       </>)
     }
@@ -96,14 +75,6 @@ function examAdmin ( {examTypeObj}) {
       setModalShow(true);
       setAction('insert');
       setCols(rows)
-    }
-
-    const batchDelBtn = () => {
-      const data = {exam_id_list : examIdList};
-      let yes =confirm('是否進行批量刪除')
-      if(yes){
-        batchDel(data, setList)
-      }
     }
  
     const handleUpdate = (files) => {
@@ -134,36 +105,19 @@ function examAdmin ( {examTypeObj}) {
 
     const handleInsert = (e) => {
       let data = formData();
-      data.exam_id = uuidv4();
+      data.exam_type_id = uuidv4();
       addData(data, list, setModalShow, setList)
     }
 
     const columns = [
       {
-        dataField: 'id',
-        text:'題號',
-        formatter: autoId
-      }, {
         dataField: 'exam_type_id',
-        text: '類別',
-        formatter: cell => examTypeObj[cell],
-        filter: selectFilter({
-          options: examTypeObj
-        })
+        text:'類別ID',
       }, {
-        dataField: 'exam_title',
-        text: '問題',
-        searchable: true
-      },
-      {
-        dataField: 'exam_option',
-        text: '選項',
-        formatter: examOption
-      }, {
-        dataField: 'exam_ans',
-        text: '答案',
+        dataField: 'exam_type_name',
+        text: '類別名稱'
       },{
-        dataField: 'exam_id',
+        dataField: 'exam_type_id',
         text: '編輯區',
         formatter: editorArea
       }];
@@ -213,26 +167,21 @@ function examAdmin ( {examTypeObj}) {
                             <div className="textTitle">
                                 <span></span>
                                 <span className="right"></span>
-                                <h2>題庫管理</h2>
+                                <h2>題庫類別管理</h2>
                             </div>
                             <div className="globalContent"> 
                             <ToolkitProvider
-                                keyField='exam_id'
+                                keyField='exam_type_id'
                                 data={ list }
                                 columns= {columns}
                                 bordered={ true }
                                 noDataIndication="沒有任何題目"
-                                search={{
-                                    searchFormatted: true
-                                  }}
                             >
                                 {
                                 props => (
                                     <div style={{zIndex:2, position:'relative'}}>
-                                    <h3>題庫修改</h3>
-                                    <SearchBar  { ...props.searchProps } />
-                                    <span style={{float:'right'}}>
-                                    <Button variant='danger' style={{ margin:5}} onClick={batchDelBtn}>批量刪除</Button>
+                                    <h3>類別修改</h3>
+                                    <span style={{float:'right', margin:'12px'}}>
                                     <Button variant='success' onClick={addBtn}>新增</Button>
                                     </span>
                                     <hr />
@@ -240,7 +189,6 @@ function examAdmin ( {examTypeObj}) {
                                         { ...props.baseProps }
                                         pagination={ paginationFactory({showTotal:true}) }
                                         filter={ filterFactory() }
-                                        selectRow={ selectRow }
                                     />
                                     </div>
                                 )
@@ -266,23 +214,5 @@ function examAdmin ( {examTypeObj}) {
 
 }
 
-export async function getStaticProps(context) {
 
-  const examTypeList = await prisma.exam_type.findMany({
-      select:{
-          exam_type_id: true,
-          exam_type_name: true
-      }
-  })
-
-    const examTypeObj = examTypeList.reduce((obj, cur) => ({...obj, [cur.exam_type_id]: cur.exam_type_name}), {})
-    // console.log(`examList ${JSON.stringify(examTypeObj)}`)
-
-  return {
-    props: {
-        examTypeObj
-    }, // will be passed to the page component as props
-  }
-}
-
-export default examAdmin;
+export default examType;
