@@ -69,7 +69,7 @@ export default function QA ({examTypeId, examTitle}) {
     },[])
 
     // 是否今日遊戲機會已用完
-	{/* useEffect(()=>{
+	useEffect(()=>{
         axios.get('/api/me')
 	    .then((res) => {
 		const is_shared = res.data.is_shared;
@@ -80,7 +80,7 @@ export default function QA ({examTypeId, examTitle}) {
         .catch((e) => {
             console.log(`exam is_shared err: ${e}`)
         })
-    },[])*/}
+    },[])
 
     // useEffect(()=>{
     //    // console.log(`examType: ${examType}`)
@@ -133,26 +133,26 @@ export default function QA ({examTypeId, examTitle}) {
 
     const share = () => {
         // 分享到fb 取得在玩一次的機會
-        router.push("/#game")
-        // FB.ui({
-        //     display: 'popup',
-        //     method: 'feed',
-        //     link: 'https://lyquiz.kinmen.travel/'
-        //   }, function(response){ 
-        //         if (response && !response.error_message) {
-        //             let data = {is_shared: true}
-        //             axios.patch('/api/me',data)
-        //             .then((res) => {
-        //                 router.push('/#game')
-        //             }
-        //             ).catch((e)=>{
-        //                 console.log(`share fb err: ${e}`)
-        //             })
+        //router.push("/#game")
+        FB.ui({
+            display: 'popup',
+            method: 'feed',
+            link: 'https://lyquiz.kinmen.travel/'
+          }, function(response){ 
+                if (response && !response.error_message) {
+                    let data = {is_shared: true}
+                    axios.patch('/api/me',data)
+                    .then((res) => {
+                        router.push('/#game')
+                    }
+                    ).catch((e)=>{
+                        console.log(`share fb err: ${e}`)
+                    })
                     
-        //         } else {
-        //             alert('Error while posting.11');
-        //         }
-        //     });
+                } else {
+                    alert('Error while posting.11');
+                }
+            });
     }
 
     const QA = () => (
@@ -228,8 +228,15 @@ export default function QA ({examTypeId, examTitle}) {
             <h2>你的成積</h2>
         </div>
         <div className="globalContent">
-            <h6 className="number">你的分數 <b>{score}</b>分  {score >= 80 ? <h6 >恭喜你獲得一張摸彩卷</h6> : 
-            <h6 >成績低於 80 未獲得彩卷，再接再勵</h6>}</h6>
+            <h6 className="number">你的分數 <b>{score}</b>分  
+            {
+            score >= 80 ? 
+            <h6 >您對烈嶼很熟悉，真棒！恭喜您獲得摸彩券一張，歡迎常來烈嶼玩，也可以上烈嶼旅遊網，觀看烈嶼介紹和最新活動資訊。</h6> 
+            : 
+            <h6 >您似乎對烈嶼不太熟悉，分數80分以上可以獲得摸彩券一張，請再接再勵！
+歡迎常來烈嶼玩，也可以上烈嶼旅遊網，觀看烈嶼介紹和最新活動資訊。</h6>
+            }
+            </h6>
           
             <ul className="globalCounter">
                 {ansList.map((v,i)=> (
@@ -318,14 +325,7 @@ export async function getStaticProps({params}) {
 // console.log(params.examType)
     const examTypeList = await prisma.exam_type.findMany()
     const examName = examTypeList.reduce((obj, cur) => ({...obj, [cur.exam_type_id]: cur.exam_type_name}), {})
-
-    console.log(`examName: ${JSON.stringify(examName)}`)
     
-    // const examNameObj = { 
-    //     "4034bd78-17c8-4919-93d5-d0f547a0401b" : "圖書",
-    //     "2b5ecce2-df3b-4a8c-9a00-17f52c71b15b" : "文化",
-    //     "669c21ce-0505-40cd-b479-19a8b700dab5" : "綜合",
-    // }
     const examTitle = examName[params.examType]
     return {
         props: {
