@@ -125,7 +125,8 @@ export default async(req, res) => {
     method
   } = req
 
-  if (!await isLogin(req)) {
+  
+  if (!await isLogin(req) && method !== 'PUT') {
     res.status(401).json(errorCode.Unauthorized);
     return;
   }
