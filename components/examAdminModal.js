@@ -34,7 +34,6 @@ export default function ExamAdminModal (props) {
       }
 
       const handleSubmit = (event) => {
-        console.log('su')
         const form = event.currentTarget;
         event.preventDefault();
         if (form.checkValidity() === false) {
@@ -44,6 +43,7 @@ export default function ExamAdminModal (props) {
         setValidated(true);
         if(action === 'insert') {
             handleInsert(files)
+           
         }else{
             handleUpdate(files)
         }
@@ -59,27 +59,32 @@ export default function ExamAdminModal (props) {
                 </Form.Control>)
             break
           case 'file':
-           return(<><Form.File 
-            id="image-file"
-            label={fileName}
-            custom
-            onChange={handleImageChange}
-          />
-          {action === 'insert' ?
-           <img src={images} style={{maxHeight:300, margin:5}}></img>
-           :
-           <img src={images ? images : `/assets/images/${v.value}`} style={{maxHeight:300, margin:5}}></img>
-          }
-         
-          {files ? <Button onClick={cancelImage}>取消上傳圖片</Button> : null}
-          </>)
+                return(<><Form.File 
+                  id="image-file"
+                  label={fileName}
+                  custom
+                  onChange={handleImageChange}
+                />
+                {action === 'insert' ?
+                <img src={images} style={{maxHeight:300, margin:5}}></img>
+                :
+                <img src={images ? images : `/assets/images/${v.value}`} style={{maxHeight:300, margin:5}}></img>
+                }
+              
+                {files ? <Button onClick={cancelImage}>取消上傳圖片</Button> : null}
+                </>)
             break
-          default: {
-              if (action === 'insert') {
-                return (<Form.Control  required={v.required} placeholder={v.placeholder} readOnly={v.readOnly} name={v.id} />)
+          default: 
+          {
+              if(v.hidden){
+                return (<input type='password' style={{display:'none'}} />)
+              }else{
+                if (action === 'insert') {
+                  return (<Form.Control type={v.type} required={v.required} placeholder={v.placeholder} readOnly={v.readOnly} name={v.id} />)
+                }
+                return (<Form.Control type={v.type} required={v.required} placeholder={v.placeholder} defaultValue={v.value} readOnly={v.readOnly} name={v.id} />) 
               }
-              return (<Form.Control  required={v.required} placeholder={v.placeholder} defaultValue={v.value} readOnly={v.readOnly} name={v.id} />)
-           
+               
           }
            
         }
@@ -100,9 +105,7 @@ export default function ExamAdminModal (props) {
             </Modal.Title>
           </Modal.Header>
           <Form validated={validated} onSubmit={handleSubmit}>
-          <Modal.Body style={{marginLeft:"60px", maxHeight: 'calc(100vh - 210px)',
-      overflowY: 'auto'}}>
-           
+          <Modal.Body style={{marginLeft:"60px", maxHeight: 'calc(100vh - 210px)', overflowY: 'auto'}}>
              {cols && cols.map((v,i) => (
                 <Form.Group key={`examForm${i}`} as={Row}>
                   <Form.Label column sm={2}>

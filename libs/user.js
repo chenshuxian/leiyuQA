@@ -19,6 +19,8 @@ const getUser = async function(filter, pagination) {
     prismaArgs['take'] = parseInt(pagination.limit) || 50;
   }
 
+  prismaArgs['include'] = { _count: { select: { ticket : true } } };
+
   total = await getUserCount(filter);
   if (!total) {
     throw errorCode.NotFound;

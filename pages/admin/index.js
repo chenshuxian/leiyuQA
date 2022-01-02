@@ -16,6 +16,7 @@ import Login from "./login"
 import ExamAdminModal from '../../components/examAdminModal'
 import { getList, singleDel, batchDel, updateData, addData } from '../../libs/front/examAdmin';
 import { v4 as uuidv4 } from 'uuid';
+import router from 'next/router';
 
 import { PrismaClient } from '@prisma/client'
 import axios from 'axios';
@@ -43,13 +44,25 @@ function examAdmin ( {examTypeObj}) {
     const { SearchBar } = Search;
 
     useEffect(()=>{
+    
+      if(session){
+        if(session.isAdmin){
+          router.push("/admin")
+        }else{
+          router.push("/admin/login")
+        }
+      }else{
+        router.push("/admin/login")
+      }
+      
+    },[session])
+
+
+    useEffect(()=>{
       getList(setList)
     },[])
 
-    if(!session){
-      return <Login />
-    }
-
+    
     const formData = () => {
       let f = document.querySelector('form')
       let fd = new FormData(f);

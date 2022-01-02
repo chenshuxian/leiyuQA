@@ -186,6 +186,7 @@ export default NextAuth({
             registeredUser = await getAdminUserById(user.sub);
             session.userId = user.sub;
             session.isAdmin = true;
+            session.isSuper = registeredUser.is_super
           } catch (e) {
           }
         }

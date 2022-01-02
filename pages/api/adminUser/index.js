@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { getAdminUser, createAdminUser } from '../../../libs/adminUser';
 import errorCode from '../../../libs/errorCode';
-import { isAdmin } from '../../../libs/auth';
+import { isAdmin, getAdminName } from '../../../libs/auth';
 
 /**
  * @swagger
@@ -109,7 +109,7 @@ export default async(req, res) => {
     res.status(401).json(errorCode.Unauthorized);
     return;
   }
-
+  let adminName = await getAdminName(req);
   let adminUser;
   let total;
   switch (method) {
@@ -140,7 +140,7 @@ export default async(req, res) => {
       }
 
       try {
-        adminUser = await createAdminUser(adminUserData);
+        adminUser = await createAdminUser(adminUserData, adminName);
       } catch (e) {
         res.status(e.statusCode).json(e);
         return;

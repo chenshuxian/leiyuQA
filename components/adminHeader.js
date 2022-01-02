@@ -49,16 +49,17 @@ export default function AdminHeader () {
         <nav className="main-nav" role="navigation">
             <ul id="globalMu">
                 <li><Link href="/admin/">題庫管理</Link></li>
-                <li><Link href="/admin/examType">題庫類別管理</Link></li>
-                <li><Link href="/admin/prize">獎品清單管理</Link></li>
-                <li><Link href="/admin/#gift">數據統計</Link></li>
+                <li><Link href="/admin/examType">類別管理</Link></li>
+                <li><Link href="/admin/prize">獎品管理</Link></li>
+                <li><Link href="/admin/admin">管理員管理</Link></li>
                 <li><Link href="/admin/lottery">會員摸彩</Link></li>
+                <li><Link href="/admin/user">用戶管理</Link></li>
             </ul>
             <div className="otherLink">
                 <ul>
                     <li>
                         {!isLogin && 
-                       <Button onClick={()=> signOut()}>登出</Button>
+                       <Button style={{ margin: 10, borderRadius:180}} onClick={()=> signOut()}>登出</Button>
                         }
                     </li>
                 </ul>

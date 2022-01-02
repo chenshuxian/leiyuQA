@@ -40,4 +40,11 @@ const isAdmin = async function(req) {
   return session?.isAdmin || false;
 }
 
-export { isLogin, getUserId, adminLogin, isAdmin };
+const getAdminName = async function(req) {
+  const session = await getUserSession(req);
+
+   return session?.user.name || '';
+}
+
+
+export { isLogin, getUserId, adminLogin, isAdmin, getAdminName };

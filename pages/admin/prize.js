@@ -137,7 +137,7 @@ function Prize () {
       },
       {
         dataField: 'prize_num',
-        text: '獎項數題',
+        text: '獎項數量',
       },
      {
         dataField: 'prize_id',
@@ -227,9 +227,9 @@ function Prize () {
                               show={modalShow} 
                               onHide={() => setModalShow(false)} 
                               cols = {cols}
+                              action = {action}
                               handleUpdate = {handleUpdate}
                               handleInsert = {handleInsert}
-                              action = {action}
                             />
                             </div>
                         </div>

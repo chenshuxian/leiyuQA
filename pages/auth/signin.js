@@ -14,6 +14,13 @@ export default function Signin () {
             }
                 router.push("/")
         }
+    },[session])
+    
+    useEffect(()=>{
+        let fromAdmin = router.query.callbackUrl?.includes('admin');
+         if(fromAdmin){
+            router.push("/admin")
+         }
       },[session])
 
   return (

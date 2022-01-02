@@ -8,16 +8,17 @@ import { Form, Col, Button } from 'react-bootstrap'
 
 export default function SignIn({ csrfToken }) {
     const [ session, loading ] = useSession()
-    // useEffect(()=>{
-    //     if(session){
-    //         if(session.isAdmin){
-    //             router.push("/admin")
-    //         }else{
-    //             router.push("/admin/login")
-    //         }
+    
+      useEffect(()=>{
+        if(session){
+            if(session.isAdmin){
+                router.push("/admin")
+            }else{
+                router.push("/admin/login")
+            }
                 
-    //     }
-    //   },[session])
+        }
+      },[session])
 
       const handleSubmit = (e) => {
         e.preventDefault();

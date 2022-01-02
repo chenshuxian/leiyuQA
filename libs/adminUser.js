@@ -41,6 +41,7 @@ const getAdminUserById = async function(id) {
     select : {
       id: true,
       name: true,
+      is_super: true,
       create_time: true,
       update_time: true
     }
@@ -71,16 +72,18 @@ const getAdminUserCount = async function(filter) {
   return 0;
 }
 
-const createAdminUser = async function(data) {
+const createAdminUser = async function(data, operater) {
   let adminUser;
 
   data.password = getPasswordHash(data.password || Math.random());
+  data.update_user = operater;
 
   try {
     adminUser = await prisma.admin.create({
       data
     });
   } catch (e) {
+    console.log(e);
     throw errorCode.InternalServerError;
   }
 
@@ -171,4 +174,10 @@ const getAdminByCredentials = async function(name, password) {
   return adminUser;
 }
 
-export { getAdminUser, createAdminUser, updateAdminUser, deleteAdminUser, getAdminUserById, getAdminByCredentials };
+export { 
+  getAdminUser, 
+  createAdminUser, 
+  updateAdminUser, 
+  deleteAdminUser, 
+  getAdminUserById, 
+  getAdminByCredentials };

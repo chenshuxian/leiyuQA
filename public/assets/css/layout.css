@@ -36,6 +36,14 @@ header.admin ul#globalMu {
     width: 70%;
 }
 
+header.admin ul#globalMu li {
+    width: calc(99.9% * 1/6 - (8px - 8px * 1/6));
+}
+
+header.admin ul#globalMu li:nth-child(5n+1) {
+    clear:none
+}
+
 .indexPage .gameUl li {
     cursor: pointer;
 }

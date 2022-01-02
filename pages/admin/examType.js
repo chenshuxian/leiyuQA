@@ -184,7 +184,6 @@ function examType () {
                                     <span style={{float:'right', margin:'12px'}}>
                                     <Button variant='success' onClick={addBtn}>新增</Button>
                                     </span>
-                                    <hr />
                                     <BootstrapTable
                                         { ...props.baseProps }
                                         pagination={ paginationFactory({showTotal:true}) }
