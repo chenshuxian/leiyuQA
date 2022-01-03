@@ -234,10 +234,10 @@ export default function QA ({examTypeId, examTitle}) {
             <h6 className="number">你的分數 <b>{score}</b>分  
             {
             score >= 80 ? 
-            <h6 >您對烈嶼很熟悉，真棒！恭喜您獲得摸彩券一張，歡迎常來烈嶼玩，也可以上烈嶼旅遊網，觀看烈嶼介紹和最新活動資訊。</h6> 
+            <h4>您對烈嶼很熟悉，真棒！恭喜您獲得摸彩券一張，歡迎常來烈嶼玩，也可以上烈嶼旅遊網，觀看烈嶼介紹和最新活動資訊。</h4> 
             : 
-            <h6 >您似乎對烈嶼不太熟悉，分數80分以上可以獲得摸彩券一張，請再接再勵！
-歡迎常來烈嶼玩，也可以上烈嶼旅遊網，觀看烈嶼介紹和最新活動資訊。</h6>
+            <h4>您似乎對烈嶼不太熟悉，分數80分以上可以獲得摸彩券一張，請再接再勵！
+歡迎常來烈嶼玩，也可以上烈嶼旅遊網，觀看烈嶼介紹和最新活動資訊。</h4>
             }
             </h6>
           
@@ -260,7 +260,9 @@ export default function QA ({examTypeId, examTitle}) {
             <ul style={{textAlign:'center',marginTop:'6px'}}>
                 {count < 2 ?
                 <li><Button style={{margin:"2px", height:"45px", width:"90px"}} variant='info' onClick={share}>返回遊戲</Button></li> 
-                : null
+                : <li style={{margin:5, color:'red'}}>
+                    <h6 >本日遊戲次數已達3次，請於明日再玩</h6>
+                 </li>
                 }
             
             </ul>

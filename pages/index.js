@@ -36,7 +36,7 @@ function Index ( { examType }) {
                             <h2>活動說明</h2>
                         </div>
                         <div className="globalContent" style={{marginBottom:2}}>
-                            <h3>每日最多3次遊戲機會，遊戲結束分享至FB，將可獲得再玩一次的機會最多3次</h3>
+                            <h3>每日最多3次遊戲機會，遊戲結束分享至FB，將可獲得再玩一次的機會</h3>
                             <h3>題目分為文化、圖書、綜合三大題庫，每次試卷10題，成績達80分，就可獲得一張摸彩卷</h3> 
                         </div>
                     </div>

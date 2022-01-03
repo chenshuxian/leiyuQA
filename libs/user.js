@@ -83,7 +83,6 @@ const getUserById = async function(id) {
 
 const updateUser = async function(id, data) {
   let user;
-
   try {
     user = await prisma.user.update({
       where: {
