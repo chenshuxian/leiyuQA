@@ -105,7 +105,8 @@ const updateIsShare = async function() {
   try {
     user = await prisma.user.updateMany({
       data : {
-        is_shared : true
+        is_shared : true,
+        count: 0
       }
     })
   } catch (e) {
