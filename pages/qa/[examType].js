@@ -30,6 +30,7 @@ export default function QA ({examTypeId, examTitle}) {
     const [ score, setScore ] = useState();
     const [ ansList, setAnsList ] = useState([]);
     const [ cName, setCName] = useState('qa');
+    const [ count, setCount] = useState(0); // 遊戲次數最多 3 次
 
     //console.log(session)
     
@@ -73,7 +74,9 @@ export default function QA ({examTypeId, examTitle}) {
         axios.get('/api/me')
 	    .then((res) => {
 		const is_shared = res.data.is_shared;
-		if(!is_shared){
+        const countGame = res.data.count;
+        setCount(countGame);
+		if(!is_shared || countGame > 2){
 			setScorePage('ALERT')
 		}
         })
@@ -255,7 +258,11 @@ export default function QA ({examTypeId, examTitle}) {
                
             </ul>
             <ul style={{textAlign:'center',marginTop:'6px'}}>
-            <li><Button style={{margin:"2px", height:"45px", width:"90px"}} variant='info' onClick={share}>返回遊戲</Button></li> 
+                {count < 2 ?
+                <li><Button style={{margin:"2px", height:"45px", width:"90px"}} variant='info' onClick={share}>返回遊戲</Button></li> 
+                : null
+                }
+            
             </ul>
         </div>
     </div>

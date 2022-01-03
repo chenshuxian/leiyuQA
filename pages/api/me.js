@@ -38,10 +38,10 @@ import { isLogin, getUserId } from '../../libs/auth';
  *         type: boolean 
  *         description: Is shared url to FB
  *         example: false
- *       is_played:
- *         type: boolean 
- *         description: Is played today
- *         example: false
+ *       count:
+ *         type: int 
+ *         description: count of game
+ *         example: 1
  *       create_time:
  *         type: string
  *         format: date-time
@@ -111,6 +111,10 @@ import { isLogin, getUserId } from '../../libs/auth';
  *                 type: boolean 
  *                 description: Is shared url to FB
  *                 example: false
+ *               count:
+ *                 type: int 
+ *                 description: count fo game
+ *                 example: {increment: 1}
  *     responses:
  *       200:
  *         description: Successful operation
@@ -159,7 +163,8 @@ export default async(req, res) => {
           name: userData.name,
           phone: userData.phone,
           addr: userData.addr,
-          is_shared: userData.is_shared
+          is_shared: userData.is_shared,
+          count: {increment: 1}
         });
       } catch (e) {
         res.status(e.statusCode).json(e);

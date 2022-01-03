@@ -38,10 +38,6 @@ import { isAdmin, getAdminName } from '../../libs/auth';
  *         type: boolean 
  *         description: Is shared url to FB
  *         example: false
- *       is_played:
- *         type: boolean 
- *         description: Is played today
- *         example: false
  *       create_time:
  *         type: string
  *         format: date-time
