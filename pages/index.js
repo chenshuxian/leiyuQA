@@ -6,9 +6,7 @@ import Layout from '../components/layout'
 import Image from 'next/image'
 import bannerImg from '../public/assets/images/bannerImg.png';
 import Link from "next/link"
-import { PrismaClient } from '@prisma/client'
 import axios from 'axios';
-const prisma = new PrismaClient()
 const PRIZEURL = '/assets/images/';
 
 function Index () {
