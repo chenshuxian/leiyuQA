@@ -141,7 +141,8 @@ export default async(req, res) => {
         examAnsErr = await checkAnswer(answerData);
         if (examAnsErr) {
           // 更新is_shared 狀態為false
-          updateUser(userId, { is_shared: false });
+          let today = new Date(Date.now() + (8 * 60 * 60 * 1000))
+          updateUser(userId, { is_shared: false, last_play_time: today });
           score = (Object.keys(answerData).length - examAnsErr.length) * 10
           examAnsErr = examAnsErr.map( exam => {
             return {

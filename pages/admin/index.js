@@ -17,14 +17,23 @@ import ExamAdminModal from '../../components/examAdminModal'
 import { getList, singleDel, batchDel, updateData, addData } from '../../libs/front/examAdmin';
 import { v4 as uuidv4 } from 'uuid';
 import router from 'next/router';
-
-import { PrismaClient } from '@prisma/client'
 import axios from 'axios';
-const prisma = new PrismaClient()
 
 
 
-function examAdmin ( {examTypeObj}) {
+
+function examAdmin () {
+    
+    const date = new Date()
+    const [ session, loading ] = useSession();
+    const [list, setList] = useState([]);
+    const [modalShow, setModalShow] = useState(false);
+    const [cols, setCols] = useState();
+    const [action, setAction] = useState();
+    const [examIdList, setExamIdList] = useState([]);
+    const [examTypeObj, setExamTypeObj] = useState([]);
+    const { SearchBar } = Search;
+
     const rows = [
       {id:'exam_id','value':'','text':'題號','type':'','placeholder':'系統自動產生', readOnly:true },
       {id:'exam_type_id','value':'','text':'類別','type':'select','placeholder':'','option':examTypeObj},
@@ -34,14 +43,6 @@ function examAdmin ( {examTypeObj}) {
       {id:'exam_img_url','value':'','text':'圖片','type':'file','placeholder':''},
       {id:'exam_video_url','value':'','text':'影片','type':'','placeholder':'格式: http://www.youtube.com/xxxxxxx'}
     ] 
-    const date = new Date()
-    const [ session, loading ] = useSession();
-    const [list, setList] = useState([]);
-    const [modalShow, setModalShow] = useState(false);
-    const [cols, setCols] = useState();
-    const [action, setAction] = useState();
-    const [examIdList, setExamIdList] = useState([]);
-    const { SearchBar } = Search;
 
     useEffect(()=>{
     
@@ -61,6 +62,15 @@ function examAdmin ( {examTypeObj}) {
     useEffect(()=>{
       getList(setList)
     },[])
+
+    useEffect(()=> {
+      axios.get('/api/examType')
+      .then((res) => {
+          let data = res.data.examTypeList.reduce((obj, cur) => ({...obj, [cur.exam_type_id]: cur.exam_type_name}), {})
+          setExamTypeObj(data)
+      })
+      .catch((e) =>  console.log(`index get prize err: ${e}`))
+  },[])
 
     
     const formData = () => {
@@ -279,23 +289,23 @@ function examAdmin ( {examTypeObj}) {
 
 }
 
-export async function getStaticProps(context) {
+// export async function getStaticProps(context) {
 
-  const examTypeList = await prisma.exam_type.findMany({
-      select:{
-          exam_type_id: true,
-          exam_type_name: true
-      }
-  })
+//   const examTypeList = await prisma.exam_type.findMany({
+//       select:{
+//           exam_type_id: true,
+//           exam_type_name: true
+//       }
+//   })
 
-    const examTypeObj = examTypeList.reduce((obj, cur) => ({...obj, [cur.exam_type_id]: cur.exam_type_name}), {})
-    // console.log(`examList ${JSON.stringify(examTypeObj)}`)
+//     const examTypeObj = examTypeList.reduce((obj, cur) => ({...obj, [cur.exam_type_id]: cur.exam_type_name}), {})
+//     // console.log(`examList ${JSON.stringify(examTypeObj)}`)
 
-  return {
-    props: {
-        examTypeObj
-    }, // will be passed to the page component as props
-  }
-}
+//   return {
+//     props: {
+//         examTypeObj
+//     }, // will be passed to the page component as props
+//   }
+// }
 
 export default examAdmin;

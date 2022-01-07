@@ -53,7 +53,7 @@ export default function SignIn({ csrfToken }) {
                                 <Form.Row xs={12} md={6}>
                                   <Form.Group as={Col}  controlId="account" >
                                     <Form.Label>帳號: </Form.Label>
-                                    <Form.Control type="text" defaultValue="admin" name="account"></Form.Control>
+                                    <Form.Control type="text" defaultValue="" name="account"></Form.Control>
                                   </Form.Group>
                                 </Form.Row>
                                 <Form.Row xs={12} md={6}>
