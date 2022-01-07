@@ -39,9 +39,7 @@ function examType () {
     useEffect(()=>{
     
       if(session){
-        if(session.isAdmin){
-          router.push("/admin")
-        }else{
+        if(!session.isAdmin){
           router.push("/admin/login")
         }
       }else{

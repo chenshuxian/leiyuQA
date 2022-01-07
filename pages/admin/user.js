@@ -28,14 +28,12 @@ function User () {
     useEffect(()=>{
     
         if(session){
-          if(session.isAdmin){
-            router.push("/admin")
+            if(!session.isAdmin){
+              router.push("/admin/login")
+            }
           }else{
             router.push("/admin/login")
           }
-        }else{
-          router.push("/admin/login")
-        }
         
       },[session])
 

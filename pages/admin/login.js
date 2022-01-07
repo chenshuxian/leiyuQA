@@ -27,7 +27,6 @@ export default function SignIn({ csrfToken }) {
         if(session){
           console.log('登出前一個使用者');
           signOut();
-          signIn("credentials",data);
         }
        
         signIn("credentials",data);

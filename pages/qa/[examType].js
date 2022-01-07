@@ -11,10 +11,7 @@ import { Button } from 'react-bootstrap';
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
-
 import axios from "axios";
-import https from "https";
-import { red } from '@material-ui/core/colors';
 
 let ans = {};
 
