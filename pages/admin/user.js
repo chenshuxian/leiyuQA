@@ -11,7 +11,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import filterFactory,{ selectFilter } from 'react-bootstrap-table2-filter';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import "../../node_modules/react-datepicker/dist/react-datepicker.min.css"
-import Login from "./login"
+import router from 'next/router';
 import { getList } from '../../libs/front/user';
 
 
@@ -24,10 +24,20 @@ function User () {
         getList(setList)
     },[]) 
 
-    if(!session){
-        return <Login />
-    }
-
+    
+    useEffect(()=>{
+    
+        if(session){
+          if(session.isAdmin){
+            router.push("/admin")
+          }else{
+            router.push("/admin/login")
+          }
+        }else{
+          router.push("/admin/login")
+        }
+        
+      },[session])
 
     const columns = [
         {

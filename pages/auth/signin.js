@@ -9,10 +9,12 @@ export default function Signin () {
     const [ session, loading ] = useSession()
     useEffect(()=>{
         if(session){
-            if(!session.reg){
-                router.push("/register")
+            if(!session.isAdmin){
+                if(!session.reg){
+                    router.push("/register")
+                }
+                    router.push("/")
             }
-                router.push("/")
         }
     },[session])
     
@@ -44,6 +46,9 @@ export default function Signin () {
                                 <a href="#" 
                                     onClick={(e) => {
                                         e.preventDefault()
+                                        if(session){
+                                            signOut();
+                                        }
                                         signIn('facebook')
                                      }} className="fb">
                                 facebook 登入</a>

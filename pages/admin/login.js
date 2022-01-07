@@ -1,5 +1,5 @@
 import react, {useEffect} from 'react'
-import { getCsrfToken,useSession, signIn } from "next-auth/client"
+import { getCsrfToken,useSession, signIn, signOut } from "next-auth/client"
 import AdminLayout from "../../components/adminLayout"
 import Image from 'next/image'
 import mainBanner from '../../public/assets/images/mainBanner.png';
@@ -22,6 +22,10 @@ export default function SignIn({ csrfToken }) {
 
       const handleSubmit = (e) => {
         e.preventDefault();
+        if(session){
+          console.log('登出前一個使用者');
+          signOut();
+        }
         const formData = new FormData(document.getElementById('form'));
         const data = {callbackUrl: 'https://localhost/admin/', 'username': formData.get('account'), 'password': formData.get('pw') }
         signIn("credentials",data)

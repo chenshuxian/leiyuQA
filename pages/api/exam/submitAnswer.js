@@ -130,7 +130,7 @@ export default async(req, res) => {
         }
       }
 
-      isQuotaExceeded = !user.is_shared && user.is_played
+      isQuotaExceeded = !user.is_shared
 
       if (isQuotaExceeded) {
         res.status(400).json(errorCode.QuotaExceeded);

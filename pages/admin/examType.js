@@ -16,7 +16,7 @@ import Login from "../admin/login"
 import ExamAdminModal from '../../components/examAdminModal'
 import { getList, singleDel, updateData, addData } from '../../libs/front/examType';
 import { v4 as uuidv4 } from 'uuid';
-
+import router from 'next/router';
 import axios from 'axios';
 
 function examType () {
@@ -35,9 +35,20 @@ function examType () {
       getList(setList)
     },[])
 
-    if(!session){
-      return <Login />
-    }
+  
+    useEffect(()=>{
+    
+      if(session){
+        if(session.isAdmin){
+          router.push("/admin")
+        }else{
+          router.push("/admin/login")
+        }
+      }else{
+        router.push("/admin/login")
+      }
+      
+    },[session])
 
     const formData = () => {
       let f = document.querySelector('form')

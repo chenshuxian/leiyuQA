@@ -36,23 +36,10 @@ export default function QA ({examTypeId, examTitle}) {
     
 
     useEffect(()=>{
-        if(session === undefined || session === null){
+        if(session === undefined || session === null || session.isAdmin){
             console.log('rediret to signin')
             router.push('/auth/signin')
         }
-        // else{
-        //     //console.log(session.is_shared
-        //         axios.get(`/api/exam/random/${examTypeId}`)
-        //         .then((res)=>
-        //         { 
-        //             //console.log(`examList: ${JSON.stringify(res.data.examList)}`)
-        //             ans = {};
-		//         const examList = res.data.examList;
-        //             examList.map((v) => ans[v.exam_id] = 0 )
-        //             setExam(examList)
-        //         })
-        //         .catch((e)=>console.log(`loadExamErr: ${e}`))
-        // }
     },[session])
 
     //load 題目

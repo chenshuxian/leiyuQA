@@ -17,7 +17,7 @@ import ExamAdminModal from '../../components/examAdminModal'
 import { getList, singleDel, updateData, addData } from '../../libs/front/member';
 import { getFormData } from '../../libs/front/common';
 import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
+import router from 'next/router';
 
 
 function Admin () {
@@ -46,9 +46,22 @@ function Admin () {
         getList(setList)
     },[]) 
 
-    if(!session){
-        return <Login />
-    }
+
+  
+    useEffect(()=>{
+    
+      if(session){
+        if(session.isAdmin){
+          router.push("/admin")
+        }else{
+          router.push("/admin/login")
+        }
+      }else{
+        router.push("/admin/login")
+      }
+      
+    },[session])
+    
 
     const editorArea = (cell, row, rowIndex) => {
         const handleEdit = () => {
