@@ -22,13 +22,15 @@ export default function SignIn({ csrfToken }) {
 
       const handleSubmit = (e) => {
         e.preventDefault();
+        const formData = new FormData(document.getElementById('form'));
+        const data = {callbackUrl: 'https://localhost/admin/', 'username': formData.get('account'), 'password': formData.get('pw') }
         if(session){
           console.log('登出前一個使用者');
           signOut();
+          signIn("credentials",data);
         }
-        const formData = new FormData(document.getElementById('form'));
-        const data = {callbackUrl: 'https://localhost/admin/', 'username': formData.get('account'), 'password': formData.get('pw') }
-        signIn("credentials",data)
+       
+        signIn("credentials",data);
         //console.log(`login admin: ${JSON.stringify(formData)} pw: ${formData.password}`)
       }
   return (

@@ -48,8 +48,9 @@ export default function Signin () {
                                         e.preventDefault()
                                         if(session){
                                             signOut();
+                                            signIn('facebook');
                                         }
-                                        signIn('facebook')
+                                        signIn('facebook');
                                      }} className="fb">
                                 facebook 登入</a>
                             </div>
