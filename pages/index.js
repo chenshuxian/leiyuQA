@@ -11,7 +11,7 @@ import axios from 'axios';
 const prisma = new PrismaClient()
 const PRIZEURL = '/assets/images/';
 
-function Index ( { examType }) {
+function Index () {
     const [prizeList, setPrizeList] = useState();
     const [examTypeList, setExamTypeList] = useState();
     useEffect(()=> {
@@ -98,31 +98,31 @@ function Index ( { examType }) {
   )
 }
 
-export async function getStaticProps(context) {
+// export async function getStaticProps(context) {
 
-    const examType = await prisma.exam_type.findMany({
-        where:{
-            is_delete: false
-        }, 
-        select:{
-            exam_type_id:true,
-            exam_type_name:true
-        }
-    })
-    //console.log(`examType : ${JSON.stringify(examType)}`)
-    // const prizeData = await prisma.prize.findMany({
-    //     select:{
-    //         prize_name:true,
-    //         prize_image_url:true,
-    //         prize_title:true
-    //     }
-    // })
+//     const examType = await prisma.exam_type.findMany({
+//         where:{
+//             is_delete: false
+//         }, 
+//         select:{
+//             exam_type_id:true,
+//             exam_type_name:true
+//         }
+//     })
+//     //console.log(`examType : ${JSON.stringify(examType)}`)
+//     // const prizeData = await prisma.prize.findMany({
+//     //     select:{
+//     //         prize_name:true,
+//     //         prize_image_url:true,
+//     //         prize_title:true
+//     //     }
+//     // })
 
-    return {
-      props: {
-          examType
-      }, // will be passed to the page component as props
-    }
-}
+//     return {
+//       props: {
+//           examType
+//       }, // will be passed to the page component as props
+//     }
+// }
 
 export default Index;
