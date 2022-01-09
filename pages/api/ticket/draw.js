@@ -141,9 +141,11 @@ import { isAdmin } from '../../../libs/auth';
  *             schema:
  *               $ref: '#/definitions/winnerList'
  */
+// eslint-disable-next-line import/no-anonymous-default-export
 export default async(req, res) => {
   const {
     query: { month, quarter, year, number, prize_id },
+    body: drawData,
     method
   } = req
 
@@ -169,14 +171,14 @@ export default async(req, res) => {
       if (year) {
         drawRange = { year }
       }
-
-      if  (!drawRange) {
-        res.status(400).json(errorCode.BadRequest);
-        return;
-      }
+     
+      // if  (!drawRange) {
+      //   res.status(400).json(errorCode.BadRequest);
+      //   return;
+      // }
 
       try {
-        ({ winnerList, total } = await drawTicket(prize_id, number, drawRange));
+        ({ winnerList, total } = await drawTicket(drawData.prize_id, drawData.number, drawRange));
       } catch (e) {
         res.status(e.statusCode).json(e);
         return;

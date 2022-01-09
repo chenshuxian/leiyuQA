@@ -123,10 +123,10 @@ export default async(req, res) => {
       let filter;
       let pagination;
 
-      if (!await isLogin(req)) {
-        res.status(401).json(errorCode.Unauthorized);
-        return;
-      }
+      // if (!await isLogin(req)) {
+      //   res.status(401).json(errorCode.Unauthorized);
+      //   return;
+      // }
 
       if (isDelete !== undefined) {
         filter = { is_delete: isDelete === 'true' ? true : false };

@@ -11,6 +11,9 @@ import { useState } from 'react';
 import { Form, DropdownButton, Dropdown, Container, Row, Col, Button } from 'react-bootstrap';
 import "../../node_modules/react-datepicker/dist/react-datepicker.min.css"
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
+import { getList } from '../../libs/front/user';
+import { getDrawer } from '../../libs/front/drawer';
+
 import zh_TW  from 'date-fns'
 registerLocale('TW', zh_TW);
 
@@ -18,15 +21,16 @@ import { PrismaClient } from '@prisma/client'
 import axios from 'axios';
 const prisma = new PrismaClient()
 
-
 function Lottery ({ prizeList, prizeObj }) {
     const date = new Date()
+    const randTime = 1000
     const lotteryList = ['陳書賢','吳書賢','吳小賢','的書賢','二小賢','吳臣賢','吳小靈']
     const [startDate, setStartDate] = useState(date)
     const [endDate, setEndDate] =useState(date)
     const [prizeId, setPrizeId] = useState(Object.keys(prizeObj)[0])
     const [luckyName, setLuckyName] = useState("準備中")
     const [ session, loading ] = useSession()
+    const [drawList, setDrawList] = useState([])
 
     
     useEffect(()=>{
@@ -41,25 +45,49 @@ function Lottery ({ prizeList, prizeObj }) {
       
     },[session])
 
+    useEffect(()=>{
+      getList(setDrawList);
+    },[])
+
+
     const prizeSelect = (e) => {
       console.log(e.target.value)
       //setDropTitle(prizeObj[e.target.value])
       setPrizeId(e.target.value)
     }
 
-    const drawer = () => {
-      //console.log("drawer")
-      const randomName = () => {
-        console.log("drawer1")
-        let len = lotteryList.length
+    const luckyList = async () => {
+      let num = document.getElementById('drawNum').value
+      let drawData = {
+        number : parseInt(num),
+        prize_id : prizeId
+      };
+
+      let draw = await getDrawer(drawData);
+      const winList = draw.data.winnerList;
+      const total = draw.data.total
+      let listStr = '';
+
+      if(total > 0 ) {
+
+      }
+    }
+
+    const drawer = async () => {
+
+      const randomName = async () => {
+        let len = drawList.length;
         let luckyNum = Math.floor(Math.random() * len)
-        setLuckyName(lotteryList[luckyNum])
+        setLuckyName(drawList[luckyNum].name)
       }
 
       let timeoutID = setInterval(() => { randomName()},100)
-      setTimeout(()=>{
+      let luckyMan = await luckyList();
+      
+      setTimeout(async ()=>{
+        setLuckyName(luckyMan)
         clearInterval(timeoutID)
-      },5000)
+      },randTime)
     }
 
   return (
@@ -90,7 +118,7 @@ function Lottery ({ prizeList, prizeObj }) {
                                     </Form.Control>
                                   </Form.Group>
                                 </Form.Row>
-                                <Form.Row xs={12} md={3}>
+                                {/* <Form.Row xs={12} md={3}>
                                   <Form.Group as={Col}  controlId="startDate">
                                     <Form.Label>開始日期: </Form.Label>
                                     <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}
@@ -112,11 +140,11 @@ function Lottery ({ prizeList, prizeObj }) {
                                               showMonthYearPicker
                                                  />
                                   </Form.Group>
-                                </Form.Row>
+                                </Form.Row> */}
                                 <Form.Row xs={12} md={3}>
                                   <Form.Group as={Col}  controlId="endDate">
                                     <Form.Label>抽獎人數: </Form.Label>
-                                    <Form.Control type="text" defaultValue="1"></Form.Control>
+                                    <Form.Control type="text" id='drawNum' defaultValue="1"></Form.Control>
                                   </Form.Group>
                                 </Form.Row>
                               </Form>
@@ -131,7 +159,7 @@ function Lottery ({ prizeList, prizeObj }) {
                                     </Col>
                                   </Row>
                                   <Row style={{justifyContent:"center",alignItems:"center",textAlign:"center"}}>
-                                    <Button style={{width:"50%"}} onClick={drawer}>摸彩</Button>
+                                    <Button style={{width:"50%", borderRadius:'5px'}} onClick={drawer}>摸彩</Button>
                                   </Row>
                               </Container>
                             </div>

@@ -1,4 +1,5 @@
-import { getTicket } from '../../../libs/ticket';
+import { getTicket, createTicket } from '../../../libs/ticket';
+import { getUser } from '../../../libs/user';
 import errorCode from '../../../libs/errorCode';
 import { isAdmin, isLogin } from '../../../libs/auth';
 
@@ -134,10 +135,30 @@ import { isAdmin, isLogin } from '../../../libs/auth';
  *           application/json:
  *             schema:
  *               $ref: '#/definitions/ticketList'
+ *   post:
+ *     tags:
+ *       - ticket
+ *     summary: Create a ticket
+ *     description: Create a new ticket
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/ticket'
+ *     responses:
+ *       201:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/ticket'
  */
+// eslint-disable-next-line import/no-anonymous-default-export
 export default async(req, res) => {
   const {
     query: { userId, isWinner, startDate, endDate, offset, limit },
+    body: ticketData,
     method
   } = req
 
@@ -147,6 +168,7 @@ export default async(req, res) => {
   }
 
   let ticket;
+  let data;
   let total;
   switch (method) {
     case 'GET':
@@ -209,6 +231,51 @@ export default async(req, res) => {
         return;
       }
       break
+    case 'POST':
+        // if (!userData) {
+        //   res.status(400).json(errorCode.BadRequest)
+        //   return;
+        // }
+        // 自動生成測試帳號
+        let user;
+        let f2={};
+        let p;
+
+
+        if (offset || limit) {
+          p = { offset, limit };
+        }
+        try {
+          ({ user, total } = await getUser(f2, p));
+        } catch (e) {
+          console.log(e);
+          res.status(e.statusCode).json(e);
+          return;
+        }
+        console.log(`userLIst ${user}`)
+        try {
+          user.forEach(async (v) => {
+            console.log(v)
+            for(let i=0; i<10; i ++){
+              data = {
+                ticket_score: 80,
+                exam_type_id: '2b5ecce2-df3b-4a8c-9a00-17f52c71b15b',
+                user_id: v.id
+              }
+              ticket = await createTicket(data);
+            }
+          });
+         
+        } catch (e) {
+          res.status(e.statusCode).json(e);
+          return;
+        }
+  
+        if (user) {
+          res.status(201).json(ticket);
+          return;
+        }
+        break
     default:
       res.setHeader('Allow', ['GET']);
       res.status(405).json(errorCode.MethodNotAllowed);

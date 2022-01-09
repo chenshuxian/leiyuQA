@@ -12,7 +12,7 @@ import filterFactory,{ selectFilter } from 'react-bootstrap-table2-filter';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import "../../node_modules/react-datepicker/dist/react-datepicker.min.css"
 import router from 'next/router';
-import { getList } from '../../libs/front/user';
+import { getList, getUserList } from '../../libs/front/user';
 
 
 function User () {
@@ -20,8 +20,8 @@ function User () {
     const [ session, loading ] = useSession();
     const [list, setList] = useState([]);
 
-    useEffect(()=>{
-        getList(setList)
+    useEffect(() => {
+        getList(setList);
     },[]) 
 
     

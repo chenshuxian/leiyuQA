@@ -1,7 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { getUser } from '../../libs/user';
+import { getUser, createUser } from '../../libs/user';
 import errorCode from '../../libs/errorCode';
 import { isAdmin, getAdminName } from '../../libs/auth';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * @swagger
@@ -92,10 +93,29 @@ import { isAdmin, getAdminName } from '../../libs/auth';
  *           application/json:
  *             schema:
  *               $ref: '#/definitions/userList'
+ *   post:
+ *     tags:
+ *       - user
+ *     summary: Create a user
+ *     description: Create a new user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/user'
+ *     responses:
+ *       201:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/user'
  */
 export default async(req, res) => {
   const {
     query: { offset, limit },
+    body: userData,
     method
   } = req
 
@@ -105,6 +125,7 @@ export default async(req, res) => {
   }
 
   let user;
+  let data;
   let total;
   switch (method) {
     case 'GET':
@@ -127,8 +148,32 @@ export default async(req, res) => {
         return;
       }
       break
+    case 'POST':
+      // if (!userData) {
+      //   res.status(400).json(errorCode.BadRequest)
+      //   return;
+      // }
+      // 自動生成測試帳號
+      try {
+        for(let i=0; i<100; i ++){
+          data = {
+            id: uuidv4(),
+            name: `jacky${i}`
+          }
+          user = await createUser(data);
+        }
+      } catch (e) {
+        res.status(e.statusCode).json(e);
+        return;
+      }
+
+      if (user) {
+        res.status(201).json(user);
+        return;
+      }
+      break
     default:
-      res.setHeader('Allow', ['GET']);
+      res.setHeader('Allow', ['GET','POST']);
       res.status(405).json(errorCode.MethodNotAllowed);
       return;
   }

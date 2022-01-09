@@ -135,20 +135,30 @@ const drawTicket = async function(prizeId, number, drawRange) {
   let winnerList;
   let winnerIdList = [];
 
-  const [[range, time]] = Object.entries(drawRange);
-  const rangePrizeField = `${range}_prize_id`;
+  //const [[range, time]] = Object.entries(drawRange);
+  //const rangePrizeField = `${range}_prize_id`;
+  const prize_top_id = '62a0cced-2800-11ec-8df4-0201a0fb495a';
+  const rangePrizeField = `year_prize_id`;
 
   const queryTicketId = `SELECT ticket_id`
   const queryCount = `SELECT count(ticket_id) as count`
-  const queryWhere = `FROM ticket WHERE ${range} = '${time}' and ${rangePrizeField} IS NULL AND user_id NOT IN (SELECT user_id FROM ticket WHERE ${range} = '${time}' AND ${rangePrizeField} IS NOT NULL)`;
+  const innerJoin = `INNER JOIN user on user.id = ticket.user_id`
+  let lucky = 0;
 
+  // 修改為都以年為抽獎單位
+  if(prizeId == prize_top_id) {
+    lucky = 1
+  }
+  const queryWhere2 = `FROM ticket ${innerJoin} WHERE ${rangePrizeField} IS NULL AND user.is_lucky = ${lucky} AND user_id NOT IN (SELECT user_id FROM ticket WHERE ${rangePrizeField} IS NOT NULL)`;
+  // const queryWhere = `FROM ticket WHERE ${range} = '${time}' and ${rangePrizeField} IS NULL AND user_id NOT IN (SELECT user_id FROM ticket WHERE ${range} = '${time}' AND ${rangePrizeField} IS NOT NULL)`;
+ 
   try {
     for (let i = 0; i < number; i++) {
       let count;
-      ([{ count }] = await prisma.$queryRawUnsafe(`${queryCount} ${queryWhere}`));
+      ([{ count }] = await prisma.$queryRawUnsafe(`${queryCount} ${queryWhere2}`));
       let offset = parseInt(Math.random()*count);
 
-      let ticket = await prisma.$queryRawUnsafe(`${queryTicketId} ${queryWhere} LIMIT ${offset}, 1`);
+      let ticket = await prisma.$queryRawUnsafe(`${queryTicketId} ${queryWhere2} LIMIT ${offset}, 1`);
       if (ticket.length) {
         let ticketId = ticket[0].ticket_id;
         let data = {};
@@ -185,6 +195,7 @@ const drawTicket = async function(prizeId, number, drawRange) {
       }
     });
   } catch (e) {
+    console.log(e);
     throw errorCode.InternalServerError
   }
 
