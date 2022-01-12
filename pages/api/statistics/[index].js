@@ -206,6 +206,7 @@ import { isAdmin } from '../../../libs/auth';
  *             schema:
  *               $ref: '#/definitions/examTypeCountList'
  */
+// eslint-disable-next-line import/no-anonymous-default-export
 export default async(req, res) => {
   const {
     query: { index, startDate, endDate },

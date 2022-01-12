@@ -175,7 +175,7 @@ export default async(req, res) => {
       let filter = {};
       let pagination;
       let orderBy;
-      let includeRelation = await isAdmin();
+      let includeRelation = await isAdmin(req);
 
       if (userId) {
         filter = { user_id: userId };

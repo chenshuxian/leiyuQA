@@ -12,7 +12,9 @@ import { Form, DropdownButton, Dropdown, Container, Row, Col, Button } from 'rea
 import "../../node_modules/react-datepicker/dist/react-datepicker.min.css"
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import { getList } from '../../libs/front/user';
-import { getDrawer } from '../../libs/front/drawer';
+import { getDrawer, getLuckyList } from '../../libs/front/drawer';
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
 import zh_TW  from 'date-fns'
 registerLocale('TW', zh_TW);
@@ -24,13 +26,13 @@ const prisma = new PrismaClient()
 function Lottery ({ prizeList, prizeObj }) {
     const date = new Date()
     const randTime = 1000
-    const lotteryList = ['陳書賢','吳書賢','吳小賢','的書賢','二小賢','吳臣賢','吳小靈']
     const [startDate, setStartDate] = useState(date)
     const [endDate, setEndDate] =useState(date)
     const [prizeId, setPrizeId] = useState(Object.keys(prizeObj)[0])
     const [luckyName, setLuckyName] = useState("準備中")
     const [ session, loading ] = useSession()
     const [drawList, setDrawList] = useState([])
+    const [luckys, setLucky] = useState([])
 
     
     useEffect(()=>{
@@ -47,6 +49,7 @@ function Lottery ({ prizeList, prizeObj }) {
 
     useEffect(()=>{
       getList(setDrawList);
+      getLuckyList(setLucky);
     },[])
 
 
@@ -69,8 +72,12 @@ function Lottery ({ prizeList, prizeObj }) {
       let listStr = '';
 
       if(total > 0 ) {
-
+        winList.forEach(v => {
+          listStr = listStr + v.user.name + ","
+        });
       }
+
+      return listStr;
     }
 
     const drawer = async () => {
@@ -86,9 +93,35 @@ function Lottery ({ prizeList, prizeObj }) {
       
       setTimeout(async ()=>{
         setLuckyName(luckyMan)
+        getLuckyList(setLucky);
         clearInterval(timeoutID)
       },randTime)
     }
+    const phone = (cell, row, rowIndex) => {
+      console.log(cell);
+      const head = cell.substr(0,4);
+      const foot = cell.substr(-3,3);
+      return `${head}XXX${foot}`;
+    }
+
+    const columns = [
+      {
+          dataField: 'year_prize.prize_name',
+          text:'獎項',
+      }, 
+      {
+          dataField: 'user.name',
+          text: '中獎者',
+          searchable: true
+      },
+      {
+          dataField: 'user.phone',
+          text: '手機',
+          formatter: phone
+      }
+     ];
+
+     
 
   return (
     <Layout>
@@ -142,9 +175,9 @@ function Lottery ({ prizeList, prizeObj }) {
                                   </Form.Group>
                                 </Form.Row> */}
                                 <Form.Row xs={12} md={3}>
-                                  <Form.Group as={Col}  controlId="endDate">
+                                  <Form.Group as={Col}  controlId="drawNum">
                                     <Form.Label>抽獎人數: </Form.Label>
-                                    <Form.Control type="text" id='drawNum' defaultValue="1"></Form.Control>
+                                    <Form.Control type="text" defaultValue="1"></Form.Control>
                                   </Form.Group>
                                 </Form.Row>
                               </Form>
@@ -155,13 +188,21 @@ function Lottery ({ prizeList, prizeObj }) {
                                       <img src={`/assets/images/${prizeObj[prizeId]}`} className="lotteryImg" />
                                     </Col>
                                     <Col xs={12} md={6} >
-                                        <h1>{luckyName}</h1>
+                                        <h2>{luckyName}</h2>
                                     </Col>
                                   </Row>
                                   <Row style={{justifyContent:"center",alignItems:"center",textAlign:"center"}}>
                                     <Button style={{width:"50%", borderRadius:'5px'}} onClick={drawer}>摸彩</Button>
                                   </Row>
                               </Container>
+                              <h6 className="number" style={{borderBottom: "4px solid #d8d8d8"}}></h6>
+                              <div className="globalContent"> 
+                                <div style={{zIndex:2, position:'relative'}}>
+                                <h3>中獎清單</h3>
+                                  <BootstrapTable keyField='id' data={ luckys } columns={ columns } 
+                                  pagination={ paginationFactory({showTotal:true}) }/>
+                                </div>
+                              </div>
                             </div>
                         </div>
                     </dd>

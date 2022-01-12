@@ -25,7 +25,7 @@ const getTicket = async function(filter, pagination, orderBy, includeRelation) {
   if (orderBy) {
     prismaArgs['orderBy'] = orderBy;
   }
-
+ 
   if (includeRelation) {
     prismaArgs['include'] = {
       exam_type: {
@@ -137,7 +137,7 @@ const drawTicket = async function(prizeId, number, drawRange) {
 
   //const [[range, time]] = Object.entries(drawRange);
   //const rangePrizeField = `${range}_prize_id`;
-  const prize_top_id = '62a0cced-2800-11ec-8df4-0201a0fb495a';
+  const prize_top_id = '6acd46d5-3077-4e58-af05-436c09e56dfd';
   const rangePrizeField = `year_prize_id`;
 
   const queryTicketId = `SELECT ticket_id`
@@ -149,16 +149,26 @@ const drawTicket = async function(prizeId, number, drawRange) {
   if(prizeId == prize_top_id) {
     lucky = 1
   }
-  const queryWhere2 = `FROM ticket ${innerJoin} WHERE ${rangePrizeField} IS NULL AND user.is_lucky = ${lucky} AND user_id NOT IN (SELECT user_id FROM ticket WHERE ${rangePrizeField} IS NOT NULL)`;
+  const queryWhere2 = `FROM ticket ${innerJoin} WHERE ${rangePrizeField} IS NULL AND user.is_delete = 0 AND user.is_lucky = ${lucky} AND user_id NOT IN (SELECT user_id FROM ticket WHERE ${rangePrizeField} IS NOT NULL)`;
+
+  const queryWhere = `FROM ticket ${innerJoin} WHERE ${rangePrizeField} IS NULL AND  user.is_delete = 0 AND user.is_lucky = 0 AND user_id NOT IN (SELECT user_id FROM ticket WHERE ${rangePrizeField} IS NOT NULL)`;
   // const queryWhere = `FROM ticket WHERE ${range} = '${time}' and ${rangePrizeField} IS NULL AND user_id NOT IN (SELECT user_id FROM ticket WHERE ${range} = '${time}' AND ${rangePrizeField} IS NOT NULL)`;
  
   try {
     for (let i = 0; i < number; i++) {
       let count;
       ([{ count }] = await prisma.$queryRawUnsafe(`${queryCount} ${queryWhere2}`));
+      
       let offset = parseInt(Math.random()*count);
 
       let ticket = await prisma.$queryRawUnsafe(`${queryTicketId} ${queryWhere2} LIMIT ${offset}, 1`);
+  
+      if(lucky==1 && count == 0){
+        ([{ count }] = await prisma.$queryRawUnsafe(`${queryCount} ${queryWhere}`));
+        offset = parseInt(Math.random()*count);
+        ticket = await prisma.$queryRawUnsafe(`${queryTicketId} ${queryWhere} LIMIT ${offset}, 1`);
+      }
+
       if (ticket.length) {
         let ticketId = ticket[0].ticket_id;
         let data = {};
