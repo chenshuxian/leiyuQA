@@ -13,15 +13,20 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import "../../node_modules/react-datepicker/dist/react-datepicker.min.css"
 import router from 'next/router';
 import { getList, getUserList } from '../../libs/front/user';
+import { getDrawer, getLuckyList } from '../../libs/front/drawer';
+import LuckyList from '../../components/LuckyList';
 
 
 function User () {
 
     const [ session, loading ] = useSession();
     const [list, setList] = useState([]);
+    const { SearchBar } = Search;
+    const [luckys, setLucky] = useState([])
 
     useEffect(() => {
         getList(setList);
+        getLuckyList(setLucky);
     },[]) 
 
     
@@ -83,6 +88,7 @@ function User () {
                                 <span className="right"></span>
                                 <h2>會員帳號管理</h2>
                             </div>
+                            <LuckyList show={true} luckys={luckys} />
                             <div className="globalContent"> 
                             <ToolkitProvider
                                 keyField='id'
@@ -90,11 +96,15 @@ function User () {
                                 columns= {columns}
                                 bordered={ true }
                                 noDataIndication="沒有任何會員帳號"
+                                search={{
+                                    searchFormatted: true
+                                  }}
                             >
                                 {
                                 props => (
                                     <div style={{zIndex:2, position:'relative'}}>
                                     <h3>會員員帳號</h3>
+                                    <SearchBar  { ...props.searchProps } />
                                     <hr />
                                     <BootstrapTable
                                         { ...props.baseProps }

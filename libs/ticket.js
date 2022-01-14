@@ -137,7 +137,7 @@ const drawTicket = async function(prizeId, number, drawRange) {
 
   //const [[range, time]] = Object.entries(drawRange);
   //const rangePrizeField = `${range}_prize_id`;
-  const prize_top_id = '6acd46d5-3077-4e58-af05-436c09e56dfd';
+  const prize_top_id = '62a0cced-2800-11ec-8df4-0201a0fb495a';
   const rangePrizeField = `year_prize_id`;
 
   const queryTicketId = `SELECT ticket_id`

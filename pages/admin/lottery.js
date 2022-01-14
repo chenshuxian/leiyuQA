@@ -13,8 +13,7 @@ import "../../node_modules/react-datepicker/dist/react-datepicker.min.css"
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import { getList } from '../../libs/front/user';
 import { getDrawer, getLuckyList } from '../../libs/front/drawer';
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
+import LuckyList from '../../components/LuckyList';
 
 import zh_TW  from 'date-fns'
 registerLocale('TW', zh_TW);
@@ -30,9 +29,10 @@ function Lottery ({ prizeList, prizeObj }) {
     const [endDate, setEndDate] =useState(date)
     const [prizeId, setPrizeId] = useState(Object.keys(prizeObj)[0])
     const [luckyName, setLuckyName] = useState("準備中")
-    const [ session, loading ] = useSession()
+    const [session, loading ] = useSession()
     const [drawList, setDrawList] = useState([])
     const [luckys, setLucky] = useState([])
+
 
     
     useEffect(()=>{
@@ -97,30 +97,6 @@ function Lottery ({ prizeList, prizeObj }) {
         clearInterval(timeoutID)
       },randTime)
     }
-    const phone = (cell, row, rowIndex) => {
-      console.log(cell);
-      const head = cell.substr(0,4);
-      const foot = cell.substr(-3,3);
-      return `${head}XXX${foot}`;
-    }
-
-    const columns = [
-      {
-          dataField: 'year_prize.prize_name',
-          text:'獎項',
-      }, 
-      {
-          dataField: 'user.name',
-          text: '中獎者',
-          searchable: true
-      },
-      {
-          dataField: 'user.phone',
-          text: '手機',
-          formatter: phone
-      }
-     ];
-
      
 
   return (
@@ -196,13 +172,7 @@ function Lottery ({ prizeList, prizeObj }) {
                                   </Row>
                               </Container>
                               <h6 className="number" style={{borderBottom: "4px solid #d8d8d8"}}></h6>
-                              <div className="globalContent"> 
-                                <div style={{zIndex:2, position:'relative'}}>
-                                <h3>中獎清單</h3>
-                                  <BootstrapTable keyField='id' data={ luckys } columns={ columns } 
-                                  pagination={ paginationFactory({showTotal:true}) }/>
-                                </div>
-                              </div>
+                              <LuckyList show={false} luckys={luckys} />
                             </div>
                         </div>
                     </dd>
