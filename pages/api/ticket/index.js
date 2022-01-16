@@ -178,9 +178,12 @@ export default async(req, res) => {
       let includeRelation = await isAdmin(req);
 
       if (userId) {
-        filter = { user_id: userId };
+        filter = { user_id: userId, is_delete: false};
+      } else {
+        filter = { is_delete: false }
       }
 
+     
       if (isWinner !== undefined ) {
         if (isWinner === 'true') {
           filter = Object.assign(filter, { OR: [
@@ -196,6 +199,7 @@ export default async(req, res) => {
           ]});
         }
       }
+
 
       if (startDate) {
         if (!filter['AND']) {

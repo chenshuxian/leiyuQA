@@ -149,9 +149,9 @@ const drawTicket = async function(prizeId, number, drawRange) {
   if(prizeId == prize_top_id) {
     lucky = 1
   }
-  const queryWhere2 = `FROM ticket ${innerJoin} WHERE ${rangePrizeField} IS NULL AND user.is_delete = 0 AND user.is_lucky = ${lucky} AND user_id NOT IN (SELECT user_id FROM ticket WHERE ${rangePrizeField} IS NOT NULL)`;
+  const queryWhere2 = `FROM ticket ${innerJoin} WHERE ${rangePrizeField} IS NULL AND ticket.is_delete = 0 AND user.is_lucky = ${lucky} AND user_id NOT IN (SELECT user_id FROM ticket WHERE ${rangePrizeField} IS NOT NULL)`;
 
-  const queryWhere = `FROM ticket ${innerJoin} WHERE ${rangePrizeField} IS NULL AND  user.is_delete = 0 AND user.is_lucky = 0 AND user_id NOT IN (SELECT user_id FROM ticket WHERE ${rangePrizeField} IS NOT NULL)`;
+  const queryWhere = `FROM ticket ${innerJoin} WHERE ${rangePrizeField} IS NULL AND ticket.is_delete = 0 AND user.is_lucky = 0 AND user_id NOT IN (SELECT user_id FROM ticket WHERE ${rangePrizeField} IS NOT NULL)`;
   // const queryWhere = `FROM ticket WHERE ${range} = '${time}' and ${rangePrizeField} IS NULL AND user_id NOT IN (SELECT user_id FROM ticket WHERE ${range} = '${time}' AND ${rangePrizeField} IS NOT NULL)`;
  
   try {

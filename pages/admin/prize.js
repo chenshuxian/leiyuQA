@@ -199,7 +199,7 @@ function Prize () {
                             <div className="textTitle">
                                 <span></span>
                                 <span className="right"></span>
-                                <h2>題庫管理</h2>
+                                <h2>獎項管理</h2>
                             </div>
                             <div className="globalContent"> 
                             <ToolkitProvider
@@ -215,7 +215,7 @@ function Prize () {
                                 {
                                 props => (
                                     <div style={{zIndex:2, position:'relative'}}>
-                                    <h3>題庫修改</h3>
+                                    <h3>獎項修改</h3>
                                     <SearchBar  { ...props.searchProps } />
                                     <span style={{float:'right'}}>
                                     {/* <Button variant='danger' style={{ margin:5}} onClick={batchDelBtn}>批量刪除</Button> */}
