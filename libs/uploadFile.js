@@ -4,7 +4,8 @@ import parse from 'csv-parse';
 import fs from 'fs';
 import path from 'path'
 
-const defaultPath = ['public', 'assets', 'images'];
+// const defaultPath = ['public', 'assets', 'images'];
+const defaultPath = ['images'];
 
 const isImage = (file) => {
   const type = file.type.split("/").pop();
