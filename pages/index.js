@@ -30,7 +30,7 @@ function Index () {
     <Layout>
       <div id="outerWp">
         <div id="banner">
-        <Image className="banImg" src={bannerImg} alt="gameIcn1" />
+        <img className="banImg" src={`/assets/images/bannerImg.png`} alt="gameIcn1" />
         </div>
         <div id="content" className="indexPage">
             <dl id="main">
