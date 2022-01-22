@@ -53,7 +53,7 @@ export default function Register () {
       <div id="outerWp">
         <div id="inter" className="loginForm">
             <div id="banner">
-            <Image src={mainBanner} alt="mainBanner" class="banImg" />
+            <img className="banImg" src={`/assets/images/bannerImg.png`} alt="gameIcn1" />
             </div>
             <div id="contentWp">
                 <dl id="main">

@@ -167,7 +167,7 @@ function examType () {
        <div id="outerWp">
         <div id="inter" className="userProfile">
             <div id="banner">
-            <Image src={mainBanner} alt="mainBanner" className="banImg" />
+            <img className="banImg" src={`/assets/images/bannerImg.png`} alt="gameIcn1" />
             </div>
             <div id="contentWp">
                 <dl id="main">

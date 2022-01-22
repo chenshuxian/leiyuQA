@@ -155,7 +155,7 @@ export default function QA ({examTypeId, examTitle}) {
                 <>
                 <h3>{`${examNum+1}. ${exam[examNum].exam_title}`}</h3>
                     <div id="videoImg" style={{margin:'0px auto', width:'50%'}}>
-                        {exam[examNum].exam_img_url ? (<img src={`/assets/images/${exam[examNum].exam_img_url}`} />) : null}
+                        {exam[examNum].exam_img_url ? (<img src={`${exam[examNum].exam_img_url}`} />) : null}
                         {exam[examNum].exam_video_url ? (<div className="youtube">
                             <iframe src={exam[examNum].exam_video_url} title={exam[examNum].exam_title} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                         </div>) : null}
@@ -284,7 +284,7 @@ export default function QA ({examTypeId, examTitle}) {
         <div id="outerWp">
         <div id="inter" className={cName}>
             <div id="banner">
-            <Image src={mainBanner} alt="mainBanner" class="banImg" />
+            <img className="banImg" src={`/assets/images/bannerImg.png`} alt="gameIcn1" />
             </div>
             <div id="contentWp">
                 <dl id="main">

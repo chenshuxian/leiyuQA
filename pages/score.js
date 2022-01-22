@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Layout from '../components/layout'
 import Image from 'next/image'
 import mainBanner from '../public/assets/images/mainBanner.png';
@@ -9,7 +10,7 @@ export default function Page () {
      <div id="outerWp">
         <div id="inter" className="score">
             <div id="banner">
-            <Image src={mainBanner} alt="mainBanner" class="banImg" />
+            <img className="banImg" src={`/assets/images/bannerImg.png`} alt="gameIcn1" />
             </div>
             <div id="contentWp">
                 <dl id="main">

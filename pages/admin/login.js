@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import react, {useEffect} from 'react'
 import { getCsrfToken,useSession, signIn, signOut } from "next-auth/client"
 import AdminLayout from "../../components/adminLayout"
@@ -37,7 +38,7 @@ export default function SignIn({ csrfToken }) {
     <div id="outerWp">
        <div id="inter" className="fbLogin">
            <div id="banner">
-               <Image src={mainBanner} alt="mainBanner" className="banImg" />
+           <img className="banImg" src={`/assets/images/bannerImg.png`} alt="gameIcn1" />
            </div>
            <div id="contentWp">
                <dl id="main">
