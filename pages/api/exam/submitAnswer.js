@@ -132,10 +132,10 @@ export default async(req, res) => {
 
       isQuotaExceeded = !user.is_shared
 
-      if (isQuotaExceeded) {
-        res.status(400).json(errorCode.QuotaExceeded);
-        return;
-      }
+      // if (isQuotaExceeded) {
+      //   res.status(400).json(errorCode.QuotaExceeded);
+      //   return;
+      // }
 
       try {
         examAnsErr = await checkAnswer(answerData);

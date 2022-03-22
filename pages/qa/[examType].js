@@ -54,20 +54,20 @@ export default function QA ({examTypeId, examTitle}) {
     },[])
 
     // 是否今日遊戲機會已用完
-	useEffect(()=>{
-        axios.get('/api/me')
-	    .then((res) => {
-		const is_shared = res.data.is_shared;
-        const countGame = res.data.count;
-        setCount(countGame);
-		if(!is_shared || countGame > 2){
-			setScorePage('ALERT')
-		}
-        })
-        .catch((e) => {
-            console.log(`exam is_shared err: ${e}`)
-        })
-    },[])
+	// useEffect(()=>{
+    //     axios.get('/api/me')
+	//     .then((res) => {
+	// 	const is_shared = res.data.is_shared;
+    //     const countGame = res.data.count;
+    //     setCount(countGame);
+	// 	if(!is_shared || countGame > 2){
+	// 		setScorePage('ALERT')
+	// 	}
+    //     })
+    //     .catch((e) => {
+    //         console.log(`exam is_shared err: ${e}`)
+    //     })
+    // },[])
 
     // useEffect(()=>{
     //    // console.log(`examType: ${examType}`)
@@ -120,26 +120,26 @@ export default function QA ({examTypeId, examTitle}) {
 
     const share = () => {
         // 分享到fb 取得在玩一次的機會
-        //router.push("/#game")
-        FB.ui({
-            display: 'popup',
-            method: 'feed',
-            link: 'https://lyquiz.kinmen.travel/'
-          }, function(response){ 
-                if (response && !response.error_message) {
-                    let data = {is_shared: true}
-                    axios.patch('/api/me',data)
-                    .then((res) => {
-                        router.push('/#game')
-                    }
-                    ).catch((e)=>{
-                        console.log(`share fb err: ${e}`)
-                    })
+        router.push("/#game")
+        // FB.ui({
+        //     display: 'popup',
+        //     method: 'feed',
+        //     link: 'https://lyquiz.kinmen.travel/'
+        //   }, function(response){ 
+        //         if (response && !response.error_message) {
+        //             let data = {is_shared: true}
+        //             axios.patch('/api/me',data)
+        //             .then((res) => {
+        //                 router.push('/#game')
+        //             }
+        //             ).catch((e)=>{
+        //                 console.log(`share fb err: ${e}`)
+        //             })
                     
-                } else {
-                    alert('Error while posting.11');
-                }
-            });
+        //         } else {
+        //             alert('Error while posting.11');
+        //         }
+        //     });
     }
 
     const QA = () => (
@@ -212,7 +212,7 @@ export default function QA ({examTypeId, examTitle}) {
         <div className="textTitle">
             <span></span>
             <span className="right"></span>
-            <h2>你的成積</h2>
+            <h2>你的成績</h2>
         </div>
         <div className="globalContent">
             <h6 className="number">你的分數 <b>{score}</b>分  
