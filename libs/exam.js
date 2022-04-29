@@ -153,7 +153,7 @@ const deleteExam = async function(examId, isDelete = false) {
   return exam;
 }
 
-const getExamRandom = async function(filter, count = 10) {
+const getExamRandom = async function(filter = null, count = 10) {
   let exam;
   let examTotal, maxOffset, offset;
   let prismaArgs = {};

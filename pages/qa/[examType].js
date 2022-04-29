@@ -2,11 +2,9 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
 import Layout from '../../components/layout'
-import Image from 'next/image'
-import mainBanner from '../../public/assets/images/mainBanner.png';
 import {useRouter} from 'next/router';
 import React, {useEffect, useState} from "react";
-import { signIn, signOut, useSession } from 'next-auth/client'
+import { useSession } from 'next-auth/client'
 import { Button } from 'react-bootstrap';
 
 import { PrismaClient } from '@prisma/client'
@@ -147,7 +145,7 @@ export default function QA ({examTypeId, examTitle}) {
             <div className="textTitle">
                 <span></span>
                 <span className="right"></span>
-                <h2>{examTitle}</h2>
+                <h2>開始遊戲</h2>
             </div>
             <div className="globalContent">
                 { exam !== null ?

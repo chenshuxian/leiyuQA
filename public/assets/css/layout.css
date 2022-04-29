@@ -47,3 +47,7 @@ header.admin ul#globalMu li:nth-child(5n+1) {
 .indexPage .gameUl li {
     cursor: pointer;
 }
+
+#outerWp dl#main dd#game ul li:nth-child(1n) {
+    float:none;
+}
