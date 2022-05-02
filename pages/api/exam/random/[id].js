@@ -37,10 +37,10 @@ export default async(req, res) => {
     method,
   } = req
 
-  if (!await isLogin(req)) {
-    res.status(401).json(errorCode.Unauthorized);
-    return;
-  }
+  // if (!await isLogin(req)) {
+  //   res.status(401).json(errorCode.Unauthorized);
+  //   return;
+  // }
 
   let exam
   switch (method) {

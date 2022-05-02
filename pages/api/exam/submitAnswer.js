@@ -96,10 +96,10 @@ export default async(req, res) => {
     method
   } = req
 
-  if (!await isLogin(req)) {
-    res.status(401).json(errorCode.Unauthorized);
-    return;
-  }
+  // if (!await isLogin(req)) {
+  //   res.status(401).json(errorCode.Unauthorized);
+  //   return;
+  // }
 
   let ticket
   switch (method) {
@@ -117,20 +117,20 @@ export default async(req, res) => {
         return;
       }
 
-      userId = await getUserId(req);
-      //console.log(`authID: ${userId}`)
+      // userId = await getUserId(req);
+      // //console.log(`authID: ${userId}`)
 
-      try {
-        user = await getUserById(userId);
-      } catch (e) {
-        if (e === errorCode.NotFound) {
-          //console.log(`post auth err NotFound`)
-          res.status(401).json(errorCode.Unauthorized);
-          return;
-        }
-      }
+      // try {
+      //   user = await getUserById(userId);
+      // } catch (e) {
+      //   if (e === errorCode.NotFound) {
+      //     //console.log(`post auth err NotFound`)
+      //     res.status(401).json(errorCode.Unauthorized);
+      //     return;
+      //   }
+      // }
 
-      isQuotaExceeded = !user.is_shared
+      // isQuotaExceeded = !user.is_shared
 
       // if (isQuotaExceeded) {
       //   res.status(400).json(errorCode.QuotaExceeded);
@@ -142,7 +142,7 @@ export default async(req, res) => {
         if (examAnsErr) {
           // 更新is_shared 狀態為false
           let today = new Date(Date.now() + (8 * 60 * 60 * 1000))
-          updateUser(userId, { is_shared: false, last_play_time: today });
+          // updateUser(userId, { is_shared: false, last_play_time: today });
           score = (Object.keys(answerData).length - examAnsErr.length) * 10
           examAnsErr = examAnsErr.map( exam => {
             return {
@@ -161,24 +161,24 @@ export default async(req, res) => {
         return;
       }
 
-      if (isPass) {
-        try {
-          ticket = await createTicket({
-            ticket_score: score,
-            exam_type_id: await getExamTypeId(Object.keys(answerData)[0]),
-            user_id: userId
-          });
+      // if (isPass) {
+      //   try {
+      //     ticket = await createTicket({
+      //       ticket_score: score,
+      //       exam_type_id: await getExamTypeId(Object.keys(answerData)[0]),
+      //       user_id: userId
+      //     });
 
-          updateUser(userId, { last_play_time: new Date() });
+      //     updateUser(userId, { last_play_time: new Date() });
 
-          if (ticket) {
-            ticketId = ticket.ticket_id;
-          }
-        } catch (e) {
-          res.status(e.statusCode).json(e);
-          return;
-        }
-      }
+      //     if (ticket) {
+      //       ticketId = ticket.ticket_id;
+      //     }
+      //   } catch (e) {
+      //     res.status(e.statusCode).json(e);
+      //     return;
+      //   }
+      // }
 
       res.status(200).json({
         score,

@@ -30,12 +30,12 @@ export default function QA ({examTypeId, examTitle}) {
     //console.log(session)
     
 
-    useEffect(()=>{
-        if(session === undefined || session === null || session.isAdmin){
-            console.log('rediret to signin')
-            router.push('/auth/signin')
-        }
-    },[session])
+    // useEffect(()=>{
+    //     if(session === undefined || session === null || session.isAdmin){
+    //         console.log('rediret to signin')
+    //         router.push('/auth/signin')
+    //     }
+    // },[session])
 
     //load 題目
     useEffect(()=>{
