@@ -241,7 +241,7 @@ export default function QA ({examTypeId, examTitle}) {
             </ul>
             <ul style={{textAlign:'center',marginTop:'6px'}}>
                 {count < 2 ?
-                <li><Button style={{margin:"2px", height:"45px", width:"90px"}} variant='info' onClick={share}>返回遊戲</Button></li> 
+                <li><Button style={{margin:"2px", height:"45px"}} variant='info' onClick={share}>返回遊戲</Button></li> 
                 : <li style={{margin:5, color:'red'}}>
                     <h6 >本日遊戲次數已達3次，請於明日再玩</h6>
                  </li>
