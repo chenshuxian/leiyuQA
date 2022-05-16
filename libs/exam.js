@@ -167,9 +167,11 @@ const getExamRandom = async function(filter = null, count = 10) {
   maxOffset = maxOffset > 0 ? maxOffset : 0;
   offset = parseInt(Math.random()*maxOffset);
 
-  prismaArgs['skip'] = offset;
+  prismaArgs['skip'] = 1;
   prismaArgs['take'] = parseInt(count);
-
+  prismaArgs['orderBy'] = {
+    'update_time' : 'desc'
+  }
   exam = await prisma.exam.findMany(prismaArgs);
 
   if (!exam) {

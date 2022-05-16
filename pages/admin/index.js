@@ -128,6 +128,20 @@ function examAdmin () {
         batchDel(data, setList)
       }
     }
+
+    const uploadFile = (fileData, doFn, data) => {
+      axios.post('/api/exam/uploadImage', fileData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })  
+      .then((res) => {
+          // console.log(`upload img success: ${res.data.imageUrl}`)
+          data.exam_img_url = res.data.imageUrl
+          doFn(data, list, setModalShow, setList)
+      })
+      .catch((e) => console.log(`upload img ERR: ${e}`))
+    }
  
     const handleUpdate = (files) => {
 
@@ -138,27 +152,27 @@ function examAdmin () {
         //fd.append('file',files)
         let fileData = new FormData();
         fileData.append('file',files);
-        axios.post('/api/exam/uploadImage', fileData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })  
-        .then((res) => {
-            // console.log(`upload img success: ${res.data.imageUrl}`)
-            data.exam_img_url = res.data.imageUrl
-            updateData(data, list, setModalShow, setList)
-        })
-        .catch((e) => console.log(`upload img ERR: ${e}`))
+        uploadFile(fileData, updateData, data)
+        
       }else{
         // 無上傳檔案
         updateData(data, list, setModalShow, setList)
       }
     }
 
-    const handleInsert = (e) => {
+    const handleInsert = (files) => {
       let data = formData();
       data.exam_id = uuidv4();
-      addData(data, list, setModalShow, setList)
+      if(files){
+        // 上傳檔案
+        let fileData = new FormData();
+        fileData.append('file',files);
+        uploadFile(fileData, addData, data)
+      }else{
+        // 無上傳檔案
+        addData(data, list, setModalShow, setList)
+      }
+
     }
 
     const columns = [
