@@ -163,10 +163,10 @@ export default function QA ({examTypeId, examTitle}) {
                             // console.log( `${examAns[i]} : ${i+1}`)
                             // console.log( examAns[i] === i+1)
                             if(examAns[examNum] === i+1) {
-                                return (<li key={i}><Button style={{margin:"2px", height:"55px", width:"100%" ,fontSize:"20px"}} variant='danger' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
+                                return (<li key={i}><Button style={{margin:"2px", height:"55px", width:"100%" ,fontSize:"24px"}} variant='danger' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
                             }else{
                                 return (
-                                    <li key={i}><Button style={{margin:"2px", height:"55px", width:"100%",fontSize:"20px"}} variant='info' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
+                                    <li key={i}><Button style={{margin:"2px", height:"55px", width:"100%",fontSize:"24px"}} variant='info' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
                             }
                         
                         })}
