@@ -163,7 +163,7 @@ export default function QA ({examTypeId, examTitle}) {
                             // console.log( `${examAns[i]} : ${i+1}`)
                             // console.log( examAns[i] === i+1)
                             let fontsize = '24px';
-                            if(v.lenght > 8){
+                            if(v.length > 8){
                                 fontsize = '18px'
                             } 
                             if(examAns[examNum] === i+1) {
