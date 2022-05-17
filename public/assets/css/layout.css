@@ -51,3 +51,18 @@ header.admin ul#globalMu li:nth-child(5n+1) {
 #outerWp dl#main dd#game ul li:nth-child(1n) {
     float:none;
 }
+
+
+@media only screen and (min-width: 300px) {
+    #outerWp #inter.qa #videoImg img {
+        width: 300px;
+        height: 200px;
+      }
+}
+
+@media only screen and (min-width: 600px) {
+    #outerWp #inter.qa #videoImg img {
+        width: 500px;
+        height: 400px;
+      }
+}

@@ -16,8 +16,6 @@ let ans = {};
 export default function QA ({examTypeId, examTitle}) {
 
     const router = useRouter()
-    const {examType} = router.query
-    const [ session, loading ] = useSession()
     const [ exam, setExam ] = useState(null)
     const [ examNum , setExamNum ] = useState(0)  // 題號
     const [ examAns , setExamAns ] = useState([0,0,0,0,0,0,0,0,0,0]) // 回答答案
@@ -152,8 +150,8 @@ export default function QA ({examTypeId, examTitle}) {
                 (
                 <>
                 <h3>{`${examNum+1}. ${exam[examNum].exam_title}`}</h3>
-                    <div id="videoImg" style={{margin:'0px auto', height:'200px' ,width:'350px'}}>
-                        {exam[examNum].exam_img_url ? (<img style={{height:'100%', width:'100%'}} src={`${exam[examNum].exam_img_url}`} />) : null}
+                    <div id="videoImg" style={{margin:'0px auto'}}>
+                        {exam[examNum].exam_img_url ? (<img src={`${exam[examNum].exam_img_url}`} />) : null}
                         {exam[examNum].exam_video_url ? (<div className="youtube">
                             <iframe src={exam[examNum].exam_video_url} title={exam[examNum].exam_title} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                         </div>) : null}
