@@ -152,8 +152,8 @@ export default function QA ({examTypeId, examTitle}) {
                 (
                 <>
                 <h3>{`${examNum+1}. ${exam[examNum].exam_title}`}</h3>
-                    <div id="videoImg" style={{margin:'0px auto', width:'50%'}}>
-                        {exam[examNum].exam_img_url ? (<img src={`${exam[examNum].exam_img_url}`} />) : null}
+                    <div id="videoImg" style={{margin:'0px auto', height:'200px'}}>
+                        {exam[examNum].exam_img_url ? (<img style={{height:'100px', width:'100px'}} src={`${exam[examNum].exam_img_url}`} />) : null}
                         {exam[examNum].exam_video_url ? (<div className="youtube">
                             <iframe src={exam[examNum].exam_video_url} title={exam[examNum].exam_title} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                         </div>) : null}
@@ -163,10 +163,10 @@ export default function QA ({examTypeId, examTitle}) {
                             // console.log( `${examAns[i]} : ${i+1}`)
                             // console.log( examAns[i] === i+1)
                             if(examAns[examNum] === i+1) {
-                                return (<li key={i}><Button style={{margin:"2px", height:"55px", width:"100%"}} variant='danger' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
+                                return (<li key={i}><Button style={{margin:"2px", height:"55px", width:"100%" ,fontSize:"20px"}} variant='danger' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
                             }else{
                                 return (
-                                    <li key={i}><Button style={{margin:"2px", height:"55px", width:"100%"}} variant='info' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
+                                    <li key={i}><Button style={{margin:"2px", height:"55px", width:"100%",fontSize:"20px"}} variant='info' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
                             }
                         
                         })}
