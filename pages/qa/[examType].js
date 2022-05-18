@@ -165,10 +165,10 @@ export default function QA ({examTypeId, examTitle}) {
                                 fontsize = '18px'
                             } 
                             if(examAns[examNum] === i+1) {
-                                return (<li key={i}><Button style={{margin:"2px", height:"55px", width:"100%" ,fontSize:fontsize}} variant='danger' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
+                                return (<li key={i}><Button style={{padding:"2px", height:"55px", width:"100%",        whiteSpace: 'normal',fontSize:fontsize}} variant='danger' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
                             }else{
                                 return (
-                                    <li key={i}><Button style={{margin:"2px", height:"55px", width:"100%",fontSize:fontsize}} variant='info' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
+                                    <li key={i}><Button style={{padding:"2px", height:"55px", width:"100%",whiteSpace: 'normal',fontSize:fontsize}} variant='info' onClick={()=> setAns(examNum,i+1,exam[examNum].exam_id)}>{v}</Button></li>)
                             }
                         
                         })}
@@ -226,19 +226,25 @@ export default function QA ({examTypeId, examTitle}) {
             </h6>
           
             <ul className="globalCounter">
-                {ansList.map((v,i)=> (
+                {ansList.map((v,i)=> {
+                     let fontsize = '24px';
+                     if(v.exan_ans?.length > 8 || v.exam_ans_err?.length > 8){
+                         fontsize = '18px'
+                     } 
+                    return(
                     <li key={i}>
                         <h3>{v.exam_title}</h3>
                         <ol className="radio">
                             <li className="right">
-                            <Button style={{margin:"2px", height:"45px", width:"100%"}} variant='success'>{v.exam_ans}</Button>
+                            <Button style={{padding:"2px", height:"55px", width:"100%",whiteSpace: 'normal', fontSize:fontsize}} variant='success'>{v.exam_ans}</Button>
                             </li>
                             <li className="wrong">
-                            <Button style={{margin:"2px", height:"45px", width:"100%"}} variant='danger'>{v.exam_ans_err}</Button>
+                            <Button style={{padding:"2px", height:"55px", width:"100%",whiteSpace: 'normal', fontSize:fontsize}} variant='danger'>{v.exam_ans_err}</Button>
                             </li>
                         </ol>
                     </li>
-                ))}
+                )}
+                )}
                
             </ul>
             <ul style={{textAlign:'center',marginTop:'6px'}}>

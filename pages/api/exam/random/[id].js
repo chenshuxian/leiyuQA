@@ -46,7 +46,7 @@ export default async(req, res) => {
   switch (method) {
     case 'GET':
       try {
-        exam = await getExamRandom('', count);
+        exam = await getExamRandom({is_delete: false}, count);
       } catch (e) {
         res.status(e.statusCode).json(e);
         return;
