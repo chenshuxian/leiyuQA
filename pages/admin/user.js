@@ -62,7 +62,7 @@ function User () {
         }, 
         {
             dataField: '_count.ticket',
-            text: '抽獎卷數量',
+            text: '抽獎券數量',
         }, 
         {
             dataField: 'last_play_time',

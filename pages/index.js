@@ -42,7 +42,7 @@ function Index () {
                             <h2>活動說明</h2>
                         </div>
                         <div className="globalContent" style={{marginBottom:2}}>
-                            <h3>1.遊戲結合烈嶼大小事知識庫，每次遊戲10題，成績達80分（含）以上，就可獲得一張摸彩卷。</h3>
+                            <h3>1.遊戲結合烈嶼大小事知識庫，每次遊戲10題，成績達80分（含）以上，就可獲得一張摸彩券。</h3>
                             <h3>2.遊戲結束分享至FB，將可獲得再玩一次的機會，每日每次最多3次遊戲機會。</h3> 
                         </div>
                     </div>
@@ -56,7 +56,7 @@ function Index () {
                         </div>
                         <div className="globalContent">
                             <h3>1. 烈嶼知識庫，包含文化、觀光、戰地、建築、歷史、人文、景點等相關在地知識性題目。</h3>
-                            <h3>2. 每次遊戲10題，成績達80分（含）以上，就可獲得一張摸彩卷，歡迎勇闖挑戰。</h3>
+                            <h3>2. 每次遊戲10題，成績達80分（含）以上，就可獲得一張摸彩券，歡迎勇闖挑戰。</h3>
                             <ul className="gameUl">
                                     <Link href={`qa/669c21ce-0505-40cd-b479-19a8b700dab5`}>
                                         <li style={{ display: 'table', margin: '0 auto'}}>

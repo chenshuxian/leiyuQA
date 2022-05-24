@@ -67,7 +67,7 @@ function UserProfile () {
 
     const columns = [{
         dataField: 'ticket_id',
-        text:'彩卷號碼',
+        text:'彩券號碼',
         sort: true,
         sortCaret: (order, column) => {
             if (!order) return (<span>&nbsp;&nbsp;Desc/Asc</span>);
@@ -117,7 +117,7 @@ function UserProfile () {
                                     data={ products }
                                     columns= {columns}
                                     bordered={ true }
-                                    noDataIndication="沒有任何彩卷"
+                                    noDataIndication="沒有任何彩券"
                                     pagination={ paginationFactory() }
                                 />
                             </div>
