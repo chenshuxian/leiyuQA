@@ -7,7 +7,6 @@ import Image from 'next/image'
 import bannerImg from '../public/assets/images/bannerImg.png';
 import Link from "next/link"
 import axios from 'axios';
-const PRIZEURL = '/assets/images/';
 
 function Index () {
     const [prizeList, setPrizeList] = useState();
@@ -88,7 +87,7 @@ function Index () {
                                 {Array.isArray(prizeList) && prizeList.map((v,i) => (
                                     <li key={`prize${i}`}>
                                     <span>{v.prize_title}</span>
-                                    <img src={PRIZEURL+v.prize_image_url} />
+                                    <img src={v.prize_image_url} />
                                     <h4>{v.prize_name}</h4>
                                 </li>
                                 ))}
