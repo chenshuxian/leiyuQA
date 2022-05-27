@@ -45,7 +45,7 @@ export default async(req, res) => {
     return;
   }
 
-  return uploadImage(req, res, 'prize');
+  return uploadImage(req, res, '/prize');
 };
 
 export const config = {
