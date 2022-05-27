@@ -1,3 +1,47 @@
+.privacy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 100px;
+}
+.privacy h1{
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+.privacy h2{
+    font-size: 40px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-inline: 40px;
+}
+
+.privacy h3{
+    font-size: 30px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-inline: 40px;
+}
+
+.privacy p{
+    font-size: 20px;
+    line-height: 1.5em;
+    margin-inline: 60px;
+}
+
+.privacy p strong{
+    font-weight: bold;
+}
+
+.privacy ul li 
+{
+    font-size: 20px;
+    line-height: 1.5em;
+    margin-inline: 60px;
+}
+
+.privacy strong{
+   font-weight:bold;
+}
 .lottery {
     justify-content: flex-start;
     align-items: baseline;
