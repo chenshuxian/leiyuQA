@@ -68,7 +68,7 @@ export default function ExamAdminModal (props) {
                 {action === 'insert' ?
                 <img src={images} style={{maxHeight:300, margin:5}}></img>
                 :
-                <img src={images ? images : `${v.value}`} style={{maxHeight:300, margin:5}}></img>
+                <img src={images ? images : `/assets/images/${v.value}`} style={{maxHeight:300, margin:5}}></img>
                 }
               
                 {files ? <Button onClick={cancelImage}>取消上傳圖片</Button> : null}

@@ -129,7 +129,28 @@ function Prize () {
     const handleInsert = (e) => {
       let data = formData();
       data.prize_id = uuidv4();
-      addData(data, list, setModalShow, setList)
+
+      if(files){
+        // 上傳檔案
+        //fd.append('file',files)
+        let fileData = new FormData();
+        fileData.append('file',files);
+        axios.post('/api/prize/uploadImage', fileData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })  
+        .then((res) => {
+            // console.log(`upload img success: ${res.data.imageUrl}`)
+            data.prize_image_url = res.data.imageUrl
+            addData(data, list, setModalShow, setList)
+        })
+        .catch((e) => console.log(`upload img ERR: ${e}`))
+      }else{
+        // 無上傳檔案
+        addData(data, list, setModalShow, setList)
+      }
+     
     }
 
     const columns = [
