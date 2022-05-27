@@ -161,7 +161,7 @@ function Lottery ({ prizeList, prizeObj }) {
                               <Container>
                                   <Row style={{justifyContent:"center",alignItems:"center",textAlign:"center"}}>
                                     <Col xs={12} md={6} >
-                                      <img src={`/assets/images/${prizeObj[prizeId]}`} className="lotteryImg" />
+                                      <img src={`${prizeObj[prizeId]}`} className="lotteryImg" />
                                     </Col>
                                     <Col xs={12} md={6} >
                                         <h2>{luckyName}</h2>
@@ -185,7 +185,7 @@ function Lottery ({ prizeList, prizeObj }) {
 
 }
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
 
   const prizeList = await prisma.prize.findMany({
       select:{
