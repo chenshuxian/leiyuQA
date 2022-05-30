@@ -170,6 +170,16 @@ function Privacy ()  {
 <p>We may update Our Privacy Policy from time to time. We will notify You of any changes by posting the new Privacy Policy on this page.</p>
 <p>We will let You know via email and/or a prominent notice on Our Service, prior to the change becoming effective and update the &quot;Last updated&quot; date at the top of this Privacy Policy.</p>
 <p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>
+<h1>
+Data access and deletion </h1>
+
+    <ul>
+        <li>Rights to erasure of personal data</li>
+        <li>Rights to deletion of Personal Information</li>
+        <li>You may ask us to delete or remove your Personal Data</li>
+        <li>You can request deletion of your personal information</li>
+    </ul>
+
 <h1>Contact Us</h1>
 <p>If you have any questions or you want to delete your profile about this Privacy Policy, You can contact us:</p>
 <ul>
