@@ -221,7 +221,7 @@ export default async(req, res) => {
         pagination = { offset, limit };
       }
 
-      orderBy = [{ year_prize: { prize_id :'ascpag'} }];
+      orderBy = [{ year_prize: { prize_id :'asc'} }];
 
       try {
         ({ ticket, total } = await getTicket(filter, pagination, orderBy, includeRelation));
