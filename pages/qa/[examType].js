@@ -31,7 +31,7 @@ export default function QA ({examTypeId, examTitle}) {
     const [ session, loading ] = useSession()
 
     useEffect(()=>{
-        if(session === undefined || session === null || session.isAdmin || shareFlag){
+        if(session === undefined || session === null || session.isAdmin){
             console.log('rediret to signin')
             router.push('/auth/signin')
         }
