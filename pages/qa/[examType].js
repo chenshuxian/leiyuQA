@@ -13,7 +13,7 @@ import axios from "axios";
 
 let ans = {};
 
-const shareFlag = false;
+const shareFlag = true;
 
 export default function QA ({examTypeId, examTitle}) {
 
