@@ -13,6 +13,8 @@ import axios from "axios";
 
 let ans = {};
 
+const shareFlag = false;
+
 export default function QA ({examTypeId, examTitle}) {
 
     const router = useRouter()
@@ -26,14 +28,14 @@ export default function QA ({examTypeId, examTitle}) {
     const [ count, setCount] = useState(0); // 遊戲次數最多 3 次
 
     //console.log(session)
-    
+    const [ session, loading ] = useSession()
 
-    // useEffect(()=>{
-    //     if(session === undefined || session === null || session.isAdmin){
-    //         console.log('rediret to signin')
-    //         router.push('/auth/signin')
-    //     }
-    // },[session])
+    useEffect(()=>{
+        if(session === undefined || session === null || session.isAdmin || shareFlag){
+            console.log('rediret to signin')
+            router.push('/auth/signin')
+        }
+    },[session])
 
     //load 題目
     useEffect(()=>{
@@ -50,20 +52,24 @@ export default function QA ({examTypeId, examTitle}) {
     },[])
 
     // 是否今日遊戲機會已用完
-	// useEffect(()=>{
-    //     axios.get('/api/me')
-	//     .then((res) => {
-	// 	const is_shared = res.data.is_shared;
-    //     const countGame = res.data.count;
-    //     setCount(countGame);
-	// 	if(!is_shared || countGame > 2){
-	// 		setScorePage('ALERT')
-	// 	}
-    //     })
-    //     .catch((e) => {
-    //         console.log(`exam is_shared err: ${e}`)
-    //     })
-    // },[])
+
+	useEffect(()=>{
+        if(shareFlag){
+            axios.get('/api/me')
+            .then((res) => {
+            const is_shared = res.data.is_shared;
+            const countGame = res.data.count;
+            setCount(countGame);
+            if(!is_shared || countGame > 2){
+                setScorePage('ALERT')
+            }
+            })
+            .catch((e) => {
+                console.log(`exam is_shared err: ${e}`)
+            })
+        }
+    },[])
+
 
     // useEffect(()=>{
     //    // console.log(`examType: ${examType}`)
@@ -116,26 +122,31 @@ export default function QA ({examTypeId, examTitle}) {
 
     const share = () => {
         // 分享到fb 取得在玩一次的機會
-        router.push("/#game")
-        // FB.ui({
-        //     display: 'popup',
-        //     method: 'feed',
-        //     link: 'https://lyquiz.kinmen.travel/'
-        //   }, function(response){ 
-        //         if (response && !response.error_message) {
-        //             let data = {is_shared: true}
-        //             axios.patch('/api/me',data)
-        //             .then((res) => {
-        //                 router.push('/#game')
-        //             }
-        //             ).catch((e)=>{
-        //                 console.log(`share fb err: ${e}`)
-        //             })
-                    
-        //         } else {
-        //             alert('Error while posting.11');
-        //         }
-        //     });
+       
+        if(shareFlag){
+            FB.ui({
+                display: 'popup',
+                method: 'feed',
+                link: 'https://lyquiz.kinmen.travel/'
+              }, function(response){ 
+                    if (response && !response.error_message) {
+                        let data = {is_shared: true}
+                        axios.patch('/api/me',data)
+                        .then((res) => {
+                            router.push('/#game')
+                        }
+                        ).catch((e)=>{
+                            console.log(`share fb err: ${e}`)
+                        })
+                        
+                    } else {
+                        alert('Error while posting.11');
+                    }
+                });
+        }else{
+            router.push("/#game")
+        }
+       
     }
 
     const QA = () => (
@@ -236,10 +247,10 @@ export default function QA ({examTypeId, examTitle}) {
                         <h3>{v.exam_title}</h3>
                         <ol className="radio">
                             <li className="right">
-                            <Button style={{padding:"2px", height:"55px", width:"100%",whiteSpace: 'normal', fontSize:fontsize}} variant='success'>{v.exam_ans}</Button>
+                            <Button style={{padding:"2px", height:"55px", width:"100%",whiteSpace: 'normal', fontSize:fontsize}} variant='success'>{`正解: ${v.exam_ans}`}</Button>
                             </li>
                             <li className="wrong">
-                            <Button style={{padding:"2px", height:"55px", width:"100%",whiteSpace: 'normal', fontSize:fontsize}} variant='danger'>{v.exam_ans_err}</Button>
+                            <Button style={{padding:"2px", height:"55px", width:"100%",whiteSpace: 'normal', fontSize:fontsize}} variant='danger'>{`你的答案: ${v.exam_ans_err}`}</Button>
                             </li>
                         </ol>
                     </li>
@@ -249,7 +260,7 @@ export default function QA ({examTypeId, examTitle}) {
             </ul>
             <ul style={{textAlign:'center',marginTop:'6px'}}>
                 {count < 2 ?
-                <li><Button style={{margin:"2px", height:"45px"}} variant='info' onClick={share}>返回遊戲</Button></li> 
+                <li><Button style={{margin:"2px", height:"45px"}} variant='info' onClick={share}>分享到FB</Button></li> 
                 : <li style={{margin:5, color:'red'}}>
                     <h6 >本日遊戲次數已達3次，請於明日再玩</h6>
                  </li>

@@ -12,6 +12,14 @@ export default function LuckyList(props) {
         return res;
     }
 
+    const hideName = (cell, row, rowIndex) => {
+        const head = cell.substr(0,1);
+        const foot = cell.substr(-1,1);
+        let res = `${head}O${foot}`;
+
+        return res;
+    }
+
     const show = (cell, row, rowIndex) => {
         return cell;
     }
@@ -24,7 +32,8 @@ export default function LuckyList(props) {
         {
             dataField: 'user.name',
             text: '中獎者',
-            searchable: true
+            searchable: true,
+            formatter: props.show ? show : hideName
         },
         {
             dataField: 'user.phone',

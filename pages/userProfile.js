@@ -57,7 +57,7 @@ function UserProfile () {
         .then(data => {
             console.log(data)
             if(data.success){
-                console.log("會員資料修改完成")
+                window.alert("會員資料修改完成");
             }
            
         })
