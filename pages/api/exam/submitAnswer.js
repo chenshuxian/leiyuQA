@@ -4,6 +4,7 @@ import { createTicket } from '../../../libs/ticket';
 import errorCode from '../../../libs/errorCode';
 import { isLogin, getUserId } from '../../../libs/auth';
 import { getUserById, updateUser } from '../../../libs/user';
+import { shareFlag } from '../../../libs/front/common';
 
 const passScore = 80;
 
@@ -102,7 +103,7 @@ export default async(req, res) => {
   // }
 
   let ticket
-  let shareFlag = true;
+  //let shareFlag = true;
   switch (method) {
     case 'POST':
       let examAnsErr;
@@ -146,7 +147,9 @@ export default async(req, res) => {
         if (examAnsErr) {
           // 更新is_shared 狀態為false
           let today = new Date(Date.now() + (8 * 60 * 60 * 1000))
-          updateUser(userId, { is_shared: false, last_play_time: today });
+          if(shareFlag){
+            updateUser(userId, { is_shared: false, last_play_time: today });
+          }
           score = (Object.keys(answerData).length - examAnsErr.length) * 10
           examAnsErr = examAnsErr.map( exam => {
             return {
@@ -165,7 +168,7 @@ export default async(req, res) => {
         return;
       }
 
-      if (isPass && shareFlag) {
+      if (isPass) {
         try {
           ticket = await createTicket({
             ticket_score: score,

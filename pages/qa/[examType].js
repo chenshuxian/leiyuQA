@@ -6,6 +6,7 @@ import {useRouter} from 'next/router';
 import React, {useEffect, useState} from "react";
 import { useSession } from 'next-auth/client'
 import { Button } from 'react-bootstrap';
+import { shareFlag } from '../../libs/front/common';
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
@@ -13,7 +14,7 @@ import axios from "axios";
 
 let ans = {};
 
-const shareFlag = true;
+// const shareFlag = false;
 
 export default function QA ({examTypeId, examTitle}) {
 
