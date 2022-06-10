@@ -118,9 +118,9 @@ export default async(req, res) => {
         res.status(400).json(errorCode.BadRequest);
         return;
       }
+      userId = await getUserId(req);
 
       if(shareFlag){
-        userId = await getUserId(req);
         //console.log(`authID: ${userId}`)
   
         try {
@@ -167,6 +167,8 @@ export default async(req, res) => {
         res.status(e.statusCode).json(e);
         return;
       }
+
+      console.log(`Object.keys debug ${await getExamTypeId(Object.keys(answerData)[0])}`)
 
       if (isPass) {
         try {
