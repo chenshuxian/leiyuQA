@@ -51,10 +51,10 @@ export default function Header () {
         <nav className="main-nav" role="navigation">
             <ul id="globalMu">
                 <li><Link href="/#evenInfo">活動說明</Link></li>
-                <li><Link href="/#game">開始遊戲</Link></li>
+                <li><Link href="/qa/669c21ce-0505-40cd-b479-19a8b700dab5">開始遊戲</Link></li>
                 <li><Link href="/#gift">遊戲獎品</Link></li>
                 {/* <li><Link href="/auth/lottery">會員摸彩</Link></li> */}
-                <li><a target="_blank" href="https://lieyu.kinmen.gov.tw/" rel="noreferrer">烈嶼鄉公所</a></li>
+                <li><a target="_blank" href="https://lieyu.kinmen.gov.tw/travel/" rel="noreferrer">烈嶼旅遊網</a></li>
             </ul>
             <div className="otherLink">
                 <ul>

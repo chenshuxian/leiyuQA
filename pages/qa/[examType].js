@@ -233,7 +233,7 @@ export default function QA ({examTypeId, examTitle}) {
             <h4>您對烈嶼很熟悉，真棒！恭喜您獲得摸彩券一張，歡迎常來烈嶼玩，也可以上烈嶼旅遊網，觀看烈嶼介紹和最新活動資訊。</h4> 
             : 
             <h4>您似乎對烈嶼不太熟悉，分數80分以上可以獲得摸彩券一張，請再接再厲！
-歡迎常來烈嶼玩，也可以上烈嶼旅遊網，觀看烈嶼介紹和最新活動資訊。</h4>
+歡迎常來烈嶼玩，也可以上<a href="https://lieyu.kinmen.gov.tw/travel/" target="_blank" rel="noreferrer">烈嶼旅遊網</a>，觀看烈嶼介紹和最新活動資訊。</h4>
             }
             </h6>
           
@@ -281,7 +281,14 @@ export default function QA ({examTypeId, examTitle}) {
             <h2>提示</h2>
         </div>
         <div className="globalContent">
-            <h3>今日遊戲次數已用完，明日請早</h3>
+            {count < 2 ?
+                <h3>今日遊戲尚有{3-count}次，分享到FB可再進行遊戲<br/>
+                <Button style={{margin:"2px", height:"45px"}} variant='info' onClick={share}>分享到FB</Button>
+                </h3> 
+            :  
+            <h3>今日遊戲次數已用完，明日請早</h3> 
+            }
+            
         </div>
     </div>
     )
@@ -304,6 +311,9 @@ export default function QA ({examTypeId, examTitle}) {
             <div id="banner">
             <img className="banImg" src={`/assets/images/bannerImg.png`} alt="gameIcn1" />
             </div>
+            <audio id="music1" controls="controls" autoPlay="autoplay" preload hidden loop>
+            <source src="/assets/music/game.mp3" />
+            x</audio>
             <div id="contentWp">
                 <dl id="main">
                     <dd>
