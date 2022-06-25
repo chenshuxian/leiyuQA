@@ -53,12 +53,6 @@ export default function QA ({examTypeId, examTitle}) {
         .catch((e)=>console.log(`loadExamErr: ${e}`))
     },[])
 
-    useEffect(()=>{
-        var m1 = document.getElementById('music1');
-        m1.load();
-        m1.play();
-        console.log('playmusic');
-    },[])
 
     // 是否今日遊戲機會已用完
 
@@ -324,7 +318,7 @@ export default function QA ({examTypeId, examTitle}) {
             <div id="banner">
             <img className="banImg" src={`/assets/images/bannerImg.png`} alt="gameIcn1" />
             </div>
-            <audio id="music1" controls="controls" autoPlay="autoplay" preload hidden loop>
+            <audio id="music1" controls="controls" autoPlay="autoplay"  hidden loop>
             <source src="/assets/music/game.mp3" />
             x</audio>
             <div id="contentWp">
