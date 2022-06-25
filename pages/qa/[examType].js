@@ -11,6 +11,7 @@ import { shareFlag } from '../../libs/front/common';
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 import axios from "axios";
+import { doc } from 'prettier';
 
 let ans = {};
 
@@ -50,6 +51,13 @@ export default function QA ({examTypeId, examTitle}) {
             setExam(examList)
         })
         .catch((e)=>console.log(`loadExamErr: ${e}`))
+    },[])
+
+    useEffect(()=>{
+        var m1 = document.getElementById('music1');
+        m1.load();
+        m1.play();
+        console.log('playmusic');
     },[])
 
     // 是否今日遊戲機會已用完
@@ -148,6 +156,10 @@ export default function QA ({examTypeId, examTitle}) {
             router.push("/#game")
         }
        
+    }
+
+    const close = () => {
+        router.push('/')
     }
 
     const QA = () => (
@@ -261,7 +273,8 @@ export default function QA ({examTypeId, examTitle}) {
             </ul>
             <ul style={{textAlign:'center',marginTop:'6px'}}>
                 {count < 2 ?
-                <li><Button style={{margin:"2px", height:"45px"}} variant='info' onClick={share}>分享到FB</Button></li> 
+                <li><Button style={{margin:"2px", height:"45px"}} variant='info' onClick={share}>分享到FB</Button>
+                <Button style={{margin:"2px", height:"45px"}} variant='error' onClick={close}>結束遊戲</Button></li> 
                 : <li style={{margin:5, color:'red'}}>
                     <h6 >本日遊戲次數已達3次，請於明日再玩</h6>
                  </li>
