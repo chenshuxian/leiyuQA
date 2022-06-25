@@ -55,8 +55,8 @@ function UserProfile () {
         console.log(`formData : ${JSON.stringify(form)}`);
          axios.patch('/api/me',form)
         .then(data => {
-            console.log(data)
-            if(data.success){
+            // console.log(data)
+            if(data){
                 window.alert("會員資料修改完成");
             }
            

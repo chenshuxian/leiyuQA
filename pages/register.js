@@ -39,10 +39,11 @@ export default function Register () {
 
     const submitForm = async (e) => {
         e.preventDefault();
-        console.log(`reg formData : ${JSON.stringify(form)}`);
+        // console.log(`reg formData : ${JSON.stringify(form)}`);
         axios.patch('/api/me',form)
         .then(data => {
             // console.log(data)
+            window.alert('修改成功');
             router.push("/");
         })
         .catch(error => console.error(error))
