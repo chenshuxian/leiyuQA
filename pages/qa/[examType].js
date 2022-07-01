@@ -289,7 +289,7 @@ export default function QA ({examTypeId, examTitle}) {
         </div>
         <div className="globalContent">
             {count < 2 ?
-                <h3>今日遊戲尚有{3-count}次，分享到FB可再進行遊戲<br/>
+                <h3>今日遊戲尚有{2-count}次，分享到FB可再進行遊戲<br/>
                 <Button style={{margin:"2px", height:"45px"}} variant='info' onClick={share}>分享到FB</Button>
                 </h3> 
             :  
