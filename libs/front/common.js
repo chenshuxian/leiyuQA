@@ -6,6 +6,6 @@ const getFormData = () => {
     return data;
 }
 
-const shareFlag = false;
+const shareFlag = true;
 
 export { getFormData, shareFlag };

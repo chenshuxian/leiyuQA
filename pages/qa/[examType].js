@@ -11,7 +11,6 @@ import { shareFlag } from '../../libs/front/common';
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 import axios from "axios";
-import { doc } from 'prettier';
 
 let ans = {};
 
@@ -33,6 +32,7 @@ export default function QA ({examTypeId, examTitle}) {
     const [ session, loading ] = useSession()
 
     useEffect(()=>{
+        
         if(session === undefined || session === null || session.isAdmin){
             console.log('rediret to signin')
             router.push('/auth/signin')
@@ -318,9 +318,11 @@ export default function QA ({examTypeId, examTitle}) {
             <div id="banner">
             <img className="banImg" src={`/assets/images/bannerImg.png`} alt="gameIcn1" />
             </div>
-            <audio id="music1" controls="controls" autoPlay="autoplay"  hidden loop>
-            <source src="/assets/music/game.mp3" />
-            x</audio>
+            <audio id="music1" controls="controls" autoPlay='autoplay' hidden loop>
+            <source src="/assets/music/game.m4a" type="audio/mpeg"/>
+            <source src="/assets/music/game.ogg" type="audio/ogg"/>
+            Your browser does not support the audio element.
+            </audio>
             <div id="contentWp">
                 <dl id="main">
                     <dd>
