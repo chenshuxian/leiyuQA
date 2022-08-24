@@ -1,6 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { getExamRandom } from '../../../../libs/exam'
-import { isLogin } from '../../../../libs/auth';
 
 /**
  * @swagger
@@ -46,7 +45,7 @@ export default async(req, res) => {
   switch (method) {
     case 'GET':
       try {
-        exam = await getExamRandom({is_delete: false}, count);
+        exam = await getExamRandom({is_delete: false, exam_type_id: '81a8fa96-62d1-41d8-b0fb-f2db7815ca6a'}, count);
       } catch (e) {
         res.status(e.statusCode).json(e);
         return;
