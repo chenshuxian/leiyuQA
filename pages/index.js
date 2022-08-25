@@ -12,7 +12,7 @@ function Index () {
     const [prizeList, setPrizeList] = useState();
     const [examTypeList, setExamTypeList] = useState();
     useEffect(()=> {
-        axios.get('/api/prize')
+        axios.get('/api/prize?isDelete=false')
         .then((res) => {
             setPrizeList(res.data.prizeList)
         })
