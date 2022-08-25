@@ -159,7 +159,7 @@ export default async(req, res) => {
 
       try {
         ({ prize, total } = await getPrize(filter, pagination));
-      } catch (e) {
+      } catch(e) {
         res.status(e.statusCode).json(e);
         return;
       }
