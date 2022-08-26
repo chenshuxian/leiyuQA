@@ -32,7 +32,7 @@ export default function App ({ Component, pageProps }) {
         <meta property="og:type"          content="website" />
         <meta property="og:title"         content="烈嶼鄉知識問答" />
         <meta property="og:description"   content="讓我們一起經由問答遊戲了解烈嶼抽大獎" />
-        <meta property="og:image"         content="https://lieyu.fantasyball.tw/assets/images/bannerImg.png" />
+        <meta property="og:image"         content="https://lieyu.fantasyball.tw/assets/images/newBanner.png" />
         <title>烈嶼鄉知識問答</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" />
 
