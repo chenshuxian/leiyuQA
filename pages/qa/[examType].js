@@ -132,7 +132,7 @@ export default function QA ({examTypeId, examTitle}) {
                 method: 'feed',
                 link: 'https://lyquiz.kinmen.travel/'
               }, function(response){ 
-                    if (response && !response.error_message) {
+                    // if (response && !response.error_message) {
                         let data = {is_shared: true}
                         axios.patch('/api/me',data)
                         .then((res) => {
@@ -142,9 +142,9 @@ export default function QA ({examTypeId, examTitle}) {
                             console.log(`share fb err: ${e}`)
                         })
                         
-                    } else {
-                        alert(`Error while posting ${response}` );
-                    }
+                    // } else {
+                    //     alert(`Error while posting ${response}` );
+                    // }
                 });
         }else{
             router.push("/#game")
