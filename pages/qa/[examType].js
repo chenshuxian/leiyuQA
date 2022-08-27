@@ -140,8 +140,15 @@ export default function QA ({examTypeId, examTitle}) {
 
     const share = () => {
         // 分享到fb 取得在玩一次的機會
+        let isMoble = check();
        
         if(shareFlag){
+            
+            if(isMoble){
+                let data = {is_shared: true}
+                axios.patch('/api/me',data);
+            }
+            
                 FB.ui(
                     {
                         display: 'popup',
