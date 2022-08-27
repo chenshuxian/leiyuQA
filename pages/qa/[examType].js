@@ -128,7 +128,7 @@ export default function QA ({examTypeId, examTitle}) {
        
         if(shareFlag){
             FB.ui({
-                display: 'popup',
+                display: 'touch',
                 method: 'feed',
                 link: 'https://lyquiz.kinmen.travel/'
               }, function(response){ 
