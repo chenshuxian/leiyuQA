@@ -141,9 +141,10 @@ export default function QA ({examTypeId, examTitle}) {
     const share = () => {
         // 分享到fb 取得在玩一次的機會
         let isMobile = check();
-        let fbUrl =`https://www.facebook.com/dialog/feed?
-        app_id=641136007247701
-        &display=touch`;
+        let fbUrl = "https://www.facebook.com/dialog/feed?" +
+        "app_id=641136007247701&display=touch" +
+        "&link=" + encodeURIComponent("https://lyquiz.kinmen.travel/") +
+        "&redirect_uri=" + encodeURIComponent("https://lyquiz.kinmen.travel/#game");
 
         if(isMobile){
             console.log('mobile')
@@ -153,7 +154,7 @@ export default function QA ({examTypeId, examTitle}) {
        
         if(shareFlag){
             if(isMobile){
-                location.href(fbUrl);
+                window.location =fbUrl;
             }else{
                 FB.ui({
                     display: 'popup',
