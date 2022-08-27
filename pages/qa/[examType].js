@@ -14,6 +14,20 @@ import axios from "axios";
 
 let ans = {};
 
+function check() {
+ var userAgentInfo=navigator.userAgent;
+ var Agents =new Array("Android","iPhone","SymbianOS","Windows Phone","iPad","iPod");
+ var flag=true;
+ for(var v=0;v<Agents.length;v++) {
+   if(userAgentInfo.indexOf(Agents[v])>0) {
+    flag=false;
+    break;
+   }
+  }
+  return flag;
+}
+
+
 // const shareFlag = false;
 
 export default function QA ({examTypeId, examTitle}) {
@@ -125,14 +139,21 @@ export default function QA ({examTypeId, examTitle}) {
 
     const share = () => {
         // 分享到fb 取得在玩一次的機會
+        let isMobile = check();
+
+        if(isMobile){
+            console.log('mobile')
+        }else{
+            console.log('not mobile')
+        }
        
         if(shareFlag){
             FB.ui({
                 display: 'touch',
-                method: 'share',
+                method: 'feed',
                 link: 'https://lyquiz.kinmen.travel/'
               }, function(response){ 
-                    // if (response && !response.error_message) {
+                    if (response && !response.error_message) {
                         let data = {is_shared: true}
                         axios.patch('/api/me',data)
                         .then((res) => {
@@ -142,9 +163,9 @@ export default function QA ({examTypeId, examTitle}) {
                             console.log(`share fb err: ${e}`)
                         })
                         
-                    // } else {
-                    //     alert(`Error while posting ${response}` );
-                    // }
+                    } else {
+                        alert(`Error while posting ${response}` );
+                    }
                 });
         }else{
             router.push("/#game")
