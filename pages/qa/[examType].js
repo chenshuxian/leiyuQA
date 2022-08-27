@@ -129,7 +129,7 @@ export default function QA ({examTypeId, examTitle}) {
         if(shareFlag){
             FB.ui({
                 display: 'touch',
-                method: 'feed',
+                method: 'share',
                 link: 'https://lyquiz.kinmen.travel/'
               }, function(response){ 
                     // if (response && !response.error_message) {
