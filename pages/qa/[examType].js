@@ -140,14 +140,11 @@ export default function QA ({examTypeId, examTitle}) {
 
     const share = () => {
         // 分享到fb 取得在玩一次的機會
-        let isMoble = check();
        
         if(shareFlag){
-            
-            if(isMoble){
                 let data = {is_shared: true}
                 axios.patch('/api/me',data);
-            }
+        
             
                 FB.ui(
                     {
@@ -157,15 +154,16 @@ export default function QA ({examTypeId, examTitle}) {
                     }, 
                     function(response){ 
                             if (response && !response.error_message) {
-                                alert('is_shared');
-                                let data = {is_shared: true}
-                                axios.patch('/api/me',data)
-                                .then((res) => {
-                                    router.push('/#game')
-                                }
-                                ).catch((e)=>{
-                                    console.log(`share fb err: ${e}`)
-                                })
+                                router.push('/#game')
+                                // alert('is_shared');
+                                // let data = {is_shared: true}
+                                // axios.patch('/api/me',data)
+                                // .then((res) => {
+                                //     router.push('/#game')
+                                // }
+                                // ).catch((e)=>{
+                                //     console.log(`share fb err: ${e}`)
+                                // })
                                 
                             } else {
                                 alert(`Error while posting ${response}` );
