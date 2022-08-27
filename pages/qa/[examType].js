@@ -141,6 +141,10 @@ export default function QA ({examTypeId, examTitle}) {
     const share = () => {
         // 分享到fb 取得在玩一次的機會
         let isMobile = check();
+        let fbUrl = "https://www.facebook.com/dialog/feed?" +
+        "app_id=641136007247701&display=touch" +
+        "&link=" + encodeURIComponent("https://lyquiz.kinmen.travel/") +
+        "&redirect_uri=" + encodeURIComponent("https://lyquiz.kinmen.travel/#game");
 
         if(isMobile){
             console.log('mobile')
@@ -149,25 +153,29 @@ export default function QA ({examTypeId, examTitle}) {
         }
        
         if(shareFlag){
-            FB.ui({
-                display: 'touch',
-                method: 'feed',
-                link: 'https://lyquiz.kinmen.travel/'
-              }, function(response){ 
-                    if (response && !response.error_message) {
-                        let data = {is_shared: true}
-                        axios.patch('/api/me',data)
-                        .then((res) => {
-                            router.push('/#game')
+            if(isMobile){
+                location.href(fbUrl);
+            }else{
+                FB.ui({
+                    display: 'popup',
+                    method: 'feed',
+                    link: 'https://lyquiz.kinmen.travel/'
+                  }, function(response){ 
+                        if (response && !response.error_message) {
+                            let data = {is_shared: true}
+                            axios.patch('/api/me',data)
+                            .then((res) => {
+                                router.push('/#game')
+                            }
+                            ).catch((e)=>{
+                                console.log(`share fb err: ${e}`)
+                            })
+                            
+                        } else {
+                            alert(`Error while posting ${response}` );
                         }
-                        ).catch((e)=>{
-                            console.log(`share fb err: ${e}`)
-                        })
-                        
-                    } else {
-                        alert(`Error while posting ${response}` );
-                    }
-                });
+                    });
+            }
         }else{
             router.push("/#game")
         }
