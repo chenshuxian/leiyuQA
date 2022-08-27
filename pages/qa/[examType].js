@@ -141,10 +141,9 @@ export default function QA ({examTypeId, examTitle}) {
     const share = () => {
         // 分享到fb 取得在玩一次的機會
         let isMobile = check();
-        let fbUrl = "https://www.facebook.com/dialog/feed?" +
-        "app_id=641136007247701&display=touch" +
-        "&link=" + encodeURIComponent("https://lyquiz.kinmen.travel/") +
-        "&redirect_uri=" + encodeURIComponent("https://lyquiz.kinmen.travel/#game");
+        let fbUrl =`https://www.facebook.com/dialog/feed?
+        app_id=641136007247701
+        &display=touch`;
 
         if(isMobile){
             console.log('mobile')
