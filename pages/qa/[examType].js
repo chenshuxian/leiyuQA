@@ -143,7 +143,7 @@ export default function QA ({examTypeId, examTitle}) {
                         })
                         
                     } else {
-                        alert('Error while posting.11');
+                        alert(`Error while posting ${response}` );
                     }
                 });
         }else{
