@@ -9,7 +9,7 @@ import { Button } from 'react-bootstrap';
 import { shareFlag } from '../../libs/front/common';
 
 import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
 import axios from "axios";
 
 let ans = {};
