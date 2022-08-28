@@ -31,7 +31,7 @@ function check() {
 
 // const shareFlag = false;
 
-export default function QA ({examTypeId, examTitle}) {
+export default function QA () {
 
     const router = useRouter()
     const [ exam, setExam ] = useState(null)
@@ -56,7 +56,7 @@ export default function QA ({examTypeId, examTitle}) {
 
     //load 題目
     useEffect(()=>{
-        axios.get(`/api/exam/random/${examTypeId}`)
+        axios.get(`/api/exam/random/669c21ce-0505-40cd-b479-19a8b700dab5`)
         .then((res)=>
         { 
             //console.log(`examList: ${JSON.stringify(res.data.examList)}`)
@@ -145,7 +145,6 @@ export default function QA ({examTypeId, examTitle}) {
                 let data = {is_shared: true}
                 axios.patch('/api/me',data);
         
-            
                 FB.ui(
                     {
                         display: 'popup',
@@ -360,31 +359,31 @@ export default function QA ({examTypeId, examTitle}) {
   )
 }
 
-export async function getStaticPaths() {
-    // Return a list of possible value for id
-    const examType = await prisma.exam_type.findMany({select:{exam_type_id:true}})
-    console.log(`examType: ${JSON.stringify(examType)}`)
-    const paths = examType.map((v,i) => ({
-        params: { examType: v.exam_type_id },
-      }))
+// export async function getStaticPaths() {
+//     // Return a list of possible value for id
+//     const examType = await prisma.exam_type.findMany({select:{exam_type_id:true}})
+//     console.log(`examType: ${JSON.stringify(examType)}`)
+//     const paths = examType.map((v,i) => ({
+//         params: { examType: v.exam_type_id },
+//       }))
 
-    return {
-        paths,
-        fallback: false
-    }
-}
+//     return {
+//         paths,
+//         fallback: false
+//     }
+// }
   
-export async function getStaticProps({params}) {
-// Fetch necessary data for the blog post using params.id
-// console.log(params.examType)
-    const examTypeList = await prisma.exam_type.findMany()
-    const examName = examTypeList.reduce((obj, cur) => ({...obj, [cur.exam_type_id]: cur.exam_type_name}), {})
+// export async function getStaticProps({params}) {
+// // Fetch necessary data for the blog post using params.id
+// // console.log(params.examType)
+//     const examTypeList = await prisma.exam_type.findMany()
+//     const examName = examTypeList.reduce((obj, cur) => ({...obj, [cur.exam_type_id]: cur.exam_type_name}), {})
     
-    const examTitle = examName[params.examType]
-    return {
-        props: {
-            examTypeId: params.examType,
-            examTitle
-        }
-    }
-}
+//     const examTitle = examName[params.examType]
+//     return {
+//         props: {
+//             examTypeId: params.examType,
+//             examTitle
+//         }
+//     }
+// }
