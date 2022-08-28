@@ -14,20 +14,6 @@ import axios from "axios";
 
 let ans = {};
 
-function check() {
- var userAgentInfo=navigator.userAgent;
- var Agents =new Array("Android","iPhone","SymbianOS","Windows Phone","iPad","iPod");
- console.log(`agent : ${userAgentInfo}`)
- var flag=false;
- for(var v=0;v<Agents.length;v++) {
-   if(userAgentInfo.indexOf(Agents[v])>0) {
-    flag=true;
-    break;
-   }
-  }
-  return flag;
-}
-
 
 // const shareFlag = false;
 
@@ -165,7 +151,8 @@ export default function QA () {
                                 // })
                                 
                             } else {
-                                alert(`Error while posting ${response}` );
+                                console.log('not share');
+                                router.push('/#game')
                             }
                     }
                     );
