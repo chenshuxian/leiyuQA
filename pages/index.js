@@ -76,13 +76,14 @@ function Index () {
                             <h3>2. 每次遊戲10題，成績達80分（含）以上，就可獲得一張摸彩券，歡迎勇闖挑戰。</h3> */}
                             <h3>博狀元餅俗稱「博餅」，以擲骰子方式進行，是盛行於閩南地區特有的民俗文化活動。相傳是出生金門洪門港(后豐港)的鄭成功營中大將洪旭，在鄭成功領軍進攻金陵時，為穩定留守廈門的官兵軍心，並撫慰思鄉情緒，發明博狀元餅遊戲，讓官兵在中秋節玩上一把，而在廈門、泉州、金門等地流傳，成為一種中秋佳節應景的民俗娛樂活動。</h3>
                             <ul className="gameUl">
-                                    <Link href={`qa/669c21ce-0505-40cd-b479-19a8b700dab5`}>
-                                    {/* <a onClick={()=>{checkDateEnd()}}> */}
+                                    {/* <Link href={`qa/669c21ce-0505-40cd-b479-19a8b700dab5`}> */}
+                                    <a onClick={()=>{checkDateEnd()}}>
                                         <li style={{ display: 'table', margin: '0 auto'}}>
                                             <img src={`/assets/images/gameIcn3.png`} />
                                             <div className="qaTitle"><h4>開始遊戲</h4></div>
                                         </li>
-                                    </Link>
+                                    </a>
+                                    {/* </Link> */}
                                 {/* {Array.isArray(examTypeList) && examTypeList.map((v,i) => (
                                     <Link key={`examType${i}`} href={`qa/${v.exam_type_id}`}>
                                     <li >
