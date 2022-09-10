@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react'
 import styles from './header.module.css'
 import { useRouter } from 'next/router'
 import { Button } from 'react-bootstrap'
+import { isEqual, isAfter } from 'date-fns';
 
 // The approach used in this component shows how to build a sign in and sign out
 // component that works on pages which support both client and server side
@@ -25,6 +26,22 @@ export default function Header () {
          }
      }
    },[session])*/}
+
+   let checkDateEnd = () => {
+        let today = new Date();
+        let y = today.getFullYear();
+        let m = today.getMonth()+1;
+        let d = today.getDate();
+
+        let e = isEqual(new Date(2022,9,10), new Date(y,m,d));
+        let a = isAfter(new Date(2022,9,10), new Date(y,m,d));
+        // alert(`isEqual: ${e} isAfter: ${a}`)
+        if(e || a){
+            router.push('/qa/669c21ce-0505-40cd-b479-19a8b700dab5');
+        }else{
+            window.alert('您好，活動時間已截止，感謝您的參與，抽獎結果將另行公告於烈嶼鄉公所臉書粉絲專頁，請持續關注以獲得最新活動資訊。');
+        }
+    }
   const toggle = () => {
       if(!toggled){
         document.getElementsByTagName('body')[0].className ='toggled'
@@ -51,7 +68,8 @@ export default function Header () {
         <nav className="main-nav" role="navigation">
             <ul id="globalMu">
                 <li><Link href="/#evenInfo">活動說明</Link></li>
-                <li><Link href="/qa/669c21ce-0505-40cd-b479-19a8b700dab5">開始遊戲</Link></li>
+                {/* <li><Link href="/qa/669c21ce-0505-40cd-b479-19a8b700dab5">開始遊戲</Link></li> */}
+                <li><a onClick={()=>{checkDateEnd()}}>開始遊戲</a></li>
                 <li><Link href="/#gift">遊戲獎品</Link></li>
                 {/* <li><Link href="/auth/lottery">會員摸彩</Link></li> */}
                 <li><a target="_blank" href="https://lieyu.kinmen.gov.tw/travel/" rel="noreferrer">烈嶼旅遊網</a></li>
