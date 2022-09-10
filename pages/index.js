@@ -20,11 +20,11 @@ function Index () {
 
         let e = isEqual(new Date(2022,9,10), new Date(y,m,d));
         let a = isAfter(new Date(2022,9,10), new Date(y,m,d));
-        // alert(`isEqual: ${e} isAfter: ${a}`)
+        alert(`isEqual: ${e} isAfter: ${a}`)
         if(e || a){
             router.push('/qa/669c21ce-0505-40cd-b479-19a8b700dab5');
         }else{
-            window.alert('中秋問答活動已於9/10晚上12點結束，敬請期待下次活動');
+            window.alert('您好，活動時間已截止，感謝您的參與，抽獎結果將另行公告於烈嶼鄉公所臉書粉絲專頁，請持續關注以獲得最新活動資訊。');
         }
     }
     useEffect(()=> {
