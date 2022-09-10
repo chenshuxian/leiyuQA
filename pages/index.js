@@ -20,7 +20,7 @@ function Index () {
 
         let e = isEqual(new Date(2022,9,10), new Date(y,m,d));
         let a = isAfter(new Date(2022,9,10), new Date(y,m,d));
-        alert(`isEqual: ${e} isAfter: ${a}`)
+        // alert(`isEqual: ${e} isAfter: ${a}`)
         if(e || a){
             router.push('/qa/669c21ce-0505-40cd-b479-19a8b700dab5');
         }else{
